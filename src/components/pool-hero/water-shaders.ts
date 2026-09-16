@@ -91,8 +91,8 @@ void main() {
     fbm(p * 0.81 + vec2(5.4 - t * 0.12, 2.3 + t * 0.14))
   );
   vec2 bend = current - 0.5;
-  vec2 refracted = p + bend * 0.42;
-  refracted += 0.019 * vec2(
+  vec2 refracted = p + bend * 0.33;
+  refracted += 0.015 * vec2(
     sin(p.y * 7.0 + t * 2.4 + current.x * 4.0),
     sin(p.x * 6.0 - t * 2.1 + current.y * 4.0)
   );

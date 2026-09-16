@@ -36,7 +36,7 @@ wake rings are part of the same shader pass. No video or 3D engine is used.
 
 Visual tuning lives in `water-shaders.ts`: `cloudLight` shapes the broad light,
 `refracted` bends the tile floor, and the two `cellEdge` fields add fine caustics.
-The main refraction amplitude is `0.42`, reduced from the initial `0.78` after
+The main refraction amplitude is `0.33`, reduced from the initial `0.78` after
 visual review. The view uses the shorter viewport dimension to preserve water
 proportions on resize. Duck image-box size is `clamp(3.75rem, 14.5vmin, 6rem)`;
 the transparent sprite padding makes the visible duck smaller than that box.
