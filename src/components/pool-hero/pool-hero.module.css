@@ -1,0 +1,99 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  overflow: clip;
+  background: #459df5 url("/pool/water-poster.webp") center / cover;
+  color: #072e56;
+}
+
+.water {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.hero[data-water-ready] .water {
+  opacity: 1;
+}
+
+.content {
+  position: relative;
+  width: fit-content;
+  padding: max(1.5rem, env(safe-area-inset-top)) max(1.5rem, env(safe-area-inset-right)) 1.5rem
+    max(1.5rem, env(safe-area-inset-left));
+}
+
+.duck {
+  position: absolute;
+  left: 53%;
+  top: 62%;
+  width: clamp(3.75rem, 14.5vmin, 6rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+.duck img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 1px 1px rgb(10 80 116 / 18%));
+}
+
+.controls {
+  position: absolute;
+  right: max(1.5rem, env(safe-area-inset-right));
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+}
+
+.pause[data-slot="button"],
+.nudge[data-slot="button"] {
+  height: 2.75rem;
+  color: #123e60;
+  background: rgb(220 245 255 / 62%);
+  border-color: rgb(240 252 255 / 55%);
+  box-shadow: 0 1px 8px rgb(7 72 144 / 5%);
+}
+
+.pause[data-slot="button"] {
+  width: 2.75rem;
+  border-radius: 50%;
+}
+
+.pause:hover,
+.nudge:hover {
+  background: rgb(233 250 255 / 85%);
+}
+
+.pause:focus-visible,
+.nudge:focus-visible {
+  outline: 2px solid #123e60;
+  outline-offset: 3px;
+}
+
+.nudge {
+  position: absolute;
+  right: 3.5rem;
+  bottom: 0;
+}
+
+.nudge:not(:focus-visible) {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .controls button {
+    transition: none;
+  }
+}
