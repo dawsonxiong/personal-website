@@ -9,13 +9,8 @@ export default function Home() {
       <PortfolioTabs
         panels={{
           about: (
-            <section
-              id="about"
-              className={`${styles.section} ${styles.about}`}
-              aria-labelledby="about-heading"
-            >
+            <section id="about" className={`${styles.section} ${styles.about}`}>
               <div>
-                <h2 id="about-heading">About</h2>
                 <h1 className={styles.intro}>Hey, I’m Dawson.</h1>
                 <p>
                   I study computer science at the University of Waterloo and build things for the
@@ -43,13 +38,8 @@ export default function Home() {
             </section>
           ),
           experience: (
-            <section
-              id="experience"
-              className={styles.section}
-              aria-labelledby="experience-heading"
-            >
+            <section id="experience" className={styles.section}>
               <div>
-                <h2 id="experience-heading">Experience</h2>
                 <ol>
                   {experience.map((job) => (
                     <li className={styles.entry} key={job.company}>
@@ -71,9 +61,8 @@ export default function Home() {
             </section>
           ),
           projects: (
-            <section id="projects" className={styles.section} aria-labelledby="projects-heading">
+            <section id="projects" className={styles.section}>
               <div>
-                <h2 id="projects-heading">Selected projects</h2>
                 <ol>
                   {projects.map((project) => (
                     <li className={styles.entry} key={project.name}>
@@ -102,12 +91,8 @@ export default function Home() {
             </section>
           ),
           activity: (
-            <section id="activity" className={styles.section} aria-labelledby="activity-heading">
+            <section id="activity" className={styles.section}>
               <div>
-                <h2 id="activity-heading">Activity</h2>
-                <p className={styles.activityIntro}>
-                  Things I’m building, trying, and figuring out.
-                </p>
                 <ol>
                   {activity.map((item) => (
                     <li className={styles.activityItem} key={item.date + item.text}>

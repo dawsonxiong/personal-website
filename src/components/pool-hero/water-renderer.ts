@@ -1,7 +1,7 @@
 import { waterFragmentShader, waterVertexShader } from "./water-shaders";
 
 const MAX_PIXEL_RATIO = 1.5;
-const MAX_RENDER_PIXELS = 2_000_000;
+const MAX_RENDER_PIXELS = 1_100_000;
 
 export interface WaterRenderer {
   draw: (
@@ -10,6 +10,8 @@ export interface WaterRenderer {
     ripples?: Float32Array,
   ) => void;
   resize: () => void;
+  /** Scales the drawing buffer. The shader is fragment bound, so cost tracks pixels. */
+  setQuality: (scale: number) => void;
   dispose: () => void;
 }
 
@@ -19,6 +21,7 @@ export function createWaterRenderer(canvas: HTMLCanvasElement): WaterRenderer | 
     antialias: false,
     depth: false,
     stencil: false,
+    powerPreference: "low-power",
   });
   if (!gl) return null;
 
@@ -75,16 +78,21 @@ export function createWaterRenderer(canvas: HTMLCanvasElement): WaterRenderer | 
   const duckPosition = gl.getUniformLocation(program, "uDuck");
   const wake = gl.getUniformLocation(program, "uRipples[0]");
   const emptyWake = new Float32Array(24);
+  let quality = 1;
 
   return {
+    setQuality(scale) {
+      quality = scale;
+    },
     resize() {
       const width = Math.max(1, canvas.clientWidth);
       const height = Math.max(1, canvas.clientHeight);
-      const ratio = Math.min(
-        window.devicePixelRatio || 1,
-        MAX_PIXEL_RATIO,
-        Math.sqrt(MAX_RENDER_PIXELS / (width * height)),
-      );
+      const ratio =
+        Math.min(
+          window.devicePixelRatio || 1,
+          MAX_PIXEL_RATIO,
+          Math.sqrt(MAX_RENDER_PIXELS / (width * height)),
+        ) * quality;
       const renderWidth = Math.max(1, Math.round(width * ratio));
       const renderHeight = Math.max(1, Math.round(height * ratio));
       if (canvas.width !== renderWidth || canvas.height !== renderHeight) {

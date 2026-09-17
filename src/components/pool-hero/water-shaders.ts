@@ -35,12 +35,12 @@ float noise(vec2 p) {
   return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
 }
 
+// Two octaves. A third costs four more hashes per sample for detail the
+// refraction bend already hides.
 float fbm(vec2 p) {
-  float value = 0.55 * noise(p);
+  float value = 0.66 * noise(p);
   p = TURN * p * 2.03 + 7.1;
-  value += 0.28 * noise(p);
-  p = TURN * p * 2.01 + 3.4;
-  return value + 0.17 * noise(p);
+  return value + 0.34 * noise(p);
 }
 
 // Two nearest moving wave cells. Distorting the domain bends their shared
@@ -138,18 +138,14 @@ void main() {
   vec2 lineWidth = fwidth(tiles) * 1.15 + 0.013;
   vec2 tileLines = 1.0 - smoothstep(vec2(0.0), lineWidth, tileEdge);
   float grout = max(tileLines.x, tileLines.y);
-  float tileVariation = hash22(floor(tiles)).x - 0.5;
-  color += tileVariation * 0.015;
   color *= 1.0 - grout * 0.10 * (1.0 - broadLight * 0.70);
 
   vec2 detailDomain = refracted + 0.04 * vec2(
     sin(refracted.y * 11.0 + t * 2.0), cos(refracted.x * 9.0 - t * 1.7)
   );
+  // A single cell network avoids a second per-pixel search for fine caustics.
   float edgeA = cellEdge(detailDomain * 2.7 + current * 0.75, t * 1.8);
-  float edgeB = cellEdge(TURN * detailDomain * 4.6 - current * 0.55 + 4.2, -t * 1.35);
-  float causticA = exp(-edgeA * 26.0) * 0.7 + exp(-edgeA * 8.0) * 0.3;
-  float causticB = exp(-edgeB * 28.0);
-  float caustics = causticA * 0.12 + causticB * 0.03;
+  float caustics = (exp(-edgeA * 26.0) * 0.7 + exp(-edgeA * 8.0) * 0.3) * 0.14;
   color = mix(color, vec3(0.73, 0.91, 1.0), caustics * (0.6 + 0.4 * broadLight));
 
   // A soft veil of scattered light keeps the floor submerged in blue water.

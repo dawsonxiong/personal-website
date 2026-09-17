@@ -20,15 +20,15 @@
   justify-content: space-between;
   gap: 20px;
   padding: 25px 36px 32px;
+  /* A translucent veil keeps the header readable without blurring the animated
+     water backdrop on each frame. */
   background: linear-gradient(
     180deg,
-    rgb(197 234 250 / 34%) 0%,
-    rgb(197 234 250 / 20%) 38%,
-    rgb(213 240 250 / 8%) 68%,
+    rgb(203 236 251 / 62%) 0%,
+    rgb(200 235 250 / 44%) 38%,
+    rgb(213 240 250 / 18%) 68%,
     transparent 100%
   );
-  -webkit-backdrop-filter: blur(14px) saturate(1.14);
-  backdrop-filter: blur(14px) saturate(1.14);
 }
 
 .header::after {
@@ -125,12 +125,6 @@
   min-height: 100%;
   display: grid;
   align-items: center;
-}
-
-.section h2 {
-  margin-bottom: 29px;
-  font-size: 14px;
-  font-weight: 550;
 }
 
 .intro {
@@ -234,13 +228,6 @@
 
 .details summary:hover {
   text-decoration: underline;
-}
-
-.activityIntro {
-  margin-top: -14px;
-  margin-bottom: 28px;
-  color: var(--pool-muted);
-  font-size: 14px;
 }
 
 .activityItem {

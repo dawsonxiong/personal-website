@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { PoolEditIcon } from "@/components/icons/pool-edit-icon";
 import { createDuckMotion } from "./duck-motion";
+import { createFrameClock } from "./frame-clock";
 import {
   placeFloatie,
   placeFloatieAt,
@@ -106,8 +107,9 @@ export function PoolHero({ children }: { children: ReactNode }) {
     let frame = 0;
     let layoutFrame = 0;
     let elapsed = 0;
-    let previousTime: number | null = null;
     let inView = true;
+    const clock = createFrameClock();
+    let quality = 1;
     const motionEnabled = () => !motion.matches;
     const duckMotion = createDuckMotion(Math.random, { x: 0.16, y: 0.32 }, 0.42);
     const duckPose = duckMotion.pose;
@@ -135,8 +137,22 @@ export function PoolHero({ children }: { children: ReactNode }) {
     };
 
     const draw = (now: number) => {
-      if (previousTime !== null) {
-        const delta = Math.min((now - previousTime) / 1000, 0.05);
+      frame = requestAnimationFrame(draw);
+      const delta = clock.next(now);
+      if (clock.stopped) {
+        renderer?.dispose();
+        renderer = null;
+        ripples.fill(0);
+        updateMotion();
+        return;
+      }
+      if (delta === null) return;
+      if (quality !== clock.quality) {
+        quality = clock.quality;
+        renderer?.setQuality(quality);
+        renderer?.resize();
+      }
+      if (delta > 0) {
         elapsed += delta;
         for (const { motion: movement } of floaties) {
           if (pointer) movement.flee(pointer.x, pointer.y);
@@ -157,14 +173,12 @@ export function PoolHero({ children }: { children: ReactNode }) {
           lastRippleY = duckPose.y;
         }
       }
-      previousTime = now;
       render();
-      frame = requestAnimationFrame(draw);
     };
 
     const updateMotion = () => {
       cancelAnimationFrame(frame);
-      previousTime = null;
+      clock.reset();
       pointer = null;
       setMode(renderer ? (motionEnabled() ? "playing" : "paused") : "fallback");
       if (!document.hidden && inView) render();
@@ -249,6 +263,7 @@ export function PoolHero({ children }: { children: ReactNode }) {
     };
     const onContextRestored = () => {
       renderer = createWaterRenderer(canvas);
+      renderer?.setQuality(quality);
       resize();
       updateMotion();
     };
@@ -318,7 +333,9 @@ export function PoolHero({ children }: { children: ReactNode }) {
       },
       { threshold: [0, 0.001] },
     );
-    visibility.observe(canvas);
+    // The canvas sits in a position: fixed scene, so it never leaves the viewport.
+    // The hero itself is in normal flow and can.
+    visibility.observe(hero);
 
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
