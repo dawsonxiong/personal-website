@@ -11,7 +11,8 @@ const geist = Geist({
 
 export const metadata: Metadata = {
   title: "Dawson Xiong",
-  description: "Personal site",
+  description:
+    "Dawson Xiong — computer science at Waterloo. Software, selected projects, and notes from a work in progress.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

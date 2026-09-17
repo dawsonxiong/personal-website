@@ -11,15 +11,15 @@ importers:
       '@base-ui/react':
         specifier: ^1.8.0
         version: 1.8.0(@types/react@19.3.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      central-icons:
+        specifier: npm:@central-icons-react/round-filled-radius-2-stroke-2@^1.1.296
+        version: '@central-icons-react/round-filled-radius-2-stroke-2@1.1.319(react@19.2.8)'
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
       cn:
         specifier: ^0.3.0
         version: 0.3.0
-      lucide-react:
-        specifier: ^1.46.0
-        version: 1.46.0(react@19.2.8)
       next:
         specifier: 16.3.5
         version: 16.3.5(@babel/core@7.29.7)(@types/node@20.19.43)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -226,6 +226,11 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  '@central-icons-react/round-filled-radius-2-stroke-2@1.1.319':
+    resolution: {integrity: sha512-uVaURQwVkAeFsgTezgw6WuyEdhlXlUdNSm0Fy0gDpHDJpBWwJ0Wa1TTBI+npGW/fzPmEQ6oPHobye7ie7Z3Erw==}
+    peerDependencies:
+      react: '>=14.0.0 <= 19'
 
   '@dotenvx/dotenvx@1.75.1':
     resolution: {integrity: sha512-/BITOC9dmS/edY2zQwZNicQ059O6RKabtQfyEafV0nGtfYRNHYy1DIPiYVcov40+tob9hfmBnbR963dS+EQ1DQ==}
@@ -1578,11 +1583,6 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@1.46.0:
-    resolution: {integrity: sha512-Bv+FZXgZPrxc/NCl1e7JJVQFLdiCxYgxNVhqoV7X0p6I8ADJo8DxBnK1auH0fZz4AmqOJ3jgneL4f1i8LJQRAA==}
-    peerDependencies:
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
@@ -2381,6 +2381,10 @@ snapshots:
       use-sync-external-store: 1.7.0(react@19.2.8)
     optionalDependencies:
       '@types/react': 19.3.0
+
+  '@central-icons-react/round-filled-radius-2-stroke-2@1.1.319(react@19.2.8)':
+    dependencies:
+      react: 19.2.8
 
   '@dotenvx/dotenvx@1.75.1':
     dependencies:
@@ -3425,10 +3429,6 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
-
-  lucide-react@1.46.0(react@19.2.8):
-    dependencies:
-      react: 19.2.8
 
   magic-string@0.30.21:
     dependencies:

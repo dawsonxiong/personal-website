@@ -9,13 +9,15 @@
     "lint": "oxlint .",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
-    "typecheck": "next typegen && tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "node --experimental-strip-types --experimental-default-type=module --test src/components/pool-hero/duck-motion.test.ts",
+    "install:deps": "op run --account my.1password.com --env-file=.env.op -- pnpm install"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
+    "central-icons": "npm:@central-icons-react/round-filled-radius-2-stroke-2@^1.1.296",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.3.0",
-    "lucide-react": "^1.46.0",
     "next": "16.3.5",
     "react": "19.2.8",
     "react-dom": "19.2.8",

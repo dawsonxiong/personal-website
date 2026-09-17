@@ -44,12 +44,13 @@ Sometime after launch, this site may grow an activity feed like `v1` (WakaTime /
 
 - Domain
 - Visual direction
-- 1Password vault (none until there are secrets)
+- Central Icons license in 1Password (`.env.op` → `CENTRAL_LICENSE_KEY`; Vercel env for deploys)
 
 ## Hard rules
 
 - Do not apply Go, Rust, or Cloudflare Worker defaults.
 - Never commit `.env.local`.
+- UI icons: Central Icons via `@/components/icons` — do not add `lucide-react` for app UI.
 - Do not add a second host.
 - Do not add auth, a database, or extra routes without being asked.
 

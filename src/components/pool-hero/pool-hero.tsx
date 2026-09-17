@@ -1,20 +1,97 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
-import { Pause, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PoolEditIcon } from "@/components/icons/pool-edit-icon";
 import { createDuckMotion } from "./duck-motion";
+import {
+  placeFloatie,
+  placeFloatieAt,
+  resolveFloatieCollisions,
+  stepFloaties,
+} from "./floatie-physics";
+import { floatieCatalog, MAX_FLOATIES, type FloatieKind } from "./floatie-catalog";
 import { createWaterRenderer } from "./water-renderer";
 import styles from "./pool-hero.module.css";
+
+type DropPoint = { x: number; y: number };
+const DRAG_THRESHOLD = 8;
+
+function FloatieArt({ kind }: { kind: FloatieKind }) {
+  if (kind === "duck")
+    return (
+      <Image
+        src="/pool/duck.webp"
+        alt=""
+        width={384}
+        height={384}
+        unoptimized
+        loading="eager"
+        draggable={false}
+      />
+    );
+  if (kind === "turtle")
+    return (
+      <>
+        <span className={styles.turtleFeet} />
+        <span className={styles.turtleHead} />
+        <span className={styles.turtleShell} />
+      </>
+    );
+  return null;
+}
 
 export function PoolHero({ children }: { children: ReactNode }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const duckRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
+  const extrasRef = useRef(
+    new Map<number, { element: HTMLDivElement; kind: FloatieKind; drop?: DropPoint }>(),
+  );
+  const pickerRef = useRef<HTMLDetailsElement>(null);
+  const nextId = useRef(1);
+  const [items, setItems] = useState<{ id: number; kind: FloatieKind; drop?: DropPoint }[]>([]);
+  const [announcement, setAnnouncement] = useState("");
+  const [spawnError, setSpawnError] = useState("");
+  const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const controllerRef = useRef<{ toggle: () => void; nudge: () => void } | null>(null);
+  const controllerRef = useRef<{
+    nudge: () => void;
+    syncFloaties: () => void;
+  } | null>(null);
   const [mode, setMode] = useState<"loading" | "playing" | "paused" | "fallback">("loading");
+  const [dragKind, setDragKind] = useState<FloatieKind | null>(null);
+  const ghostRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{
+    kind: FloatieKind;
+    pointerId: number;
+    startX: number;
+    startY: number;
+    x: number;
+    y: number;
+    active: boolean;
+  } | null>(null);
+  // A drag ends with a click on the tile it started from; that click must not spawn a second toy.
+  // Timed rather than flagged, so a keyboard activation later is never swallowed.
+  const dragEndRef = useRef(0);
+
+  const poolIsFull = items.length >= MAX_FLOATIES - 1;
+
+  const addFloatie = (kind: FloatieKind, drop?: DropPoint) => {
+    const id = nextId.current++;
+    setItems((current) =>
+      current.length < MAX_FLOATIES - 1 ? [...current, { id, kind, drop }] : current,
+    );
+  };
+
+  const moveGhost = (x: number, y: number) => {
+    if (ghostRef.current) ghostRef.current.style.translate = `${x}px ${y}px`;
+  };
+
+  useLayoutEffect(() => {
+    const drag = dragRef.current;
+    if (dragKind && drag) moveGhost(drag.x, drag.y);
+  }, [dragKind]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -27,14 +104,18 @@ export function PoolHero({ children }: { children: ReactNode }) {
 
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
+    let layoutFrame = 0;
     let elapsed = 0;
     let previousTime: number | null = null;
     let inView = true;
-    // An explicit play/pause choice can override the system preference for this visit.
-    let userMotion: boolean | null = null;
-    const motionEnabled = () => userMotion ?? !motion.matches;
-    const duckMotion = createDuckMotion();
+    const motionEnabled = () => !motion.matches;
+    const duckMotion = createDuckMotion(Math.random, { x: 0.16, y: 0.32 }, 0.42);
     const duckPose = duckMotion.pose;
+    let floaties = [{ element: duck, motion: duckMotion }];
+    let bodies = floaties.map(({ motion: movement }) => movement);
+    const exclusionElements = Array.from(
+      hero.querySelectorAll<HTMLElement>("[data-pool-exclusion]"),
+    );
     const ripples = new Float32Array(24);
     let rippleIndex = 0;
     let lastRippleTime = 0;
@@ -43,10 +124,13 @@ export function PoolHero({ children }: { children: ReactNode }) {
     let pointer: { x: number; y: number } | null = null;
 
     const render = () => {
-      const angle = duckPose.angle + Math.sin(elapsed * 0.63) * 0.04;
-      const bob = Math.sin(elapsed * 1.6) * 0.8;
-      const scale = 1 + Math.sin(elapsed * 1.3) * 0.008;
-      duck.style.transform = `translate3d(${duckPose.x}px, ${duckPose.y + bob}px, 0) translate(-50%, -50%) rotate(${angle}rad) scale(${scale})`;
+      for (const { element, motion: movement } of floaties) {
+        const pose = movement.pose;
+        const angle = pose.angle + Math.sin(elapsed * 0.63) * 0.04;
+        const bob = Math.sin(elapsed * 1.6) * 0.8;
+        const scale = 1 + Math.sin(elapsed * 1.3) * 0.008;
+        element.style.transform = `translate3d(${pose.x}px, ${pose.y + bob}px, 0) translate(-50%, -50%) rotate(${angle}rad) scale(${scale})`;
+      }
       renderer?.draw(elapsed, duckPose, ripples);
     };
 
@@ -54,8 +138,10 @@ export function PoolHero({ children }: { children: ReactNode }) {
       if (previousTime !== null) {
         const delta = Math.min((now - previousTime) / 1000, 0.05);
         elapsed += delta;
-        if (pointer) duckMotion.flee(pointer.x, pointer.y);
-        duckMotion.step(delta);
+        for (const { motion: movement } of floaties) {
+          if (pointer) movement.flee(pointer.x, pointer.y);
+        }
+        stepFloaties(bodies, delta);
         if (
           duckPose.speed > 45 &&
           elapsed - lastRippleTime > 0.09 &&
@@ -87,22 +173,34 @@ export function PoolHero({ children }: { children: ReactNode }) {
       }
     };
 
-    const onMotionPreference = () => {
-      userMotion = null;
-      updateMotion();
+    const readExclusions = () =>
+      exclusionElements
+        .map((element) => element.getBoundingClientRect())
+        .filter((rect) => rect.width > 0 && rect.height > 0);
+
+    const measureExclusions = () => {
+      const zones = readExclusions();
+      for (const { motion: movement } of floaties) movement.setExclusions(zones);
+      resolveFloatieCollisions(bodies);
+    };
+
+    const onLayout = () => {
+      cancelAnimationFrame(layoutFrame);
+      layoutFrame = requestAnimationFrame(() => {
+        measureExclusions();
+        if (!document.hidden && inView) render();
+      });
     };
 
     const resize = () => {
       renderer?.resize();
       ripples.fill(0);
-      duckMotion.resize(
-        canvas.clientWidth,
-        canvas.clientHeight,
-        duck.offsetWidth,
-        content.offsetHeight,
-      );
-      duck.style.left = "0";
-      duck.style.top = "0";
+      for (const { element, motion: movement } of floaties) {
+        movement.resize(canvas.clientWidth, canvas.clientHeight, element.offsetWidth);
+        element.style.left = "0";
+        element.style.top = "0";
+      }
+      measureExclusions();
       if (!document.hidden && inView) render();
     };
 
@@ -121,18 +219,18 @@ export function PoolHero({ children }: { children: ReactNode }) {
       const target = event.target;
       if (
         target instanceof Element &&
-        (content.contains(target) || target.closest("button, a, input, textarea, select"))
+        target.closest("[data-pool-exclusion], button, a, input, textarea, select, summary")
       ) {
         pointer = null;
         return;
       }
       if (event.pointerType === "touch" && event.type !== "pointerdown") return;
-      const rect = hero.getBoundingClientRect();
+      const rect = canvas.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
       if (event.pointerType === "touch") {
         // A tap can emit pointerleave before the next animation frame.
-        duckMotion.flee(x, y, true);
+        for (const { motion: movement } of floaties) movement.flee(x, y, true);
         pointer = null;
       } else {
         pointer = { x, y };
@@ -156,15 +254,58 @@ export function PoolHero({ children }: { children: ReactNode }) {
     };
 
     controllerRef.current = {
-      toggle() {
-        userMotion = !motionEnabled();
-        updateMotion();
+      syncFloaties() {
+        const liveElements = new Set([...extrasRef.current.values()].map(({ element }) => element));
+        floaties = floaties.filter(({ element }) => element === duck || liveElements.has(element));
+        bodies = floaties.map(({ motion: movement }) => movement);
+        const zones = readExclusions();
+        for (const [id, { element, kind, drop }] of extrasRef.current) {
+          if (floaties.some((floatie) => floatie.element === element)) continue;
+          const definition = floatieCatalog.find((item) => item.kind === kind)!;
+          const movement = createDuckMotion(
+            Math.random,
+            { x: 0.86, y: 0.3 },
+            definition.collisionScale,
+          );
+          movement.resize(canvas.clientWidth, canvas.clientHeight, element.offsetWidth);
+          movement.setExclusions(zones);
+          const dropped =
+            drop !== undefined &&
+            placeFloatieAt(
+              movement,
+              bodies,
+              canvas.clientWidth,
+              canvas.clientHeight,
+              zones,
+              drop.x,
+              drop.y,
+            );
+          if (
+            !dropped &&
+            !placeFloatie(movement, bodies, canvas.clientWidth, canvas.clientHeight, zones)
+          ) {
+            setItems((current) => current.filter((item) => item.id !== id));
+            setAnnouncement("No open water here. Clear the extras to make room.");
+            setSpawnError("No open water here. Clear the extras to make room.");
+            continue;
+          }
+          element.style.left = "0";
+          element.style.top = "0";
+          floaties.push({ element, motion: movement });
+          bodies.push(movement);
+          setSpawnError("");
+          setAnnouncement(`${definition.label} added. ${bodies.length} floaties in the pool.`);
+        }
+        render();
+        for (const { element } of floaties) element.style.visibility = "visible";
       },
       nudge() {
         if (!renderer || !motionEnabled()) return;
         pointer = null;
         // A fixed keyboard target offers the same playful burst without chasing focus.
-        duckMotion.flee(duckPose.x, duckPose.y, false, true);
+        for (const { motion: movement } of floaties) {
+          movement.flee(movement.pose.x, movement.pose.y, false, true);
+        }
       },
     };
 
@@ -177,26 +318,38 @@ export function PoolHero({ children }: { children: ReactNode }) {
       },
       { threshold: [0, 0.001] },
     );
-    visibility.observe(hero);
+    visibility.observe(canvas);
 
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
     observer.observe(content);
+    for (const element of exclusionElements) observer.observe(element);
     canvas.addEventListener("webglcontextlost", onContextLost);
     canvas.addEventListener("webglcontextrestored", onContextRestored);
     hero.addEventListener("pointermove", onPointer, { passive: true });
     hero.addEventListener("pointerdown", onPointer, { passive: true });
     hero.addEventListener("pointerleave", clearPointer);
     hero.addEventListener("pointercancel", clearPointer);
-    motion.addEventListener("change", onMotionPreference);
+    motion.addEventListener("change", updateMotion);
     document.addEventListener("visibilitychange", updateMotion);
     window.addEventListener("resize", resize);
+    window.addEventListener("scroll", onLayout, { passive: true });
+    const closePicker = (event: PointerEvent) => {
+      if (
+        event.target instanceof Node &&
+        !pickerRef.current?.contains(event.target) &&
+        pickerRef.current
+      )
+        pickerRef.current.open = false;
+    };
+    document.addEventListener("pointerdown", closePicker);
     watchDensity();
     resize();
     updateMotion();
 
     return () => {
       cancelAnimationFrame(frame);
+      cancelAnimationFrame(layoutFrame);
       controllerRef.current = null;
       observer.disconnect();
       visibility.disconnect();
@@ -206,58 +359,188 @@ export function PoolHero({ children }: { children: ReactNode }) {
       hero.removeEventListener("pointerdown", onPointer);
       hero.removeEventListener("pointerleave", clearPointer);
       hero.removeEventListener("pointercancel", clearPointer);
-      motion.removeEventListener("change", onMotionPreference);
+      motion.removeEventListener("change", updateMotion);
       document.removeEventListener("visibilitychange", updateMotion);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", onLayout);
+      document.removeEventListener("pointerdown", closePicker);
       density.removeEventListener("change", onDensityChange);
       renderer?.dispose();
     };
   }, []);
 
+  useEffect(() => {
+    controllerRef.current?.syncFloaties();
+  }, [items]);
+
   return (
-    <section
+    <div
       ref={heroRef}
       className={styles.hero}
-      aria-label="Introduction"
       data-water-ready={mode === "playing" || mode === "paused" ? "" : undefined}
     >
-      <canvas ref={canvasRef} className={styles.water} aria-hidden="true" />
-      <div ref={duckRef} className={styles.duck} aria-hidden="true">
-        <Image
-          src="/pool/duck.webp"
-          alt=""
-          width={384}
-          height={384}
-          unoptimized
-          loading="eager"
-          draggable={false}
-        />
+      <div className={styles.scene} aria-hidden="true">
+        <canvas ref={canvasRef} className={styles.water} />
+        <div ref={duckRef} className={styles.duck} data-floatie="duck">
+          <FloatieArt kind="duck" />
+        </div>
+        {items.map(({ id, kind, drop }) => (
+          <div
+            key={id}
+            data-floatie={kind}
+            className={`${styles.floatie} ${styles[kind]} ${styles.spawned}`}
+            ref={(element) => {
+              if (element) extrasRef.current.set(id, { element, kind, drop });
+              else extrasRef.current.delete(id);
+            }}
+          >
+            <FloatieArt kind={kind} />
+          </div>
+        ))}
       </div>
+      {dragKind && (
+        <div
+          ref={ghostRef}
+          className={`${styles.floatie} ${styles[dragKind]} ${styles.dragGhost}`}
+          aria-hidden="true"
+        >
+          <FloatieArt kind={dragKind} />
+        </div>
+      )}
       <div ref={contentRef} className={styles.content}>
         {children}
       </div>
-      {(mode === "playing" || mode === "paused") && (
-        <div className={styles.controls}>
+      <div
+        className={styles.controls}
+        data-pool-exclusion
+        hidden={mode !== "playing" && mode !== "paused"}
+      >
+        <details
+          ref={pickerRef}
+          className={styles.picker}
+          data-pool-exclusion
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && pickerRef.current?.open) {
+              pickerRef.current.open = false;
+              pickerRef.current.querySelector("summary")?.focus();
+              event.preventDefault();
+            }
+          }}
+        >
+          <summary className={styles.addButton} aria-label="Edit the pool" title="Edit the pool">
+            <PoolEditIcon className={styles.controlIcon} />
+          </summary>
+          <div className={styles.pickerPanel} data-pool-exclusion>
+            <div className={styles.pickerHeading}>
+              Add to the pool{" "}
+              <span>
+                {items.length + 1}/{MAX_FLOATIES} floating
+              </span>
+            </div>
+            <div className={styles.pickerGrid}>
+              {floatieCatalog.map(({ kind, label }) => (
+                <button
+                  key={kind}
+                  type="button"
+                  disabled={poolIsFull}
+                  title={`Drag ${label} into the pool, or click to drop it in`}
+                  draggable={false}
+                  // A native drag would swallow the pointer stream this gesture runs on.
+                  onDragStart={(event) => event.preventDefault()}
+                  onPointerDown={(event) => {
+                    if (poolIsFull || (event.pointerType === "mouse" && event.button !== 0)) return;
+                    dragRef.current = {
+                      kind,
+                      pointerId: event.pointerId,
+                      startX: event.clientX,
+                      startY: event.clientY,
+                      x: event.clientX,
+                      y: event.clientY,
+                      active: false,
+                    };
+                    event.currentTarget.setPointerCapture(event.pointerId);
+                  }}
+                  onPointerMove={(event) => {
+                    const drag = dragRef.current;
+                    if (!drag || drag.pointerId !== event.pointerId) return;
+                    drag.x = event.clientX;
+                    drag.y = event.clientY;
+                    if (!drag.active) {
+                      const travelled = Math.hypot(
+                        event.clientX - drag.startX,
+                        event.clientY - drag.startY,
+                      );
+                      if (travelled < DRAG_THRESHOLD) return;
+                      drag.active = true;
+                      setDragKind(drag.kind);
+                      return;
+                    }
+                    moveGhost(event.clientX, event.clientY);
+                  }}
+                  onPointerUp={(event) => {
+                    const drag = dragRef.current;
+                    dragRef.current = null;
+                    if (!drag || drag.pointerId !== event.pointerId) return;
+                    if (!drag.active) return;
+                    dragEndRef.current = performance.now();
+                    setDragKind(null);
+                    const rect = canvasRef.current?.getBoundingClientRect();
+                    addFloatie(
+                      drag.kind,
+                      rect && {
+                        x: event.clientX - rect.left,
+                        y: event.clientY - rect.top,
+                      },
+                    );
+                  }}
+                  onPointerCancel={() => {
+                    dragRef.current = null;
+                    setDragKind(null);
+                  }}
+                  onClick={() => {
+                    if (performance.now() - dragEndRef.current < 300) return;
+                    addFloatie(kind);
+                  }}
+                >
+                  <span className={`${styles[kind]} ${styles.preview}`} aria-hidden="true">
+                    <FloatieArt kind={kind} />
+                  </span>
+                  {label}
+                </button>
+              ))}
+            </div>
+            {(spawnError || poolIsFull) && (
+              <p className={styles.pickerHint}>
+                {spawnError || "Pool’s full. Clear extras to make room."}
+              </p>
+            )}
+            <button
+              className={styles.clearButton}
+              type="button"
+              disabled={items.length === 0}
+              onClick={() => {
+                setItems([]);
+                setSpawnError("");
+                setAnnouncement("Extras cleared. Just the duck again.");
+              }}
+            >
+              Clear extras
+            </button>
+          </div>
+        </details>
+        {mode === "playing" && (
           <Button
             variant="outline"
-            size="icon-lg"
-            className={styles.pause}
-            aria-label={mode === "playing" ? "Pause animation" : "Play animation"}
-            onClick={() => controllerRef.current?.toggle()}
+            className={styles.nudge}
+            onClick={() => controllerRef.current?.nudge()}
           >
-            {mode === "playing" ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
+            Nudge the floaties
           </Button>
-          {mode === "playing" && (
-            <Button
-              variant="outline"
-              className={styles.nudge}
-              onClick={() => controllerRef.current?.nudge()}
-            >
-              Nudge the duck
-            </Button>
-          )}
-        </div>
-      )}
-    </section>
+        )}
+      </div>
+      <p role="status" className={styles.srOnly}>
+        {announcement}
+      </p>
+    </div>
   );
 }
