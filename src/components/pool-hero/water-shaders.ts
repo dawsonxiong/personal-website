@@ -1,3 +1,6 @@
+import { MAX_FLOATIES } from "./floatie-catalog";
+import { MAX_RIPPLES, RIPPLE_LIFETIME } from "./water-effects";
+
 export const waterVertexShader = `#version 300 es
 in vec2 aPosition;
 
@@ -12,8 +15,9 @@ precision highp float;
 uniform vec2 uResolution;
 uniform vec2 uViewport;
 uniform float uTime;
-uniform vec3 uDuck;
-uniform vec4 uRipples[6];
+uniform vec3 uFloaties[${MAX_FLOATIES}];
+uniform vec4 uRipples[${MAX_RIPPLES}];
+uniform float uRippleSizes[${MAX_RIPPLES}];
 out vec4 fragColor;
 
 const mat2 TURN = mat2(0.80, -0.60, 0.60, 0.80);
@@ -99,15 +103,15 @@ void main() {
 
   float wakeLight = 0.0;
   vec2 surfacePixel = vec2(uv.x, 1.0 - uv.y) * uViewport;
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < ${MAX_RIPPLES}; i++) {
     float age = uTime - uRipples[i].z;
-    if (uRipples[i].w > 0.0 && age >= 0.0 && age < 1.7) {
+    if (uRipples[i].w > 0.0 && age >= 0.0 && age < ${RIPPLE_LIFETIME}) {
       vec2 delta = surfacePixel - uRipples[i].xy;
       float distanceFromWake = length(delta);
-      float radius = uDuck.z * (0.20 + age * 0.65);
-      float band = (distanceFromWake - radius) / (1.0 + uDuck.z * 0.045);
+      float radius = uRippleSizes[i] * 0.4 + age * 52.0;
+      float band = (distanceFromWake - radius) / (1.0 + uRippleSizes[i] * 0.09);
       float ring = exp(-band * band) * exp(-age * 2.0);
-      ring *= (1.0 - smoothstep(1.1, 1.7, age)) * uRipples[i].w;
+      ring *= (1.0 - smoothstep(0.25, ${RIPPLE_LIFETIME}, age)) * uRipples[i].w;
       wakeLight += ring;
       vec2 normal = delta / max(distanceFromWake, 0.001) * vec2(1.0, -1.0);
       refracted += normal * ring * band * 0.007;
@@ -124,12 +128,14 @@ void main() {
   vec3 litBlue = vec3(0.490, 0.795, 0.995);
   vec3 color = mix(deepBlue, litBlue, light);
 
-  // A faint pool-floor shadow bends with the same refraction as the tiles.
-  if (uDuck.z > 0.0) {
-    float worldScale = 3.6 / min(uViewport.x, uViewport.y);
-    vec2 duckCenter = vec2(uDuck.x - uViewport.x * 0.5, uViewport.y * 0.5 - uDuck.y);
-    vec2 shadowCenter = (duckCenter + vec2(0.13, -0.28) * uDuck.z) * worldScale;
-    vec2 shadowUV = (refracted - shadowCenter) / (uDuck.z * worldScale * vec2(0.38, 0.48));
+  // Soft floor shadows share the tiles' refraction and the sprites' surface pose.
+  float worldScale = 3.6 / min(uViewport.x, uViewport.y);
+  for (int i = 0; i < ${MAX_FLOATIES}; i++) {
+    vec3 body = uFloaties[i];
+    if (body.z <= 0.0) continue;
+    vec2 center = vec2(body.x - uViewport.x * 0.5, uViewport.y * 0.5 - body.y);
+    vec2 shadowCenter = (center + vec2(0.26, -0.56) * body.z) * worldScale;
+    vec2 shadowUV = (refracted - shadowCenter) / (body.z * worldScale * vec2(0.9, 1.0));
     color *= 1.0 - exp(-dot(shadowUV, shadowUV) * 1.7) * 0.14;
   }
 

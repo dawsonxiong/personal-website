@@ -236,11 +236,11 @@
   position: absolute;
   right: 0;
   bottom: 54px;
-  width: min(240px, calc(100vw - 32px));
+  width: min(168px, calc(100vw - 32px));
   max-height: calc(100dvh - 160px);
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 16px;
+  padding: 12px;
   border: 1px solid #f0fcffbf;
   border-radius: 16px;
   background: #e1f3fbf5;
@@ -249,17 +249,9 @@
 }
 
 .pickerHeading {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
   margin-bottom: 14px;
   font-size: 13px;
   font-weight: 550;
-}
-
-.pickerHeading span {
-  font-weight: 400;
-  opacity: 0.7;
 }
 
 .pickerGrid {
@@ -270,14 +262,11 @@
 
 .pickerGrid button {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 8px 4px;
-  border: 1px solid #7cacc52b;
+  padding: 10px 4px;
+  border: 0;
   border-radius: 8px;
-  font-size: 11px;
   cursor: grab;
   touch-action: none;
   user-select: none;
@@ -289,7 +278,6 @@
 
 .pickerGrid button:hover:not(:disabled) {
   background: #ffffffa6;
-  border-color: #7cacc58c;
 }
 
 .picker button:disabled {

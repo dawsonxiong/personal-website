@@ -13,6 +13,7 @@ import {
   stepFloaties,
 } from "./floatie-physics";
 import { floatieCatalog, MAX_FLOATIES, type FloatieKind } from "./floatie-catalog";
+import { createWaterEffects, surfacePose } from "./water-effects";
 import { createWaterRenderer } from "./water-renderer";
 import styles from "./pool-hero.module.css";
 
@@ -112,28 +113,21 @@ export function PoolHero({ children }: { children: ReactNode }) {
     let quality = 1;
     const motionEnabled = () => !motion.matches;
     const duckMotion = createDuckMotion(Math.random, { x: 0.16, y: 0.32 }, 0.42);
-    const duckPose = duckMotion.pose;
     let floaties = [{ element: duck, motion: duckMotion }];
     let bodies = floaties.map(({ motion: movement }) => movement);
     const exclusionElements = Array.from(
       hero.querySelectorAll<HTMLElement>("[data-pool-exclusion]"),
     );
-    const ripples = new Float32Array(24);
-    let rippleIndex = 0;
-    let lastRippleTime = 0;
-    let lastRippleX = 0;
-    let lastRippleY = 0;
+    const waterEffects = createWaterEffects();
     let pointer: { x: number; y: number } | null = null;
 
-    const render = () => {
+    const render = (emitWake = false) => {
       for (const { element, motion: movement } of floaties) {
-        const pose = movement.pose;
-        const angle = pose.angle + Math.sin(elapsed * 0.63) * 0.04;
-        const bob = Math.sin(elapsed * 1.6) * 0.8;
-        const scale = 1 + Math.sin(elapsed * 1.3) * 0.008;
-        element.style.transform = `translate3d(${pose.x}px, ${pose.y + bob}px, 0) translate(-50%, -50%) rotate(${angle}rad) scale(${scale})`;
+        const pose = surfacePose(movement.pose, elapsed);
+        element.style.transform = `translate3d(${pose.x}px, ${pose.y}px, 0) translate(-50%, -50%) rotate(${pose.angle}rad)`;
       }
-      renderer?.draw(elapsed, duckPose, ripples);
+      waterEffects.update(bodies, elapsed, emitWake);
+      renderer?.draw(elapsed, waterEffects);
     };
 
     const draw = (now: number) => {
@@ -142,7 +136,7 @@ export function PoolHero({ children }: { children: ReactNode }) {
       if (clock.stopped) {
         renderer?.dispose();
         renderer = null;
-        ripples.fill(0);
+        waterEffects.clear();
         updateMotion();
         return;
       }
@@ -158,22 +152,8 @@ export function PoolHero({ children }: { children: ReactNode }) {
           if (pointer) movement.flee(pointer.x, pointer.y);
         }
         stepFloaties(bodies, delta);
-        if (
-          duckPose.speed > 45 &&
-          elapsed - lastRippleTime > 0.09 &&
-          Math.hypot(duckPose.x - lastRippleX, duckPose.y - lastRippleY) > duckPose.size * 0.2
-        ) {
-          const index = (rippleIndex++ % 6) * 4;
-          ripples[index] = duckPose.x - Math.sin(duckPose.angle) * duckPose.size * 0.24;
-          ripples[index + 1] = duckPose.y + Math.cos(duckPose.angle) * duckPose.size * 0.24;
-          ripples[index + 2] = elapsed;
-          ripples[index + 3] = Math.min(1, duckPose.speed / 220);
-          lastRippleTime = elapsed;
-          lastRippleX = duckPose.x;
-          lastRippleY = duckPose.y;
-        }
       }
-      render();
+      render(delta > 0);
     };
 
     const updateMotion = () => {
@@ -189,6 +169,12 @@ export function PoolHero({ children }: { children: ReactNode }) {
 
     const readExclusions = () =>
       exclusionElements
+        .filter((element) => {
+          // Closed details can retain nonzero descendant rectangles. Only the
+          // disclosure itself occupies water while its panel is hidden.
+          const closedPicker = element.closest("details:not([open])");
+          return !closedPicker || element === closedPicker;
+        })
         .map((element) => element.getBoundingClientRect())
         .filter((rect) => rect.width > 0 && rect.height > 0);
 
@@ -208,7 +194,7 @@ export function PoolHero({ children }: { children: ReactNode }) {
 
     const resize = () => {
       renderer?.resize();
-      ripples.fill(0);
+      waterEffects.clear();
       for (const { element, motion: movement } of floaties) {
         movement.resize(canvas.clientWidth, canvas.clientHeight, element.offsetWidth);
         element.style.left = "0";
@@ -258,7 +244,7 @@ export function PoolHero({ children }: { children: ReactNode }) {
       event.preventDefault();
       renderer?.dispose();
       renderer = null;
-      ripples.fill(0);
+      waterEffects.clear();
       updateMotion();
     };
     const onContextRestored = () => {
@@ -271,7 +257,11 @@ export function PoolHero({ children }: { children: ReactNode }) {
     controllerRef.current = {
       syncFloaties() {
         const liveElements = new Set([...extrasRef.current.values()].map(({ element }) => element));
-        floaties = floaties.filter(({ element }) => element === duck || liveElements.has(element));
+        const remaining = floaties.filter(
+          ({ element }) => element === duck || liveElements.has(element),
+        );
+        if (remaining.length !== floaties.length) waterEffects.clear();
+        floaties = remaining;
         bodies = floaties.map(({ motion: movement }) => movement);
         const zones = readExclusions();
         for (const [id, { element, kind, drop }] of extrasRef.current) {
@@ -351,6 +341,8 @@ export function PoolHero({ children }: { children: ReactNode }) {
     document.addEventListener("visibilitychange", updateMotion);
     window.addEventListener("resize", resize);
     window.addEventListener("scroll", onLayout, { passive: true });
+    const picker = pickerRef.current;
+    picker?.addEventListener("toggle", onLayout);
     const closePicker = (event: PointerEvent) => {
       if (
         event.target instanceof Node &&
@@ -380,6 +372,7 @@ export function PoolHero({ children }: { children: ReactNode }) {
       document.removeEventListener("visibilitychange", updateMotion);
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onLayout);
+      picker?.removeEventListener("toggle", onLayout);
       document.removeEventListener("pointerdown", closePicker);
       density.removeEventListener("change", onDensityChange);
       renderer?.dispose();
@@ -448,18 +441,14 @@ export function PoolHero({ children }: { children: ReactNode }) {
             <PoolEditIcon className={styles.controlIcon} />
           </summary>
           <div className={styles.pickerPanel} data-pool-exclusion>
-            <div className={styles.pickerHeading}>
-              Add to the pool{" "}
-              <span>
-                {items.length + 1}/{MAX_FLOATIES} floating
-              </span>
-            </div>
+            <div className={styles.pickerHeading}>Add to the pool</div>
             <div className={styles.pickerGrid}>
               {floatieCatalog.map(({ kind, label }) => (
                 <button
                   key={kind}
                   type="button"
                   disabled={poolIsFull}
+                  aria-label={label}
                   title={`Drag ${label} into the pool, or click to drop it in`}
                   draggable={false}
                   // A native drag would swallow the pointer stream this gesture runs on.
@@ -522,14 +511,11 @@ export function PoolHero({ children }: { children: ReactNode }) {
                   <span className={`${styles[kind]} ${styles.preview}`} aria-hidden="true">
                     <FloatieArt kind={kind} />
                   </span>
-                  {label}
                 </button>
               ))}
             </div>
             {(spawnError || poolIsFull) && (
-              <p className={styles.pickerHint}>
-                {spawnError || "Pool’s full. Clear extras to make room."}
-              </p>
+              <p className={styles.pickerHint}>{spawnError || "Pool’s full!"}</p>
             )}
             <button
               className={styles.clearButton}
@@ -541,7 +527,7 @@ export function PoolHero({ children }: { children: ReactNode }) {
                 setAnnouncement("Extras cleared. Just the duck again.");
               }}
             >
-              Clear extras
+              Clear
             </button>
           </div>
         </details>

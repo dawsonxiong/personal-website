@@ -1,14 +1,11 @@
+import type { createWaterEffects } from "./water-effects";
 import { waterFragmentShader, waterVertexShader } from "./water-shaders";
 
 const MAX_PIXEL_RATIO = 1.5;
 const MAX_RENDER_PIXELS = 1_100_000;
 
 export interface WaterRenderer {
-  draw: (
-    seconds: number,
-    duck?: { x: number; y: number; size: number },
-    ripples?: Float32Array,
-  ) => void;
+  draw: (seconds: number, effects: ReturnType<typeof createWaterEffects>) => void;
   resize: () => void;
   /** Scales the drawing buffer. The shader is fragment bound, so cost tracks pixels. */
   setQuality: (scale: number) => void;
@@ -75,9 +72,9 @@ export function createWaterRenderer(canvas: HTMLCanvasElement): WaterRenderer | 
   const resolution = gl.getUniformLocation(program, "uResolution");
   const viewport = gl.getUniformLocation(program, "uViewport");
   const time = gl.getUniformLocation(program, "uTime");
-  const duckPosition = gl.getUniformLocation(program, "uDuck");
+  const floaties = gl.getUniformLocation(program, "uFloaties[0]");
   const wake = gl.getUniformLocation(program, "uRipples[0]");
-  const emptyWake = new Float32Array(24);
+  const rippleSizes = gl.getUniformLocation(program, "uRippleSizes[0]");
   let quality = 1;
 
   return {
@@ -103,10 +100,11 @@ export function createWaterRenderer(canvas: HTMLCanvasElement): WaterRenderer | 
       gl.uniform2f(resolution, renderWidth, renderHeight);
       gl.uniform2f(viewport, width, height);
     },
-    draw(seconds, duck, ripples) {
+    draw(seconds, effects) {
       gl.uniform1f(time, seconds);
-      gl.uniform3f(duckPosition, duck?.x ?? 0, duck?.y ?? 0, duck?.size ?? 0);
-      gl.uniform4fv(wake, ripples ?? emptyWake);
+      gl.uniform3fv(floaties, effects.floaties);
+      gl.uniform4fv(wake, effects.ripples);
+      gl.uniform1fv(rippleSizes, effects.rippleSizes);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     },
     dispose,

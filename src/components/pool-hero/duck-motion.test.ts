@@ -259,3 +259,30 @@ test("spawning fails safely when no open water remains", () => {
   assert.equal(placeFloatie(movement, [existing], 390, 844, zones), false);
   assert.deepEqual(existing.pose, before);
 });
+
+test("wall correction preserves velocity already pointing back into the pool", () => {
+  const movement = body(42, 400, 60, 30, 12);
+  movement.moveBy(-20, 0);
+  assert.equal(movement.velocity.x, 30);
+  assert.equal(movement.velocity.y, 12);
+  assertClear(movement.pose, [], 1280, 900);
+});
+
+test("slow contacts settle without a restitution bounce", () => {
+  const a = body(500, 400, 60, 2);
+  const b = body(560, 400, 60, -2);
+  resolveFloatieCollisions([a, b]);
+  assertSeparated([a, b]);
+  assert.ok(Math.abs(a.velocity.x - b.velocity.x) < 0.0001);
+});
+
+test("resizing does not project a right-lane toy against stale desktop exclusions", () => {
+  const movement = createDuckMotion(randomSource(), { x: 0.87, y: 0.5 });
+  movement.resize(1024, 1039, 96);
+  movement.setExclusions([{ left: 237, right: 787, top: 100, bottom: 1000 }]);
+  movement.resize(390, 844, 28);
+  const zones = [{ left: 48, right: 342, top: 100, bottom: 800 }];
+  movement.setExclusions(zones);
+  assert.ok(movement.pose.x > 342, "the toy stays in the right lane after resizing");
+  assertClear(movement.pose, zones, 390, 844);
+});

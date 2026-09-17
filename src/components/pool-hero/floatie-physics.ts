@@ -3,6 +3,7 @@ import type { ExclusionZone } from "./duck-motion";
 
 type Floatie = ReturnType<typeof createDuckMotion>;
 const RESTITUTION = 0.45;
+const BOUNCE_THRESHOLD = 10;
 const CONTACT_TOLERANCE = 0.01;
 const SPAWN_GAP = 6;
 
@@ -99,7 +100,9 @@ export function resolveFloatieCollisions(bodies: readonly Floatie[]) {
 
         // Only approaching bodies bounce; separating contacts must not gain energy.
         if (closingSpeed < 0) {
-          const impulse = -(1 + RESTITUTION) * closingSpeed;
+          // Slow drift should settle into contact instead of chattering.
+          const restitution = closingSpeed < -BOUNCE_THRESHOLD ? RESTITUTION : 0;
+          const impulse = -(1 + restitution) * closingSpeed;
           a.applyImpulse(-nx * impulse * weightA, -ny * impulse * weightA);
           b.applyImpulse(nx * impulse * weightB, ny * impulse * weightB);
         }

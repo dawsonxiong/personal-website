@@ -81,14 +81,14 @@ export function createDuckMotion(
     }
   };
 
-  const contain = () => {
-    if (pose.x < minX || pose.x > maxX)
-      vx = pose.x < minX ? Math.abs(vx) * 0.3 : -Math.abs(vx) * 0.3;
-    if (pose.y < minY || pose.y > maxY)
-      vy = pose.y < minY ? Math.abs(vy) * 0.3 : -Math.abs(vy) * 0.3;
+  const contain = (checkContent = true) => {
+    // Contact correction can cross a wall while velocity already points away.
+    // Only an incoming velocity should lose energy to a wall impact.
+    if ((pose.x < minX && vx < 0) || (pose.x > maxX && vx > 0)) vx *= -0.3;
+    if ((pose.y < minY && vy < 0) || (pose.y > maxY && vy > 0)) vy *= -0.3;
     pose.x = clamp(pose.x, minX, maxX);
     pose.y = clamp(pose.y, minY, maxY);
-    avoidContent();
+    if (checkContent) avoidContent();
   };
 
   return {
@@ -135,7 +135,9 @@ export function createDuckMotion(
       minY = Math.min(Math.max(margin, 120), height * 0.5);
       maxY = Math.max(minY, height - Math.max(margin, 80));
       acceleration = clamp(Math.min(width, height) * 1.8, 950, 1550);
-      contain();
+      // The layout owner calls setExclusions with fresh rectangles after resize.
+      // Projecting against the previous viewport first can move a toy across the pool.
+      contain(false);
     },
 
     flee(pointerX: number, pointerY: number, touch = false, force = false) {
