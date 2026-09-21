@@ -53,6 +53,7 @@ Sometime after launch, this site may grow an activity feed like `v1` (WakaTime /
 - UI icons: Central Icons via `@/components/icons` — do not add `lucide-react` for app UI.
 - Do not add a second host.
 - Do not add auth, a database, or extra routes without being asked.
+- Short/easy tweaks (copy, spacing, text size): edit only — no `pnpm build` / `typecheck` / `lint` unless asked or types may break.
 
 ## MCP
 

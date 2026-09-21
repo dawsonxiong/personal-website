@@ -286,3 +286,52 @@ test("resizing does not project a right-lane toy against stale desktop exclusion
   assert.ok(movement.pose.x > 342, "the toy stays in the right lane after resizing");
   assertClear(movement.pose, zones, 390, 844);
 });
+
+test("an entrance swims across content to the resting spot, then avoids it again", () => {
+  const width = 1280;
+  const height = 800;
+  const zones = [
+    { left: 0, top: 0, right: width, bottom: 70 },
+    { left: 340, top: 250, right: 940, bottom: 550 },
+  ];
+  const movement = createDuckMotion(randomSource(), { x: 0.16, y: 0.32 });
+  movement.resize(width, height, 96);
+  movement.setExclusions(zones);
+  const home = { x: movement.pose.x, y: movement.pose.y };
+
+  movement.enterFrom(width / 2, height / 2);
+  movement.setExclusions(zones);
+  assert.deepEqual([movement.pose.x, movement.pose.y], [width / 2, height / 2]);
+
+  for (let frame = 0; frame < 60; frame++) movement.step(1 / 60);
+  assert.deepEqual([movement.pose.x, movement.pose.y], [width / 2, height / 2], "waits");
+  assert.equal(movement.flee(width / 2, height / 2, false, true), false, "ignores the pointer");
+
+  movement.depart();
+  let frames = 0;
+  while (movement.entering && frames < 600) {
+    movement.step(1 / 60);
+    frames++;
+  }
+  assert.ok(frames < 240, `arrives within four seconds, took ${frames} frames`);
+  assert.ok(Math.hypot(movement.pose.x - home.x, movement.pose.y - home.y) < 8);
+
+  for (let frame = 0; frame < 600; frame++) {
+    movement.step(1 / 60);
+    assertClear(movement.pose, zones, width, height);
+  }
+});
+
+test("an entrance still arrives when the resting spot hugs a wall", () => {
+  const movement = createDuckMotion(randomSource(), { x: 0, y: 0 });
+  movement.resize(390, 844, 28);
+  movement.setExclusions([{ left: 24, top: 150, right: 366, bottom: 700 }]);
+  movement.enterFrom(195, 422);
+  movement.depart();
+  let frames = 0;
+  while (movement.entering && frames < 600) {
+    movement.step(1 / 60);
+    frames++;
+  }
+  assert.ok(frames < 240, `took ${frames} frames`);
+});

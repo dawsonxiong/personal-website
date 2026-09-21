@@ -19,6 +19,10 @@ import styles from "./pool-hero.module.css";
 
 type DropPoint = { x: number; y: number };
 const DRAG_THRESHOLD = 8;
+// Milliseconds on the CSS intro clock, which also times the content reveal in the stylesheets.
+const INTRO_DEPART = 700;
+const INTRO_MIN_HOLD = 450;
+const INTRO_LATEST_START = 500;
 
 function FloatieArt({ kind }: { kind: FloatieKind }) {
   if (kind === "duck")
@@ -41,7 +45,12 @@ function FloatieArt({ kind }: { kind: FloatieKind }) {
         <span className={styles.turtleShell} />
       </>
     );
-  return null;
+  return (
+    <>
+      <span className={styles.floatieBody} />
+      <span className={styles.floatieGloss} />
+    </>
+  );
 }
 
 export function PoolHero({ children }: { children: ReactNode }) {
@@ -62,6 +71,8 @@ export function PoolHero({ children }: { children: ReactNode }) {
     syncFloaties: () => void;
   } | null>(null);
   const [mode, setMode] = useState<"loading" | "playing" | "paused" | "fallback">("loading");
+  // The duck waits mid-pool ("hold"), then swims home ("swim") while the content eases in.
+  const [intro, setIntro] = useState<"pending" | "hold" | "swim" | "done">("pending");
   const [dragKind, setDragKind] = useState<FloatieKind | null>(null);
   const ghostRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{
@@ -145,6 +156,11 @@ export function PoolHero({ children }: { children: ReactNode }) {
         quality = clock.quality;
         renderer?.setQuality(quality);
         renderer?.resize();
+      }
+      if (departAt !== null && introClock.currentTime >= departAt) {
+        departAt = null;
+        duckMotion.depart();
+        setIntro("swim");
       }
       if (delta > 0) {
         elapsed += delta;
@@ -354,6 +370,30 @@ export function PoolHero({ children }: { children: ReactNode }) {
     document.addEventListener("pointerdown", closePicker);
     watchDensity();
     resize();
+
+    // The reveal runs on a CSS clock, so content still appears if this script never does.
+    // The duck joins in only when it can start on time; otherwise it simply rests at home.
+    const introClock = {
+      animation: renderer && motionEnabled() ? hero.getAnimations()[0] : undefined,
+      get currentTime() {
+        return Number(this.animation?.currentTime ?? Infinity);
+      },
+    };
+    let departAt: number | null = null;
+    if (introClock.currentTime < INTRO_LATEST_START) {
+      duckMotion.enterFrom(canvas.clientWidth / 2, canvas.clientHeight / 2);
+      departAt = Math.max(INTRO_DEPART, introClock.currentTime + INTRO_MIN_HOLD);
+      setIntro("hold");
+    } else {
+      setIntro("done");
+    }
+    const onIntroEnd = (event: AnimationEvent) => {
+      if (event.target !== hero) return;
+      setIntro("done");
+      // The content has settled out of its entrance transforms; measure where it really is.
+      onLayout();
+    };
+    hero.addEventListener("animationend", onIntroEnd);
     updateMotion();
 
     return () => {
@@ -364,6 +404,7 @@ export function PoolHero({ children }: { children: ReactNode }) {
       visibility.disconnect();
       canvas.removeEventListener("webglcontextlost", onContextLost);
       canvas.removeEventListener("webglcontextrestored", onContextRestored);
+      hero.removeEventListener("animationend", onIntroEnd);
       hero.removeEventListener("pointermove", onPointer);
       hero.removeEventListener("pointerdown", onPointer);
       hero.removeEventListener("pointerleave", clearPointer);
@@ -387,6 +428,7 @@ export function PoolHero({ children }: { children: ReactNode }) {
     <div
       ref={heroRef}
       className={styles.hero}
+      data-intro={intro === "done" ? undefined : intro}
       data-water-ready={mode === "playing" || mode === "paused" ? "" : undefined}
     >
       <div className={styles.scene} aria-hidden="true">
@@ -449,7 +491,6 @@ export function PoolHero({ children }: { children: ReactNode }) {
                   type="button"
                   disabled={poolIsFull}
                   aria-label={label}
-                  title={`Drag ${label} into the pool, or click to drop it in`}
                   draggable={false}
                   // A native drag would swallow the pointer stream this gesture runs on.
                   onDragStart={(event) => event.preventDefault()}

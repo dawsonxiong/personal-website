@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import styles from "./portfolio.module.css";
+import { syncScrollEdgeFade } from "./scroll-edge-fade";
 
 const sections = ["about", "experience", "projects", "activity"] as const;
 type Section = (typeof sections)[number];
@@ -26,6 +27,33 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
       window.removeEventListener("popstate", syncHash);
     };
   }, []);
+
+  useEffect(() => {
+    const panel = panelRefs.current[active];
+    const column = panel?.parentElement;
+    if (!panel || !column) return;
+
+    const updateFade = () => {
+      syncScrollEdgeFade(panel, "y", column, "fadeTop", "fadeBottom");
+    };
+
+    updateFade();
+    const frame = requestAnimationFrame(updateFade);
+    panel.addEventListener("scroll", updateFade, { passive: true });
+    const observer = new ResizeObserver(updateFade);
+    observer.observe(panel);
+    if (panel.firstElementChild) observer.observe(panel.firstElementChild);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      panel.removeEventListener("scroll", updateFade);
+      observer.disconnect();
+      delete column.dataset.fadeTop;
+      delete column.dataset.fadeBottom;
+      delete panel.dataset.fadeTop;
+      delete panel.dataset.fadeBottom;
+    };
+  }, [active]);
 
   const select = (section: Section) => {
     if (section === active) return;
@@ -84,28 +112,27 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
         Skip to content
       </button>
       <header className={styles.header} data-pool-exclusion>
-        <a className={styles.name} href="#about">
-          Dawson Xiong
-        </a>
-        <div className={styles.nav} role="tablist" aria-label="Portfolio sections">
-          {sections.map((section) => (
-            <button
-              key={section}
-              type="button"
-              role="tab"
-              id={`tab-${section}`}
-              aria-controls={`panel-${section}`}
-              aria-selected={active === section}
-              tabIndex={active === section ? 0 : -1}
-              ref={(element) => {
-                if (element) tabRefs.current[section] = element;
-              }}
-              onClick={() => select(section)}
-              onKeyDown={(event) => onTabKeyDown(event, section)}
-            >
-              {section}
-            </button>
-          ))}
+        <div className={styles.barInner}>
+          <div className={styles.nav} role="tablist" aria-label="Portfolio sections">
+            {sections.map((section) => (
+              <button
+                key={section}
+                type="button"
+                role="tab"
+                id={`tab-${section}`}
+                aria-controls={`panel-${section}`}
+                aria-selected={active === section}
+                tabIndex={active === section ? 0 : -1}
+                ref={(element) => {
+                  if (element) tabRefs.current[section] = element;
+                }}
+                onClick={() => select(section)}
+                onKeyDown={(event) => onTabKeyDown(event, section)}
+              >
+                {section}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
       <main className={styles.column} data-pool-exclusion>
@@ -127,7 +154,9 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
         ))}
       </main>
       <footer className={styles.footer} data-pool-exclusion>
-        <span>© 2026 Dawson Xiong</span>
+        <div className={styles.barInner}>
+          <span>© 2026 Dawson Xiong</span>
+        </div>
       </footer>
     </div>
   );

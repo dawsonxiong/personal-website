@@ -1,59 +1,132 @@
 // Keep portfolio copy and the hand-written activity log in one place.
-// Experience dates are from the previous portfolio; no live data fetch is needed.
+// Resume content and selected work samples live in the tree; no live data fetch is needed.
+interface WorkSample {
+  src: string;
+  alt: string;
+  caption: string;
+  width: number;
+  height: number;
+  fit?: "cover" | "contain";
+}
+
+interface Experience {
+  company: string;
+  href: string;
+  role: string;
+  date: string;
+  description: string;
+  logo: string;
+  logoAlt: string;
+  stack?: string;
+  details?: string;
+  work?: WorkSample[];
+}
+
 export const experience = [
   {
-    company: "RevisionDojo",
-    href: "https://revisiondojo.com",
-    role: "Senior software engineer",
-    date: "May 2025–present",
-    description: "Building tools that bring AI into the classroom.",
-    details: "University discovery, vocabulary practice, social features, and a mobile app.",
+    company: "Scott's SAT Prep",
+    href: "https://www.scottssatprep.com",
+    role: "Founding Software Engineer",
+    date: "Aug 2026–present",
+    description:
+      "Built 1500 Blueprint's study planner, practive tools, and account management, and performed a security audit.",
+    logo: "/portfolio/organizations/scotts-sat-prep.svg",
+    logoAlt: "Scott's SAT Prep logo",
   },
   {
-    company: "Canada China Public Relations Foundation",
+    company: "General Learning (YC F24)",
+    href: "https://www.generallearning.com",
+    role: "Founding Engineer",
+    date: "May 2025–Aug 2026",
+    description:
+      "Helped grow RevisionDojo from 250K to 750K+ users. Shipped the mobile app and high-retention learning features.",
+    logo: "/portfolio/organizations/general-learning.svg",
+    logoAlt: "General Learning logo",
+    work: [
+      {
+        src: "/portfolio/revisiondojo/universities.webp",
+        alt: "RevisionDojo university profile with admissions data and a campus map",
+        caption: "University discovery",
+        width: 1128,
+        height: 1432,
+      },
+      {
+        src: "/portfolio/revisiondojo/vocab.webp",
+        alt: "RevisionDojo vocabulary practice interface",
+        caption: "Vocabulary practice",
+        width: 1400,
+        height: 834,
+      },
+      {
+        src: "/portfolio/revisiondojo/friends.webp",
+        alt: "RevisionDojo friends interface",
+        caption: "Social features",
+        width: 1400,
+        height: 1264,
+      },
+      {
+        src: "/portfolio/revisiondojo/mobile.webp",
+        alt: "RevisionDojo mobile app home screen",
+        caption: "Mobile app",
+        width: 1206,
+        height: 2622,
+        fit: "contain",
+      },
+    ],
+  },
+  {
+    company: "Crest Compass Professional Resource Foundation",
     href: "https://cc-prf.com",
-    role: "Software engineer",
-    date: "May–Aug 2025",
-    description: "Built the foundation’s website with Next.js and TypeScript.",
+    role: "Lead Frontend Software Engineer",
+    date: "May 2025–Jan 2026",
+    description: "Led the migration from WordPress to Next.js. Built a custom CMS for blogs and an encrypted payments system.",
+    logo: "/portfolio/organizations/ccprf.svg",
+    logoAlt: "CCPRF logo",
   },
   {
-    company: "Datacurve",
-    href: "https://shipd.ai",
-    role: "AI reasoning specialist, Shipd",
-    date: "Sep 2024–May 2025",
-    description: "Labelled, analyzed, and reviewed data to train foundational models.",
+    company: "Datacurve (YC W24)",
+    href: "https://datacurve.ai",
+    role: "Machine Learning Data Consultant",
+    date: "Sep 2024–Apr 2025",
+    description:
+      "Reviewed coding problems for LLM training data and helped tighten evaluation quality.",
+    logo: "/portfolio/organizations/datacurve.svg",
+    logoAlt: "Datacurve logo",
   },
-];
+] satisfies Experience[];
 
 export const projects = [
   {
+    name: "Thock",
+    href: "https://github.com/dawsonxiong/thock",
+    description: "A terminal typing engine with real-time WPM and accuracy metrics.",
+    stack: "Go, Bubble Tea, concurrency, TUI",
+    details:
+      "Replaced terminal buffer re-renders with raw I/O loops and goroutines, cutting p99 input latency from 35 ms to 0.6 ms.",
+  },
+  {
+    name: "ConvertKit",
+    href: "https://github.com/dawsonxiong/convertkit",
+    description: "A multi-format converter for images, audio, and documents.",
+    stack: "Rust, Tokio, FFmpeg, systems programming",
+    details:
+      "Built a bounded async worker pool over FFmpeg C bindings that processes batches in parallel, 3× faster than HandBrake.",
+  },
+  {
     name: "LaTeX.ly",
     href: "https://github.com/dawsonxiong/latex-ly",
-    description:
-      "From handwritten math to LaTeX. An OCR model trained to recognize mathematical symbols.",
-    stack: "Python, PyTorch, OpenCV, Next.js",
+    description: "A math OCR engine that turns handwritten and printed equations into LaTeX.",
+    stack: "Python, PyTorch, OpenCV, Next.js, TypeScript",
     details:
-      "Built a training set of more than 49,000 generated and handwritten symbol images, with a preprocessing pipeline for noisy handwriting.",
+      "Trained a PyTorch CNN on 25K+ equations, lifting character and syntax accuracy from 48% to 91% over Tesseract OCR.",
   },
   {
     name: "LinkedIt",
     href: "https://github.com/dawsonxiong/LinkedIt",
-    description: "A shorter path from finding a potential sponsor to making a connection.",
-    stack: "React, Flask, Selenium",
+    description: "A sponsor discovery platform that finds and filters relevant company profiles.",
+    stack: "Python, Selenium, Flask, React, Tailwind CSS",
     details:
-      "Search by two terms to find relevant LinkedIn profiles and contact details. Winner of Best Beginner Hack at GeeseHacks 2025.",
-  },
-  {
-    name: "React Native LaTeX renderer",
-    href: "https://github.com/dawsonxiong/react-native-LaTeX-renderer",
-    description: "A lightweight, auto-resizing way to render math in React Native apps.",
-    stack: "React Native, KaTeX",
-  },
-  {
-    name: "This little pool",
-    href: "#about",
-    description: "A home for my work, with moving water and a duck that likes its personal space.",
-    stack: "Next.js, TypeScript, WebGL",
+      "Cached scraped profiles per session to avoid redundant page loads; awarded first place at GeeseHacks.",
   },
 ];
 

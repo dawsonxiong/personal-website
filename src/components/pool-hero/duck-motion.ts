@@ -1,6 +1,9 @@
 const TAU = Math.PI * 2;
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 const MAX_SPEED = 360;
+// An entrance is a purposeful swim, quicker than anything the pointer can provoke.
+const ENTRANCE_SPEED = 620;
+const ARRIVAL_DISTANCE = 6;
 
 export interface DuckPose {
   x: number;
@@ -39,12 +42,16 @@ export function createDuckMotion(
   let escapeY = 0;
   let acceleration = 0;
   let exclusions: ExclusionZone[] = [];
+  // A scripted entrance: the toy swims to `seek`, crossing content it would otherwise avoid.
+  let seek: { x: number; y: number } | null = null;
+  let held = false;
 
   const limitSpeed = () => {
     const speed = Math.hypot(vx, vy);
-    if (speed > MAX_SPEED) {
-      vx *= MAX_SPEED / speed;
-      vy *= MAX_SPEED / speed;
+    const limit = seek ? ENTRANCE_SPEED : MAX_SPEED;
+    if (speed > limit) {
+      vx *= limit / speed;
+      vy *= limit / speed;
     }
     pose.speed = Math.hypot(vx, vy);
   };
@@ -52,16 +59,16 @@ export function createDuckMotion(
   const inside = (x: number, y: number, zone: ExclusionZone) =>
     x > zone.left && x < zone.right && y > zone.top && y < zone.bottom;
 
-  const avoidContent = () => {
-    if (!exclusions.some((zone) => inside(pose.x, pose.y, zone))) return;
+  const openWaterNear = (point: { x: number; y: number }) => {
+    if (!exclusions.some((zone) => inside(point.x, point.y, zone))) return point;
     let nearest: { x: number; y: number; distance: number } | null = null;
     // Project onto the nearest valid edge. This also handles instant anchor jumps,
     // resizes, and paused scenes without letting a sprite obscure readable text.
     const candidates = exclusions.flatMap((zone) => [
-      { x: zone.left, y: pose.y },
-      { x: zone.right, y: pose.y },
-      { x: pose.x, y: zone.top },
-      { x: pose.x, y: zone.bottom },
+      { x: zone.left, y: point.y },
+      { x: zone.right, y: point.y },
+      { x: point.x, y: zone.top },
+      { x: point.x, y: zone.bottom },
     ]);
     for (const x of [minX, maxX]) {
       for (const y of [minY, maxY]) candidates.push({ x, y });
@@ -70,15 +77,23 @@ export function createDuckMotion(
       const x = clamp(candidate.x, minX, maxX);
       const y = clamp(candidate.y, minY, maxY);
       if (exclusions.some((zone) => inside(x, y, zone))) continue;
-      const distance = Math.hypot(x - pose.x, y - pose.y);
+      const distance = Math.hypot(x - point.x, y - point.y);
       if (!nearest || distance < nearest.distance) nearest = { x, y, distance };
     }
-    if (nearest) {
-      if (pose.x !== nearest.x) vx = 0;
-      if (pose.y !== nearest.y) vy = 0;
-      pose.x = nearest.x;
-      pose.y = nearest.y;
+    return nearest ?? point;
+  };
+
+  const avoidContent = () => {
+    // The destination stays in open water; the swimmer itself may cross content to reach it.
+    if (seek) {
+      seek = openWaterNear(seek);
+      return;
     }
+    const open = openWaterNear(pose);
+    if (pose.x !== open.x) vx = 0;
+    if (pose.y !== open.y) vy = 0;
+    pose.x = open.x;
+    pose.y = open.y;
   };
 
   const contain = (checkContent = true) => {
@@ -99,6 +114,23 @@ export function createDuckMotion(
     },
     get velocity() {
       return { x: vx, y: vy };
+    },
+    get entering() {
+      return seek !== null;
+    },
+    /** Start away from the resting spot and wait there; `depart` begins the swim back to it. */
+    enterFrom(x: number, y: number) {
+      seek = { x: pose.x, y: pose.y };
+      held = true;
+      pose.x = x;
+      pose.y = y;
+      vx = 0;
+      vy = 0;
+      contain(false);
+      pose.speed = 0;
+    },
+    depart() {
+      held = false;
     },
     applyImpulse(x: number, y: number) {
       vx += x;
@@ -126,6 +158,9 @@ export function createDuckMotion(
     resize(nextWidth: number, nextHeight: number, size: number) {
       pose.x = width ? (pose.x / width) * nextWidth : nextWidth * start.x;
       pose.y = height ? (pose.y / height) * nextHeight : nextHeight * start.y;
+      if (seek && width && height) {
+        seek = { x: (seek.x / width) * nextWidth, y: (seek.y / height) * nextHeight };
+      }
       width = nextWidth;
       height = nextHeight;
       pose.size = size;
@@ -141,7 +176,7 @@ export function createDuckMotion(
     },
 
     flee(pointerX: number, pointerY: number, touch = false, force = false) {
-      if (cooldown > 0) return false;
+      if (cooldown > 0 || seek) return false;
       const dx = pose.x - pointerX;
       const dy = pose.y - pointerY;
       const radius = Math.max(touch ? 120 : 90, pose.size * 1.3);
@@ -173,7 +208,7 @@ export function createDuckMotion(
     step(delta: number) {
       // Small fixed upper-bound steps keep edge steering consistent at 30–120 Hz.
       let remaining = Math.min(delta, 0.05);
-      while (remaining > 0) {
+      while (remaining > 0 && !held) {
         const dt = Math.min(remaining, 1 / 120);
         remaining -= dt;
         time += dt;
@@ -181,8 +216,22 @@ export function createDuckMotion(
         let ax = 0;
         let ay = 0;
 
+        if (seek) {
+          const dx = seek.x - pose.x;
+          const dy = seek.y - pose.y;
+          const distance = Math.hypot(dx, dy);
+          if (distance < ARRIVAL_DISTANCE) {
+            seek = null;
+          } else {
+            // Ease off near the destination so the toy drifts in rather than braking.
+            const cruise = Math.min(ENTRANCE_SPEED, distance * 2.4 + 30);
+            ax += ((dx / distance) * cruise - vx) * 7;
+            ay += ((dy / distance) * cruise - vy) * 7;
+          }
+        }
+
         // Steer gently away before the hard exclusion boundary is reached.
-        for (const zone of exclusions) {
+        for (const zone of seek ? [] : exclusions) {
           const nearestX = clamp(pose.x, zone.left, zone.right);
           const nearestY = clamp(pose.y, zone.top, zone.bottom);
           const dx = pose.x - nearestX;
@@ -196,7 +245,9 @@ export function createDuckMotion(
           }
         }
 
-        if (burst > 0) {
+        if (seek) {
+          burst = 0;
+        } else if (burst > 0) {
           burst -= dt;
           ax += escapeX * acceleration;
           ay += escapeY * acceleration;
@@ -206,7 +257,8 @@ export function createDuckMotion(
         }
 
         const margin = Math.min(pose.size * 1.25, (maxX - minX) * 0.4, (maxY - minY) * 0.4);
-        if (margin > 0) {
+        // A destination beside a wall would otherwise be pushed out of reach.
+        if (margin > 0 && !seek) {
           const nextX = pose.x + vx * 0.24;
           const nextY = pose.y + vy * 0.24;
           ax +=
