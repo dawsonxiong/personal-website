@@ -1,5 +1,5 @@
-// Keep portfolio copy and the hand-written activity log in one place.
-// Resume content and selected work samples live in the tree; no live data fetch is needed.
+// Keep portfolio copy and the hand-picked misc lists in one place.
+// Resume content and selected work samples live in the tree; only the Monkeytype bests are fetched.
 interface WorkSample {
   src: string;
   alt: string;
@@ -79,7 +79,8 @@ export const experience = [
     href: "https://cc-prf.com",
     role: "Lead Frontend Software Engineer",
     date: "May 2025–Jan 2026",
-    description: "Led the migration from WordPress to Next.js. Built a custom CMS for blogs and an encrypted payments system.",
+    description:
+      "Led the migration from WordPress to Next.js. Built a custom CMS for blogs and an encrypted payments system.",
     logo: "/portfolio/organizations/ccprf.svg",
     logoAlt: "CCPRF logo",
   },
@@ -130,12 +131,46 @@ export const projects = [
   },
 ];
 
-// Newest first. Add actual updates here, including small works in progress.
-export const activity = [
+// Hand-picked, in no particular order.
+export const albums = [
   {
-    date: "2026-09-16",
-    label: "Sep 16, 2026",
-    text: "Turning my personal site into a swimming pool. You’re in it.",
-    href: "#about",
+    title: "9 Months & 50 Hours",
+    artist: "Fred again.. & Latin Mafia",
+    cover: "/portfolio/covers/9-months-50-hours.jpg",
+  },
+  {
+    title: "Blonde",
+    artist: "Frank Ocean",
+    cover: "/portfolio/covers/blonde.jpg",
+  },
+  {
+    title: "Nothing Was the Same",
+    artist: "Drake",
+    cover: "/portfolio/covers/nothing-was-the-same.jpg",
   },
 ];
+
+export const songs = [
+  {
+    title: "u + me = <3",
+    artist: "Olivia Rodrigo",
+    cover: "/portfolio/covers/u-me-3.jpg",
+  },
+  {
+    title: "Every Breath You Take",
+    artist: "The Police",
+    cover: "/portfolio/covers/every-breath-you-take.jpg",
+  },
+  {
+    title: "Devil in a New Dress",
+    artist: "Kanye West",
+    cover: "/portfolio/covers/devil-in-a-new-dress.jpg",
+  },
+];
+
+export const pokerHand = {
+  cards: [
+    { rank: "J", suit: "♥", name: "Jack of hearts" },
+    { rank: "10", suit: "♥", name: "Ten of hearts" },
+  ],
+};

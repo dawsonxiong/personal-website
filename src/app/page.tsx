@@ -3,10 +3,13 @@ import { PoolHero } from "@/components/pool-hero/pool-hero";
 import { CopyEmailButton } from "@/components/portfolio/copy-email-button";
 import { PortfolioTabs } from "@/components/portfolio/portfolio-tabs";
 import { WorkSamples } from "@/components/portfolio/work-samples";
-import { activity, experience, projects } from "@/content/portfolio";
+import { albums, experience, pokerHand, projects, songs } from "@/content/portfolio";
+import { MONKEYTYPE_PROFILE, getPersonalBests } from "@/lib/monkeytype";
 import styles from "@/components/portfolio/portfolio.module.css";
 
-export default function Home() {
+export default async function Home() {
+  const personalBests = await getPersonalBests();
+
   return (
     <PoolHero>
       <PortfolioTabs
@@ -14,9 +17,9 @@ export default function Home() {
           about: (
             <section id="about" className={`${styles.section} ${styles.about}`}>
               <div>
-                <h1 className={styles.intro}>Hey, I’m Dawson.</h1>
+                <h1 className={styles.intro}>hey, i'm dawson</h1>
                 <p>
-                  I study computer science at the{" "}
+                  i study computer science at the{" "}
                   <a
                     className={styles.schoolLink}
                     href="https://uwaterloo.ca"
@@ -133,26 +136,80 @@ export default function Home() {
               </div>
             </section>
           ),
-          activity: (
-            <section id="activity" className={styles.section}>
+          misc: (
+            <section id="misc" className={styles.section}>
               <div>
                 <ol>
-                  {activity.map((item) => (
-                    <li className={styles.activityItem} key={item.date + item.text}>
-                      <time className={styles.date} dateTime={item.date}>
-                        {item.label}
-                      </time>
-                      <a
-                        className={styles.textLink}
-                        href={item.href}
-                        {...(item.href.startsWith("http")
-                          ? { target: "_blank" as const, rel: "noopener noreferrer" }
-                          : {})}
-                      >
-                        {item.text}
+                  <li className={styles.entry}>
+                    <h3>
+                      <a href={MONKEYTYPE_PROFILE} target="_blank" rel="noopener noreferrer">
+                        Monkeytype bests
                       </a>
-                    </li>
-                  ))}
+                    </h3>
+                    <dl className={styles.bests}>
+                      {personalBests.map((best) => (
+                        <div key={best.label}>
+                          <dt>{best.label}</dt>
+                          <dd className={styles.bestWpm}>{best.wpm}</dd>
+                          {best.topPercent !== undefined && (
+                            <dd className={styles.bestRank}>Top {best.topPercent.toFixed(2)}%</dd>
+                          )}
+                        </div>
+                      ))}
+                    </dl>
+                  </li>
+                  <li className={styles.entry}>
+                    <h3>Albums</h3>
+                    <ul className={styles.picks}>
+                      {albums.map((album) => (
+                        <li key={album.title}>
+                          <Image
+                            className={styles.cover}
+                            src={album.cover}
+                            alt=""
+                            width={40}
+                            height={40}
+                          />
+                          <span className={styles.pickTitle}>{album.title}</span>
+                          <span className={styles.pickArtist}>{album.artist}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                  <li className={styles.entry}>
+                    <h3>Songs</h3>
+                    <ul className={styles.picks}>
+                      {songs.map((song) => (
+                        <li key={song.title}>
+                          <Image
+                            className={styles.cover}
+                            src={song.cover}
+                            alt=""
+                            width={40}
+                            height={40}
+                          />
+                          <span className={styles.pickTitle}>{song.title}</span>
+                          <span className={styles.pickArtist}>{song.artist}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                  <li className={styles.entry}>
+                    <h3>Favourite poker hand</h3>
+                    <div className={styles.hand}>
+                      {pokerHand.cards.map((card) => (
+                        <span
+                          className={styles.playingCard}
+                          key={card.name}
+                          role="img"
+                          aria-label={card.name}
+                        >
+                          <span aria-hidden="true">{card.rank}</span>
+                          <span aria-hidden="true">{card.suit}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </li>
                 </ol>
               </div>
             </section>

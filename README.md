@@ -36,7 +36,7 @@ Import icons only through `@/components/icons` (see `central-icons.ts` for the l
 ## Portfolio in the pool
 
 A single persistent, viewport-sized WebGL scene sits behind a tabbed portfolio.
-About, Experience, Selected projects, and Activity switch in the same main space;
+About, Experience, Selected projects, and Misc switch in the same main space;
 the document does not scroll between sections. Only an active panel with content
 taller than the available space scrolls internally. The narrow reading column
 has a feathered translucent wash, without section cards.
@@ -46,9 +46,9 @@ and label their corresponding panels. Section hashes support direct links and
 browser back/forward without remounting the pool. Content stays server-rendered;
 the small tab shell handles selection. Project details use native disclosures.
 
-Edit `src/content/portfolio.ts` for experience, projects, and activity. Activity is
-an intentionally hand-written, newest-first list: add a real date, display label,
-update, and link. It needs no service, API, database, or collector. Experience and
+Edit `src/content/portfolio.ts` for experience, projects, and the misc tab's albums,
+songs, and poker hand. Monkeytype bests come from the public profile endpoint in
+`src/lib/monkeytype.ts`, cached for an hour with a static fallback. Experience and
 contact details come from the archived `v1` portfolio; selected project copy comes
 from the public project READMEs. No archived components or routes are imported.
 

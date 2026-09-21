@@ -38,6 +38,7 @@ Sometime after launch, this site may grow an activity feed like `v1` (WakaTime /
 
 - This app is on Vercel, so it **cannot** use a Cloudflare D1 binding. Options then: Prisma + Postgres (house default) or HTTP to an existing store (how `v1` reads D1).
 - Collector stays off the Next app. No runtime calls to WakaTime/Monkeytype from the web app.
+- Exception already shipped: the misc tab reads Monkeytype personal bests from the public, keyless profile endpoint (`src/lib/monkeytype.ts`, cached an hour, static fallback). No store involved.
 - Do not create the table, worker, or Prisma schema until that work is explicit.
 
 ## Still open

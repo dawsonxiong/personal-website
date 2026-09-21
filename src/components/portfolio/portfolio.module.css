@@ -388,8 +388,7 @@
 }
 
 .meta,
-.stack,
-.date {
+.stack {
   color: #0c3552;
   font-size: 15px;
   font-weight: 500;
@@ -550,13 +549,97 @@
   text-decoration: underline;
 }
 
-.activityItem {
+.bests {
   display: grid;
-  grid-template-columns: 100px 1fr;
-  align-items: baseline;
-  gap: 20px;
-  padding-block: 19px;
-  border-top: 1px solid var(--pool-rule);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px 12px;
+  margin: 16px 0 0;
+}
+
+.bests dt {
+  color: #0c3552;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.bests dd {
+  margin: 2px 0 0;
+}
+
+.bestWpm {
+  font-size: 30px;
+  font-weight: 550;
+  line-height: 1.15;
+  letter-spacing: -0.8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bestRank {
+  color: #0c3552;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.picks {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.picks li {
+  display: flex;
+  align-items: center;
+  gap: 4px 14px;
+  padding-block: 5px;
+}
+
+.cover {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px #123e601f;
+}
+
+.pickTitle {
+  flex: 1;
+  min-width: 0;
+}
+
+.pickArtist {
+  flex-shrink: 0;
+  color: #0c3552;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.hand {
+  display: flex;
+  margin-top: 16px;
+}
+
+.playingCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 58px;
+  height: 80px;
+  border: 1px solid var(--pool-rule);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 14px #123e601f;
+  color: #c8323c;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+  transform: rotate(-5deg);
+}
+
+.playingCard + .playingCard {
+  margin-left: -10px;
+  transform: translateY(3px) rotate(6deg);
 }
 
 .footer {
@@ -665,9 +748,14 @@
     flex-basis: min(218px, 78vw);
   }
 
-  .activityItem {
-    grid-template-columns: 1fr;
-    gap: 6px;
+  .picks li {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    column-gap: 12px;
+  }
+
+  .cover {
+    grid-row: span 2;
   }
 
   .footer {

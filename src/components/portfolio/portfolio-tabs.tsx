@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 
 import styles from "./portfolio.module.css";
 import { syncScrollEdgeFade } from "./scroll-edge-fade";
 
-const sections = ["about", "experience", "projects", "activity"] as const;
+const sections = ["about", "experience", "projects", "misc"] as const;
 type Section = (typeof sections)[number];
 const isSection = (value: string): value is Section =>
   sections.some((section) => section === value);
