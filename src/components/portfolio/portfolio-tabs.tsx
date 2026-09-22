@@ -33,6 +33,10 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
     const column = panel?.parentElement;
     if (!panel || !column) return;
 
+    // Reset here, once the panel is visible: a hidden panel can't be scrolled,
+    // so resetting from the click handler left stale offsets behind.
+    panel.scrollTop = 0;
+
     const updateFade = () => {
       syncScrollEdgeFade(panel, "y", column, "fadeTop", "fadeBottom");
     };
@@ -58,7 +62,6 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
   const select = (section: Section) => {
     if (section === active) return;
     setActive(section);
-    panelRefs.current[section]?.scrollTo({ top: 0 });
     window.history.pushState(null, "", `#${section}`);
   };
 

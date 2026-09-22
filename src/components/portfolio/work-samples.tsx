@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { IconChevronLeftMedium, IconChevronRightMedium } from "@/components/icons/central-icons";
 import styles from "./portfolio.module.css";
 import { syncScrollEdgeFade } from "./scroll-edge-fade";
 
@@ -47,6 +48,18 @@ export function WorkSamples({ samples }: { samples: WorkSample[] }) {
       delete shell.dataset.fadeRight;
     };
   }, [samples]);
+
+  const step = (direction: -1 | 1) => {
+    const scroller = scrollerRef.current;
+    const card = scroller?.querySelector<HTMLElement>("[data-fade-item]");
+    if (!scroller || !card) return;
+    const gap = parseFloat(getComputedStyle(scroller).columnGap) || 0;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    scroller.scrollBy({
+      left: direction * (card.offsetWidth + gap),
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+  };
 
   return (
     <div ref={shellRef} className={styles.workSamplesShell}>
@@ -90,6 +103,24 @@ export function WorkSamples({ samples }: { samples: WorkSample[] }) {
           </Dialog>
         ))}
       </div>
+      <button
+        type="button"
+        className={styles.workSamplesArrow}
+        data-direction="previous"
+        aria-label="Previous work sample"
+        onClick={() => step(-1)}
+      >
+        <IconChevronLeftMedium aria-hidden />
+      </button>
+      <button
+        type="button"
+        className={styles.workSamplesArrow}
+        data-direction="next"
+        aria-label="Next work sample"
+        onClick={() => step(1)}
+      >
+        <IconChevronRightMedium aria-hidden />
+      </button>
     </div>
   );
 }

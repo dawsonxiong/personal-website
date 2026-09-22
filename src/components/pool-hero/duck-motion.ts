@@ -118,9 +118,22 @@ export function createDuckMotion(
     get entering() {
       return seek !== null;
     },
-    /** Start away from the resting spot and wait there; `depart` begins the swim back to it. */
-    enterFrom(x: number, y: number) {
+    /**
+     * Start at (x, y) and wait there; `depart` begins the swim. Without a heading the
+     * toy returns to its resting spot; with one it heads that way toward the pool wall
+     * and settles in the nearest open water.
+     */
+    enterFrom(x: number, y: number, heading?: number) {
       seek = { x: pose.x, y: pose.y };
+      if (heading !== undefined) {
+        const dx = Math.cos(heading);
+        const dy = Math.sin(heading);
+        const spaceX = Math.abs(dx) < 0.001 ? Infinity : (dx > 0 ? maxX - x : minX - x) / dx;
+        const spaceY = Math.abs(dy) < 0.001 ? Infinity : (dy > 0 ? maxY - y : minY - y) / dy;
+        const reach = Math.max(0, Math.min(spaceX, spaceY)) * 0.8;
+        seek = { x: x + dx * reach, y: y + dy * reach };
+        pose.angle = heading + Math.PI / 2;
+      }
       held = true;
       pose.x = x;
       pose.y = y;

@@ -108,43 +108,19 @@
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 35%);
 }
 
-.column::before,
-.column::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  height: 36px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 140ms ease;
+/* Scroll edges fade the content itself (a mask), not an overlay painted on
+   top of it, so clipped text dissolves into the glass instead of showing
+   through a lighter band. Registered so the fade length can transition. */
+@property --fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
 }
 
-/* Inset past the rounded rim so the soft edge stays inside the box. */
-.column::before {
-  top: 10px;
-  background: linear-gradient(
-    to bottom,
-    rgb(246 249 251 / 88%) 0%,
-    rgb(246 249 251 / 35%) 55%,
-    transparent 100%
-  );
-}
-
-.column::after {
-  bottom: 10px;
-  background: linear-gradient(
-    to top,
-    rgb(246 249 251 / 88%) 0%,
-    rgb(246 249 251 / 35%) 55%,
-    transparent 100%
-  );
-}
-
-.column[data-fade-top]::before,
-.column[data-fade-bottom]::after {
-  opacity: 1;
+@property --fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
 }
 
 .panel {
@@ -156,6 +132,24 @@
   overscroll-behavior: none;
   scrollbar-width: none;
   padding: 32px 28px;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
+  transition:
+    --fade-start 140ms ease,
+    --fade-end 140ms ease;
+}
+
+.column[data-fade-top] > .panel {
+  --fade-start: 40px;
+}
+
+.column[data-fade-bottom] > .panel {
+  --fade-end: 40px;
 }
 
 .panel::-webkit-scrollbar {
@@ -283,14 +277,16 @@
   font-size: 18px;
 }
 
-.schoolLink {
+.schoolLink,
+.companyLink {
   color: inherit;
   text-decoration: underline;
   text-decoration-color: #23587870;
   text-underline-offset: 4px;
 }
 
-.schoolLink:hover {
+.schoolLink:hover,
+.companyLink:hover {
   text-decoration-color: currentColor;
 }
 
@@ -330,13 +326,6 @@
 
 .entry:last-child {
   padding-bottom: 4px;
-}
-
-.entryHeading {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
 }
 
 .entry h3 {
@@ -382,11 +371,6 @@
   object-fit: contain;
 }
 
-.external {
-  flex-shrink: 0;
-  font-size: 14px;
-}
-
 .meta,
 .stack {
   color: #0c3552;
@@ -420,32 +404,62 @@
   margin-top: 18px;
 }
 
-.workSamplesShell::before,
-.workSamplesShell::after {
-  content: "";
+.workSamplesShell[data-fade-left] > .workSamples {
+  --fade-start: 28px;
+}
+
+.workSamplesShell[data-fade-right] > .workSamples {
+  --fade-end: 28px;
+}
+
+/* Shown only while there's more to scroll that way (same signal as the fade). */
+.workSamplesArrow {
   position: absolute;
-  top: 0;
-  bottom: 9px;
-  z-index: 2;
-  width: 28px;
-  pointer-events: none;
+  top: 73px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 60%);
+  border-radius: 50%;
+  background: rgb(246 249 251 / 82%);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px #123e6026;
+  color: var(--pool-ink);
+  cursor: pointer;
   opacity: 0;
-  transition: opacity 140ms ease;
+  visibility: hidden;
+  transform: translateY(-50%);
+  transition:
+    opacity 140ms ease,
+    visibility 140ms,
+    background-color 140ms ease;
 }
 
-.workSamplesShell::before {
-  left: 0;
-  background: linear-gradient(to right, rgb(246 249 251 / 55%) 0%, transparent 100%);
+.workSamplesArrow svg {
+  width: 18px;
+  height: 18px;
 }
 
-.workSamplesShell::after {
-  right: 0;
-  background: linear-gradient(to left, rgb(246 249 251 / 55%) 0%, transparent 100%);
+.workSamplesArrow:hover {
+  background: #fff;
 }
 
-.workSamplesShell[data-fade-left]::before,
-.workSamplesShell[data-fade-right]::after {
+.workSamplesArrow[data-direction="previous"] {
+  left: 6px;
+}
+
+.workSamplesArrow[data-direction="next"] {
+  right: 6px;
+}
+
+.workSamplesShell[data-fade-left] > .workSamplesArrow[data-direction="previous"],
+.workSamplesShell[data-fade-right] > .workSamplesArrow[data-direction="next"] {
   opacity: 1;
+  visibility: visible;
 }
 
 .workSamples {
@@ -456,6 +470,16 @@
   overscroll-behavior-inline: contain;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
+  transition:
+    --fade-start 140ms ease,
+    --fade-end 140ms ease;
 }
 
 .workSamples::-webkit-scrollbar {
@@ -615,31 +639,261 @@
 
 .hand {
   display: flex;
+  align-items: center;
+  gap: 22px;
   margin-top: 16px;
 }
 
+.reset {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #0c3552;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: #23587870;
+  text-underline-offset: 4px;
+}
+
+.reset:hover {
+  text-decoration-color: currentColor;
+}
+
+.reset[hidden] {
+  display: none;
+}
+
 .playingCard {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: 88px;
+  height: 124px;
+  border: 1px solid var(--pool-rule);
+  border-radius: 9px;
+  background: #fff;
+  color: #16181d;
+  line-height: 1;
+}
+
+.playingCard[data-color="red"] {
+  color: #d3222f;
+}
+
+.cardFace {
+  position: absolute;
+  inset: 0;
+}
+
+.cardFace [data-flipped] {
+  rotate: 180deg;
+}
+
+.cardIndex {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 17px;
+}
+
+.cardIndex[data-flipped] {
+  inset: auto 3px 3px auto;
+}
+
+.cardRank {
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -2.6px;
+  transform: scaleX(0.7);
+}
+
+.cardIndexSuit {
+  margin-top: -2px;
+  font-size: 16px;
+}
+
+.cardPips {
+  position: absolute;
+  inset: 20px 32px;
+}
+
+.cardPip {
+  position: absolute;
+  font-size: 16px;
+  translate: -50% -50%;
+}
+
+.cardAce {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 46px;
+}
+
+.cardArt {
+  position: absolute;
+  top: 18px;
+  left: 21px;
+  width: 48px;
+  height: 86px;
+}
+
+.cardCourt {
+  position: absolute;
+  inset: 13px 20px;
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid currentcolor;
+  border-radius: 3px;
+  background: linear-gradient(to bottom right, #fdf0d2 0 48.5%, #d9a441 48.5% 51.5%, #dce9fb 51.5%);
+}
+
+.cardCourtHalf {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  width: 58px;
-  height: 80px;
-  border: 1px solid var(--pool-rule);
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 4px 14px #123e601f;
-  color: #c8323c;
+  gap: 1px;
   font-size: 22px;
-  font-weight: 600;
-  line-height: 1;
-  transform: rotate(-5deg);
+  font-weight: 700;
 }
 
-.playingCard + .playingCard {
-  margin-left: -10px;
-  transform: translateY(3px) rotate(6deg);
+.cardCourtHalf span + span {
+  font-size: 13px;
+}
+
+/* Face-down stack: cards lie sideways, the second offset so the first one's corner shows.
+   Once up, they fan out upright. --i is the card's index, --fold how far it is bent over. */
+.cards {
+  --fold: 0px;
+  --spread: 0px;
+  /* Corner radius where the back is cut. A flap narrower than the card radius can't
+     hold the full curve, so from about 2px up the back matches the flap's smaller
+     radius and the two cut edges stay flush. Below that it climbs back to the card's
+     own radius, so an unfolded card still has round corners. */
+  --crease: max(calc(9px - 3 * var(--fold)), min(9px, var(--fold)));
+  position: relative;
+  width: 168px;
+  height: 128px;
+}
+
+.hole {
+  position: absolute;
+  /* Stacked square at rest. Squeezing slides the card underneath towards you, so its
+     folded corner shows in a column under the top card's. */
+  top: calc((0.5 - var(--i)) * var(--spread));
+  left: 18px;
+  width: 88px;
+  height: 124px;
+  rotate: 90deg;
+}
+
+.cards[data-up] .hole {
+  left: calc(var(--i) * 80px);
+  translate: 0 calc(var(--i) * 3px);
+  rotate: calc(var(--i) * 11deg - 5deg);
+}
+
+.holeInner,
+.holeBack,
+.holeFlap {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/* Shadow is off for now. To bring it back, add
+   `filter: drop-shadow(0 3px 8px #123e6033);` here: one shadow for the whole
+   silhouette, so the fold never shows a clipped box edge. */
+.holeInner {
+  translate: max(0px, calc(2 * var(--fold) - 88px)) 0;
+}
+
+.holeBack {
+  clip-path: inset(0 var(--fold) 0 0 round 9px var(--crease) var(--crease) 9px);
+  border: 1px solid var(--pool-rule);
+  border-radius: 9px;
+  background:
+    repeating-linear-gradient(45deg, rgb(255 255 255 / 16%) 0 1.5px, transparent 1.5px 7px),
+    repeating-linear-gradient(-45deg, rgb(255 255 255 / 16%) 0 1.5px, transparent 1.5px 7px),
+    #00205b;
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 0 0 5px #fff,
+    inset 0 0 0 6px #00205b40;
+}
+
+/* The free edge is the face's own rounded corner; only the crease needs rounding. The
+   first couple of pixels of fold, where the radii can't match yet, are faded out. */
+.holeFlap {
+  --flap-radius: min(var(--fold), var(--crease));
+  clip-path: inset(0 calc(88px - var(--fold)) 0 0 round 0 var(--flap-radius) var(--flap-radius) 0);
+  translate: calc(88px - 2 * var(--fold)) 0;
+  opacity: var(--flap-alpha, 1);
+}
+
+.holeShade {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--fold);
+  border-radius: 9px 0 0 9px;
+  background: linear-gradient(to left, #0c2f4a3d, transparent 16px);
+}
+
+.cards[data-up] .holeBack,
+.cards[data-up] .holeShade {
+  display: none;
+}
+
+/* Face-up the fold shift nets to zero; drop it so the boxes sit where they look. */
+.cards[data-up] .holeInner,
+.cards[data-up] .holeFlap {
+  translate: 0 0;
+  clip-path: none;
+}
+
+.squeeze {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  width: 158px;
+  height: 88px;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.squeeze:active {
+  cursor: grabbing;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* `top` is left out so the squeeze spread tracks the pointer; it only moves 3px
+     between the two resting layouts anyway. */
+  .hole {
+    transition:
+      left 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      rotate 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      translate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .cards[data-up]:hover .hole {
+    translate: calc(var(--i) * 8px - 3px) calc(var(--i) * 5px - 5px);
+    rotate: calc(var(--i) * 21deg - 10deg);
+  }
 }
 
 .footer {
@@ -718,10 +972,6 @@
 
   .about p {
     font-size: 17px;
-  }
-
-  .entryHeading {
-    gap: 8px;
   }
 
   .entry h3 {

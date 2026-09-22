@@ -35,6 +35,24 @@
   z-index: 1;
 }
 
+/* Mounted on the right edge of the pool, just below the nav. */
+.ladder {
+  position: absolute;
+  top: 72px;
+  right: 0;
+  width: clamp(108px, 14.3vw, 186px);
+  height: auto;
+  /* Same contact shadow as the floaties, so it sits on the water the same way. */
+  filter: drop-shadow(0 1px 1px rgb(10 80 116 / 18%)) drop-shadow(1px 3px 3px rgb(8 60 110 / 16%));
+}
+
+@media (max-width: 640px) {
+  .ladder {
+    top: 100px;
+    width: 94px;
+  }
+}
+
 .duck,
 .floatie {
   position: absolute;

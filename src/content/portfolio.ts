@@ -29,17 +29,17 @@ export const experience = [
     role: "Founding Software Engineer",
     date: "Aug 2026–present",
     description:
-      "Built 1500 Blueprint's study planner, practive tools, and account management, and performed a security audit.",
+      "Built 1500 Blueprint's study planner, practive tools, and account management, and bolstered the platform's security.",
     logo: "/portfolio/organizations/scotts-sat-prep.svg",
     logoAlt: "Scott's SAT Prep logo",
   },
   {
     company: "General Learning (YC F24)",
     href: "https://www.generallearning.com",
-    role: "Founding Engineer",
+    role: "Senior Software Engineer",
     date: "May 2025–Aug 2026",
     description:
-      "Helped grow RevisionDojo from 250K to 750K+ users. Shipped the mobile app and high-retention learning features.",
+      "Helped grow RevisionDojo from 250K to 750K+ users. Shipped the mobile app (20k+ downloads, 4.8 stars) and high-retention learning features.",
     logo: "/portfolio/organizations/general-learning.svg",
     logoAlt: "General Learning logo",
     work: [
@@ -173,4 +173,4 @@ export const pokerHand = {
     { rank: "J", suit: "♥", name: "Jack of hearts" },
     { rank: "10", suit: "♥", name: "Ten of hearts" },
   ],
-};
+} as const;

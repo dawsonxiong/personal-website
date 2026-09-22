@@ -322,6 +322,43 @@ test("an entrance swims across content to the resting spot, then avoids it again
   }
 });
 
+test("an entrance with a heading swims that way and settles in open water", () => {
+  const width = 1280;
+  const height = 800;
+  const zones = [
+    { left: 0, top: 0, right: width, bottom: 70 },
+    { left: 340, top: 250, right: 940, bottom: 550 },
+  ];
+  for (let i = 0; i < 16; i++) {
+    const heading = (i / 16) * Math.PI * 2;
+    const movement = createDuckMotion(randomSource(), { x: 0.16, y: 0.32 });
+    movement.resize(width, height, 96);
+    movement.setExclusions(zones);
+    movement.enterFrom(width / 2, height / 2, heading);
+    movement.setExclusions(zones);
+    movement.depart();
+    let frames = 0;
+    while (movement.entering && frames < 600) {
+      movement.step(1 / 60);
+      frames++;
+    }
+    assert.ok(frames < 240, `heading ${i}/16 took ${frames} frames`);
+    const travel = {
+      x: movement.pose.x - width / 2,
+      y: movement.pose.y - height / 2,
+    };
+    // Open water may sit to one side of the heading, but never behind it.
+    assert.ok(
+      travel.x * Math.cos(heading) + travel.y * Math.sin(heading) > 0,
+      `heading ${i}/16 ended behind where it started`,
+    );
+    for (let frame = 0; frame < 120; frame++) {
+      movement.step(1 / 60);
+      assertClear(movement.pose, zones, width, height);
+    }
+  }
+});
+
 test("an entrance still arrives when the resting spot hugs a wall", () => {
   const movement = createDuckMotion(randomSource(), { x: 0, y: 0 });
   movement.resize(390, 844, 28);

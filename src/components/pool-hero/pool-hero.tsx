@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PoolEditIcon } from "@/components/icons/pool-edit-icon";
 import { createDuckMotion } from "./duck-motion";
 import { createFrameClock } from "./frame-clock";
+// import { PoolLadder } from "./pool-ladder";
 import {
   placeFloatie,
   placeFloatieAt,
@@ -381,7 +382,11 @@ export function PoolHero({ children }: { children: ReactNode }) {
     };
     let departAt: number | null = null;
     if (introClock.currentTime < INTRO_LATEST_START) {
-      duckMotion.enterFrom(canvas.clientWidth / 2, canvas.clientHeight / 2);
+      duckMotion.enterFrom(
+        canvas.clientWidth / 2,
+        canvas.clientHeight / 2,
+        Math.random() * Math.PI * 2,
+      );
       departAt = Math.max(INTRO_DEPART, introClock.currentTime + INTRO_MIN_HOLD);
       setIntro("hold");
     } else {
@@ -433,6 +438,7 @@ export function PoolHero({ children }: { children: ReactNode }) {
     >
       <div className={styles.scene} aria-hidden="true">
         <canvas ref={canvasRef} className={styles.water} />
+        {/* <PoolLadder /> */}
         <div ref={duckRef} className={styles.duck} data-floatie="duck">
           <FloatieArt kind="duck" />
         </div>

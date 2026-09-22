@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { PoolHero } from "@/components/pool-hero/pool-hero";
 import { CopyEmailButton } from "@/components/portfolio/copy-email-button";
+import { PeelHand } from "@/components/portfolio/peel-hand";
 import { PortfolioTabs } from "@/components/portfolio/portfolio-tabs";
 import { WorkSamples } from "@/components/portfolio/work-samples";
 import { albums, experience, pokerHand, projects, songs } from "@/content/portfolio";
@@ -17,9 +18,9 @@ export default async function Home() {
           about: (
             <section id="about" className={`${styles.section} ${styles.about}`}>
               <div>
-                <h1 className={styles.intro}>hey, i'm dawson</h1>
+                <h1 className={styles.intro}>Hey, I’m Dawson.</h1>
                 <p>
-                  i study computer science at the{" "}
+                  I'm currently studying computer science at the{" "}
                   <a
                     className={styles.schoolLink}
                     href="https://uwaterloo.ca"
@@ -28,11 +29,20 @@ export default async function Home() {
                   >
                     University of Waterloo
                   </a>{" "}
-                  and build things for the web, mobile, and the occasional neural network.
+                  and previously worked full-time at{" "}
+                  <a
+                    className={styles.companyLink}
+                    href="https://generallearning.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    General Learning (YC F24)
+                  </a>{" "}
+                  as a Senior Software Engineer.
                 </p>
                 <p>
-                  I like making complicated things a little easier to use. Away from the keyboard,
-                  you'll find me at the gym or the poker table.
+                  I specialize in designing backend systems and designing UI/UX for web and mobile
+                  apps. If I'm not at the keyboard, you might find me at the gym or the poker table.
                 </p>
                 <div className={styles.links}>
                   <CopyEmailButton className={styles.textLink} />
@@ -112,16 +122,11 @@ export default async function Home() {
                 <ol>
                   {projects.map((project) => (
                     <li className={styles.entry} key={project.name}>
-                      <div className={styles.entryHeading}>
-                        <h3>
-                          <a href={project.href} target="_blank" rel="noopener noreferrer">
-                            {project.name}
-                          </a>
-                        </h3>
-                        <span className={styles.external} aria-hidden="true">
-                          ↗
-                        </span>
-                      </div>
+                      <h3>
+                        <a href={project.href} target="_blank" rel="noopener noreferrer">
+                          {project.name}
+                        </a>
+                      </h3>
                       <p>{project.description}</p>
                       <p className={styles.stack}>{project.stack}</p>
                       {project.details && (
@@ -143,7 +148,7 @@ export default async function Home() {
                   <li className={styles.entry}>
                     <h3>
                       <a href={MONKEYTYPE_PROFILE} target="_blank" rel="noopener noreferrer">
-                        Monkeytype bests
+                        Monkeytype
                       </a>
                     </h3>
                     <dl className={styles.bests}>
@@ -159,7 +164,7 @@ export default async function Home() {
                     </dl>
                   </li>
                   <li className={styles.entry}>
-                    <h3>Albums</h3>
+                    <h3>Favourite albums right now</h3>
                     <ul className={styles.picks}>
                       {albums.map((album) => (
                         <li key={album.title}>
@@ -176,7 +181,7 @@ export default async function Home() {
                       ))}
                     </ul>
                   </li>
-                  <li className={styles.entry}>
+                  {/* <li className={styles.entry}>
                     <h3>Songs</h3>
                     <ul className={styles.picks}>
                       {songs.map((song) => (
@@ -193,21 +198,11 @@ export default async function Home() {
                         </li>
                       ))}
                     </ul>
-                  </li>
+                  </li> */}
                   <li className={styles.entry}>
                     <h3>Favourite poker hand</h3>
                     <div className={styles.hand}>
-                      {pokerHand.cards.map((card) => (
-                        <span
-                          className={styles.playingCard}
-                          key={card.name}
-                          role="img"
-                          aria-label={card.name}
-                        >
-                          <span aria-hidden="true">{card.rank}</span>
-                          <span aria-hidden="true">{card.suit}</span>
-                        </span>
-                      ))}
+                      <PeelHand cards={pokerHand.cards} />
                     </div>
                   </li>
                 </ol>
