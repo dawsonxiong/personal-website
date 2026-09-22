@@ -304,7 +304,7 @@
   height: 44px;
   list-style: none;
   border-radius: 50%;
-  color: #123e60;
+  color: var(--pool-muted);
   background: var(--content-surface, rgb(246 249 251 / 62%));
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
@@ -419,7 +419,7 @@
 }
 
 .picker :is(button, summary):focus-visible {
-  outline: 2px solid #123e60;
+  outline: 2px solid var(--pool-muted);
   outline-offset: 3px;
 }
 
@@ -434,7 +434,7 @@
 
 .nudge[data-slot="button"] {
   height: 2.75rem;
-  color: #123e60;
+  color: var(--pool-muted);
   background: rgb(220 245 255 / 62%);
   border-color: rgb(240 252 255 / 55%);
   box-shadow: 0 1px 8px rgb(7 72 144 / 5%);
@@ -445,7 +445,7 @@
 }
 
 .nudge:focus-visible {
-  outline: 2px solid #123e60;
+  outline: 2px solid var(--pool-muted);
   outline-offset: 3px;
 }
 

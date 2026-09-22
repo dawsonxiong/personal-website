@@ -115,6 +115,8 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
         Skip to content
       </button>
       <header className={styles.header} data-pool-exclusion>
+        {/* Visible headings live in the panels, which are hidden when not selected. */}
+        <h1 className="sr-only">Dawson Xiong</h1>
         <div className={styles.barInner}>
           <div className={styles.nav} role="tablist" aria-label="Portfolio sections">
             {sections.map((section) => (
@@ -158,7 +160,8 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
       </main>
       <footer className={styles.footer} data-pool-exclusion>
         <div className={styles.barInner}>
-          <span>© 2026 Dawson Xiong</span>
+          {/* The page is prerendered, so the client's year can differ from the build's. */}
+          <span suppressHydrationWarning>© {new Date().getFullYear()} Dawson Xiong</span>
         </div>
       </footer>
     </div>

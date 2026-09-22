@@ -16,11 +16,11 @@ export default async function Home() {
       <PortfolioTabs
         panels={{
           about: (
-            <section id="about" className={`${styles.section} ${styles.about}`}>
+            <section className={`${styles.section} ${styles.about}`}>
               <div>
-                <h1 className={styles.intro}>Hey, I’m Dawson.</h1>
+                <h2 className={styles.intro}>Hey, I’m Dawson.</h2>
                 <p>
-                  I'm currently studying computer science at the{" "}
+                  I’m currently studying computer science at the{" "}
                   <a
                     className={styles.schoolLink}
                     href="https://uwaterloo.ca"
@@ -41,8 +41,8 @@ export default async function Home() {
                   as a Senior Software Engineer.
                 </p>
                 <p>
-                  I specialize in designing backend systems and designing UI/UX for web and mobile
-                  apps. If I'm not at the keyboard, you might find me at the gym or the poker table.
+                  I specialize in backend systems and UI/UX design for web and mobile apps. If I’m
+                  not at the keyboard, you might find me at the gym or the poker table.
                 </p>
                 <div className={styles.links}>
                   <CopyEmailButton className={styles.textLink} />
@@ -64,6 +64,14 @@ export default async function Home() {
                   </a>
                   <a
                     className={styles.textLink}
+                    href="https://x.com/dawsonxiong"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    X/Twitter
+                  </a>
+                  <a
+                    className={styles.textLink}
                     href="https://cal.com/dawsonxiong/15min"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -75,7 +83,7 @@ export default async function Home() {
             </section>
           ),
           experience: (
-            <section id="experience" className={styles.section}>
+            <section className={styles.section}>
               <div>
                 <ol>
                   {experience.map((job) => (
@@ -86,22 +94,24 @@ export default async function Home() {
                           href={job.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          aria-label={`Visit ${job.company}`}
+                          // Same link as the company name beside it, so keep it out of the tab order.
+                          tabIndex={-1}
+                          aria-hidden="true"
                         >
                           <Image
                             className={styles.logoImage}
                             src={job.logo}
-                            alt={job.logoAlt}
+                            alt=""
                             width={40}
                             height={40}
                           />
                         </a>
                         <div className={styles.experienceTitle}>
-                          <h3>
+                          <h2>
                             <a href={job.href} target="_blank" rel="noopener noreferrer">
                               {job.company}
                             </a>
-                          </h3>
+                          </h2>
                           <div className={styles.meta}>
                             <span>{job.role}</span>
                             <span>{job.date}</span>
@@ -117,16 +127,16 @@ export default async function Home() {
             </section>
           ),
           projects: (
-            <section id="projects" className={styles.section}>
+            <section className={styles.section}>
               <div>
                 <ol>
                   {projects.map((project) => (
                     <li className={styles.entry} key={project.name}>
-                      <h3>
+                      <h2>
                         <a href={project.href} target="_blank" rel="noopener noreferrer">
                           {project.name}
                         </a>
-                      </h3>
+                      </h2>
                       <p>{project.description}</p>
                       <p className={styles.stack}>{project.stack}</p>
                       {project.details && (
@@ -142,29 +152,33 @@ export default async function Home() {
             </section>
           ),
           misc: (
-            <section id="misc" className={styles.section}>
+            <section className={styles.section}>
               <div>
                 <ol>
                   <li className={styles.entry}>
-                    <h3>
+                    <h2>
                       <a href={MONKEYTYPE_PROFILE} target="_blank" rel="noopener noreferrer">
                         Monkeytype
                       </a>
-                    </h3>
+                    </h2>
                     <dl className={styles.bests}>
                       {personalBests.map((best) => (
                         <div key={best.label}>
                           <dt>{best.label}</dt>
                           <dd className={styles.bestWpm}>{best.wpm}</dd>
-                          {best.topPercent !== undefined && (
-                            <dd className={styles.bestRank}>Top {best.topPercent.toFixed(2)}%</dd>
-                          )}
+                          <dd className={styles.bestRank}>
+                            {best.topPercent !== undefined ? (
+                              `Top ${best.topPercent.toFixed(2)}%`
+                            ) : (
+                              <span aria-hidden="true">—</span>
+                            )}
+                          </dd>
                         </div>
                       ))}
                     </dl>
                   </li>
                   <li className={styles.entry}>
-                    <h3>Favourite albums right now</h3>
+                    <h2>Favourite albums right now</h2>
                     <ul className={styles.picks}>
                       {albums.map((album) => (
                         <li key={album.title}>
@@ -172,8 +186,8 @@ export default async function Home() {
                             className={styles.cover}
                             src={album.cover}
                             alt=""
-                            width={40}
-                            height={40}
+                            width={56}
+                            height={56}
                           />
                           <span className={styles.pickTitle}>{album.title}</span>
                           <span className={styles.pickArtist}>{album.artist}</span>
@@ -182,7 +196,7 @@ export default async function Home() {
                     </ul>
                   </li>
                   {/* <li className={styles.entry}>
-                    <h3>Songs</h3>
+                    <h2>Songs</h2>
                     <ul className={styles.picks}>
                       {songs.map((song) => (
                         <li key={song.title}>
@@ -200,7 +214,7 @@ export default async function Home() {
                     </ul>
                   </li> */}
                   <li className={styles.entry}>
-                    <h3>Favourite poker hand</h3>
+                    <h2>Favourite poker hand</h2>
                     <div className={styles.hand}>
                       <PeelHand cards={pokerHand.cards} />
                     </div>

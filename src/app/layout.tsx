@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
@@ -14,6 +14,12 @@ export const metadata: Metadata = {
   title: "Dawson Xiong",
   description:
     "Dawson Xiong, computer science at Waterloo. Software, selected projects, and notes from a work in progress.",
+};
+
+// Matches the frosted header over the pool.
+export const viewport: Viewport = {
+  themeColor: "#c6dbf8",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

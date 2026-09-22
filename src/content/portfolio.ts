@@ -16,7 +16,6 @@ interface Experience {
   date: string;
   description: string;
   logo: string;
-  logoAlt: string;
   stack?: string;
   details?: string;
   work?: WorkSample[];
@@ -24,14 +23,13 @@ interface Experience {
 
 export const experience = [
   {
-    company: "Scott's SAT Prep",
+    company: "Scott’s SAT Prep",
     href: "https://www.scottssatprep.com",
     role: "Founding Software Engineer",
     date: "Aug 2026–present",
     description:
-      "Built 1500 Blueprint's study planner, practive tools, and account management, and bolstered the platform's security.",
+      "Built 1500 Blueprint’s study planner, practice tools, and account management, and bolstered the platform’s security.",
     logo: "/portfolio/organizations/scotts-sat-prep.svg",
-    logoAlt: "Scott's SAT Prep logo",
   },
   {
     company: "General Learning (YC F24)",
@@ -41,7 +39,6 @@ export const experience = [
     description:
       "Helped grow RevisionDojo from 250K to 750K+ users. Shipped the mobile app (20k+ downloads, 4.8 stars) and high-retention learning features.",
     logo: "/portfolio/organizations/general-learning.svg",
-    logoAlt: "General Learning logo",
     work: [
       {
         src: "/portfolio/revisiondojo/universities.webp",
@@ -82,7 +79,6 @@ export const experience = [
     description:
       "Led the migration from WordPress to Next.js. Built a custom CMS for blogs and an encrypted payments system.",
     logo: "/portfolio/organizations/ccprf.svg",
-    logoAlt: "CCPRF logo",
   },
   {
     company: "Datacurve (YC W24)",
@@ -92,7 +88,6 @@ export const experience = [
     description:
       "Reviewed coding problems for LLM training data and helped tighten evaluation quality.",
     logo: "/portfolio/organizations/datacurve.svg",
-    logoAlt: "Datacurve logo",
   },
 ] satisfies Experience[];
 

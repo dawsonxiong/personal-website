@@ -1,8 +1,8 @@
+/*
+ * Type: 48 display, 30 stat, 19 heading, 17 body, 15 secondary, 13 caption.
+ * Space: 4 / 8 / 12 / 16 / 24 / 32.
+ */
 .portfolio {
-  --pool-ink: #031a2f;
-  --pool-muted: #123d5c;
-  --pool-paper: #d5f0fa;
-  --pool-rule: #1a4a6b38;
   --content-surface: rgb(246 249 251 / 62%);
   --content-width: 600px;
   --content-inline: calc(100% - 112px);
@@ -43,7 +43,7 @@
 
 .nav {
   display: flex;
-  gap: 28px;
+  gap: 24px;
   font-size: 15px;
 }
 
@@ -55,7 +55,7 @@
   background: transparent;
   color: var(--pool-muted);
   font: inherit;
-  font-weight: 450;
+  font-weight: 500;
   text-decoration: underline;
   text-decoration-color: transparent;
   text-decoration-thickness: 1.5px;
@@ -66,7 +66,7 @@
 
 .nav button[aria-selected="true"] {
   color: var(--pool-ink);
-  font-weight: 600;
+  font-weight: 550;
   text-decoration-color: currentColor;
 }
 
@@ -79,11 +79,13 @@
   outline: none;
 }
 
+/* A ring of its own: the active tab is already underlined, so thickening the line isn't enough. */
 .nav button:focus-visible {
-  outline: none;
+  outline: 2px solid var(--pool-ink);
+  outline-offset: 2px;
+  border-radius: 4px;
   color: var(--pool-ink);
   text-decoration-color: currentColor;
-  text-decoration-thickness: 2px;
 }
 
 .column {
@@ -131,7 +133,7 @@
   overflow-y: auto;
   overscroll-behavior: none;
   scrollbar-width: none;
-  padding: 32px 28px;
+  padding: 32px 24px;
   mask-image: linear-gradient(
     to bottom,
     transparent,
@@ -264,58 +266,76 @@
 }
 
 .intro {
-  margin-bottom: 21px;
+  margin-bottom: 24px;
   font-size: clamp(34px, 4.5vw, 48px);
   line-height: 1.2;
   font-weight: 450;
   letter-spacing: -1.65px;
 }
 
-.about p {
-  max-width: 540px;
-  margin-top: 15px;
-  font-size: 18px;
+.portfolio :is(h1, h2) {
+  text-wrap: balance;
 }
 
+.portfolio p {
+  text-wrap: pretty;
+}
+
+.about p {
+  max-width: 540px;
+  margin-top: 16px;
+}
+
+/* Every link in running text and every linked heading shares one treatment. */
 .schoolLink,
-.companyLink {
+.companyLink,
+.textLink,
+.entry h2 a,
+.details summary {
   color: inherit;
   text-decoration: underline;
-  text-decoration-color: #23587870;
+  text-decoration-color: var(--pool-link-rule);
+  text-decoration-thickness: 1px;
   text-underline-offset: 4px;
 }
 
 .schoolLink:hover,
-.companyLink:hover {
+.companyLink:hover,
+.textLink:hover,
+.entry h2 a:hover,
+.details summary:hover {
   text-decoration-color: currentColor;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .schoolLink,
+  .companyLink,
+  .textLink,
+  .entry h2 a,
+  .details summary {
+    transition: text-decoration-color 140ms ease;
+  }
 }
 
 .links {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px 22px;
-  margin-top: 25px;
+  gap: 8px 24px;
+  margin-top: 24px;
   font-size: 15px;
+  line-height: 1.5;
 }
 
 .textLink {
   padding: 0;
   border: 0;
   background: none;
-  color: inherit;
   font: inherit;
   cursor: pointer;
-  text-decoration: underline;
-  text-decoration-color: #23587870;
-  text-underline-offset: 4px;
-}
-
-.textLink:hover {
-  text-decoration-color: currentColor;
 }
 
 .entry {
-  padding-block: 28px;
+  padding-block: 32px;
   border-top: 1px solid var(--pool-rule);
 }
 
@@ -328,22 +348,18 @@
   padding-bottom: 4px;
 }
 
-.entry h3 {
+.entry h2 {
   font-size: 19px;
   font-weight: 550;
-  line-height: 1.4;
+  line-height: 1.3;
   letter-spacing: -0.3px;
-}
-
-.entry h3 a {
-  text-decoration: none;
 }
 
 .experienceHeading {
   display: grid;
   grid-template-columns: 40px minmax(0, 1fr);
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .experienceTitle {
@@ -351,11 +367,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 3px;
-}
-
-.experienceTitle h3 {
-  line-height: 1.25;
+  gap: 4px;
 }
 
 .logoLink {
@@ -373,9 +385,10 @@
 
 .meta,
 .stack {
-  color: #0c3552;
+  color: var(--pool-muted);
   font-size: 15px;
   font-weight: 500;
+  line-height: 1.4;
 }
 
 .meta {
@@ -384,24 +397,20 @@
   justify-content: space-between;
   align-items: baseline;
   gap: 0 12px;
-  line-height: 1.4;
 }
 
 .entry p {
   margin-top: 12px;
 }
 
-.entry p + p {
-  margin-top: 5px;
-}
-
 .entry .stack {
-  margin-top: 14px;
+  margin-top: 8px;
 }
 
 .workSamplesShell {
+  --work-image-height: 142px;
   position: relative;
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
 .workSamplesShell[data-fade-left] > .workSamples {
@@ -415,7 +424,8 @@
 /* Shown only while there's more to scroll that way (same signal as the fade). */
 .workSamplesArrow {
   position: absolute;
-  top: 73px;
+  /* Centred on the thumbnails: scroller top padding plus half the image. */
+  top: calc(2px + var(--work-image-height) / 2);
   z-index: 1;
   display: grid;
   place-items: center;
@@ -509,7 +519,7 @@
 .workImage {
   display: block;
   width: 100%;
-  height: 142px;
+  height: var(--work-image-height);
   object-fit: cover;
   object-position: top;
   background: rgb(255 255 255 / 58%);
@@ -522,7 +532,7 @@
 
 .workSample span {
   display: block;
-  padding: 8px 10px 9px;
+  padding: 8px 12px;
 }
 
 .workModal {
@@ -534,7 +544,7 @@
   border: 0;
   background: #e8f5fbf7;
   box-shadow: 0 16px 48px #123e6029;
-  color: #123e60;
+  color: var(--pool-ink);
 }
 
 .workModalFrame {
@@ -554,40 +564,41 @@
 
 .workModalCaption {
   margin: 10px 6px 2px;
-  color: #244f70;
+  color: var(--pool-muted);
   letter-spacing: -0.2px;
 }
 
 .details {
-  margin-top: 14px;
+  margin-top: 12px;
   font-size: 15px;
+  line-height: 1.6;
 }
 
 .details summary {
   width: fit-content;
   cursor: pointer;
-  text-underline-offset: 4px;
 }
 
-.details summary:hover {
-  text-decoration: underline;
+.details p {
+  margin-top: 8px;
 }
 
 .bests {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px 12px;
+  gap: 16px 12px;
   margin: 16px 0 0;
 }
 
 .bests dt {
-  color: #0c3552;
+  color: var(--pool-muted);
   font-size: 13px;
   font-weight: 500;
+  line-height: 1.4;
 }
 
 .bests dd {
-  margin: 2px 0 0;
+  margin: 4px 0 0;
 }
 
 .bestWpm {
@@ -599,40 +610,52 @@
 }
 
 .bestRank {
-  color: #0c3552;
+  color: var(--pool-muted);
   font-size: 13px;
   font-weight: 500;
+  line-height: 1.4;
 }
 
 .picks {
   list-style: none;
-  margin: 10px 0 0;
+  margin: 6px 0 0;
   padding: 0;
+  line-height: 1.4;
 }
 
+/* Cover on the left, title over artist beside it, the pair centred on the cover. */
 .picks li {
-  display: flex;
-  align-items: center;
-  gap: 4px 14px;
-  padding-block: 5px;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  grid-template-rows: 1fr auto auto 1fr;
+  column-gap: 16px;
+  padding-block: 10px;
+}
+
+.picks li > * {
+  grid-column: 2;
+}
+
+.picks .cover {
+  grid-column: 1;
+  grid-row: 1 / -1;
 }
 
 .cover {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 6px;
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
   box-shadow: 0 2px 8px #123e601f;
 }
 
 .pickTitle {
-  flex: 1;
-  min-width: 0;
+  grid-row: 2;
 }
 
 .pickArtist {
-  flex-shrink: 0;
-  color: #0c3552;
+  grid-row: 3;
+  color: var(--pool-muted);
   font-size: 15px;
   font-weight: 500;
 }
@@ -640,7 +663,7 @@
 .hand {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 24px;
   margin-top: 16px;
 }
 
@@ -648,13 +671,13 @@
   padding: 0;
   border: 0;
   background: none;
-  color: #0c3552;
+  color: var(--pool-muted);
   font: inherit;
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   text-decoration: underline;
-  text-decoration-color: #23587870;
+  text-decoration-color: var(--pool-link-rule);
   text-underline-offset: 4px;
 }
 
@@ -795,6 +818,10 @@
   width: 88px;
   height: 124px;
   rotate: 90deg;
+  /* The folded-away flap sits outside the card, hidden only by clip-path, which still
+     counts as scrollable overflow and made the misc panel scroll. Everything visible
+     stays inside the card's own box, so clip to it. */
+  overflow: clip;
 }
 
 .cards[data-up] .hole {
@@ -900,7 +927,8 @@
   position: relative;
   width: 100%;
   padding: 0 0 20px;
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 1.4;
   color: var(--pool-muted);
   background: transparent;
 }
@@ -924,11 +952,6 @@
   border-radius: 2px;
 }
 
-.nav button:focus-visible {
-  outline: none;
-  border-radius: 0;
-}
-
 @media (max-width: 640px) {
   .portfolio {
     --content-inline: calc(100% - 48px);
@@ -939,19 +962,9 @@
     padding: 16px 0;
   }
 
-  .barInner {
-    align-items: flex-start;
-  }
-
+  /* All four tabs fit on one row down to 320px. */
   .nav {
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 0 17px;
-    font-size: 14px;
-  }
-
-  .nav button {
-    padding-block: 3px;
+    gap: 16px;
   }
 
   .column {
@@ -959,7 +972,7 @@
   }
 
   .panel {
-    padding: 24px 18px;
+    padding: 24px 16px;
   }
 
   .section {
@@ -970,11 +983,7 @@
     padding-block: 0;
   }
 
-  .about p {
-    font-size: 17px;
-  }
-
-  .entry h3 {
+  .entry h2 {
     font-size: 18px;
   }
 
@@ -991,21 +1000,11 @@
   .meta {
     display: grid;
     justify-content: start;
-    gap: 2px;
+    gap: 4px;
   }
 
   .workSample {
     flex-basis: min(218px, 78vw);
-  }
-
-  .picks li {
-    display: grid;
-    grid-template-columns: 40px 1fr;
-    column-gap: 12px;
-  }
-
-  .cover {
-    grid-row: span 2;
   }
 
   .footer {
