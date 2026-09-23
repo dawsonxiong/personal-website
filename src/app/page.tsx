@@ -209,8 +209,8 @@ export default async function Home() {
                             className={styles.cover}
                             src={album.cover}
                             alt=""
-                            width={56}
-                            height={56}
+                            width={48}
+                            height={48}
                           />
                           <span className={styles.pickTitle}>{album.title}</span>
                           <span className={styles.pickArtist}>{album.artist}</span>

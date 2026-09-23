@@ -8,4 +8,5 @@ export {
   IconCrossMedium,
   IconGithub,
   IconPencil,
+  IconPlayCircle,
 } from "central-icons";

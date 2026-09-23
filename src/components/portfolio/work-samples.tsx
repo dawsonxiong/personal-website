@@ -14,6 +14,7 @@ import {
   IconChevronLeftMedium,
   IconChevronRightMedium,
   IconCrossMedium,
+  IconPlayCircle,
 } from "@/components/icons/central-icons";
 import styles from "./portfolio.module.css";
 import { syncScrollEdgeFade } from "./scroll-edge-fade";
@@ -111,7 +112,6 @@ function WorkSampleDialog({ sample }: { sample: WorkSample }) {
       <DialogTrigger
         className={styles.workSample}
         data-fade-item
-        data-video={sample.video ? "" : undefined}
         onPointerDown={() => {
           openedByKeyboard.current = false;
         }}
@@ -128,6 +128,9 @@ function WorkSampleDialog({ sample }: { sample: WorkSample }) {
           sizes="(max-width: 640px) 72vw, 220px"
           data-fit={sample.fit ?? "cover"}
         />
+        {sample.video ? (
+          <IconPlayCircle aria-hidden mode="raw" className={styles.workPlayIcon} />
+        ) : null}
         <span>{sample.caption}</span>
       </DialogTrigger>
       <DialogContent
