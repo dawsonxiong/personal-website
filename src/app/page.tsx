@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { PoolHero } from "@/components/pool-hero/pool-hero";
 import { CopyEmailButton } from "@/components/portfolio/copy-email-button";
-import { IconGithub } from "@/components/icons/central-icons";
+import { GithubIcon } from "@/components/icons";
 import { PeelHand } from "@/components/portfolio/peel-hand";
 import { PortfolioTabs } from "@/components/portfolio/portfolio-tabs";
 import { WorkSamples } from "@/components/portfolio/work-samples";
@@ -72,14 +72,14 @@ export default async function Home() {
                   >
                     X/Twitter
                   </a>
-                  <a
+                  {/* <a
                     className={styles.textLink}
                     href="https://cal.com/dawsonxiong/15min"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     Let’s chat
-                  </a>
+                  </a> */}
                 </div>
               </div>
             </section>
@@ -146,7 +146,7 @@ export default async function Home() {
                             rel="noopener noreferrer"
                             aria-label={`${project.name} on GitHub`}
                           >
-                            <IconGithub aria-hidden mode="raw" />
+                            <GithubIcon />
                           </a>
                         </h2>
                         <div className={styles.meta}>

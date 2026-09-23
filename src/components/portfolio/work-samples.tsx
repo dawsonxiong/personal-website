@@ -10,12 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  IconChevronLeftMedium,
-  IconChevronRightMedium,
-  IconCrossMedium,
-  IconPlayCircle,
-} from "@/components/icons/central-icons";
+import { ChevronLeftIcon, ChevronRightIcon, PlayIcon, XMarkIcon } from "@/components/icons";
 import styles from "./portfolio.module.css";
 import { syncScrollEdgeFade } from "./scroll-edge-fade";
 
@@ -77,9 +72,6 @@ export function WorkSamples({ samples }: { samples: WorkSample[] }) {
           <WorkSampleDialog key={sample.src} sample={sample} />
         ))}
       </div>
-      {/* Icons render raw (no SVG mask): the masked variant reuses one mask id per icon, and
-          with several scrollers across tabs the id resolves to a copy in a hidden panel,
-          which drew the arrow as a solid square. */}
       <button
         type="button"
         className={styles.workSamplesArrow}
@@ -87,7 +79,7 @@ export function WorkSamples({ samples }: { samples: WorkSample[] }) {
         aria-label="Previous work sample"
         onClick={() => step(-1)}
       >
-        <IconChevronLeftMedium aria-hidden mode="raw" />
+        <ChevronLeftIcon aria-hidden />
       </button>
       <button
         type="button"
@@ -96,7 +88,7 @@ export function WorkSamples({ samples }: { samples: WorkSample[] }) {
         aria-label="Next work sample"
         onClick={() => step(1)}
       >
-        <IconChevronRightMedium aria-hidden mode="raw" />
+        <ChevronRightIcon aria-hidden />
       </button>
     </div>
   );
@@ -119,19 +111,26 @@ function WorkSampleDialog({ sample }: { sample: WorkSample }) {
           openedByKeyboard.current = true;
         }}
       >
-        <Image
-          className={styles.workImage}
-          src={sample.src}
-          alt={sample.alt}
-          width={sample.width}
-          height={sample.height}
-          sizes="(max-width: 640px) 72vw, 220px"
-          data-fit={sample.fit ?? "cover"}
-        />
-        {sample.video ? (
-          <IconPlayCircle aria-hidden mode="raw" className={styles.workPlayIcon} />
-        ) : null}
-        <span>{sample.caption}</span>
+        {/* The badge is centred on this wrapper, so it tracks the image box, not a height. */}
+        <span className={styles.workMedia}>
+          <Image
+            className={styles.workImage}
+            src={sample.src}
+            alt={sample.alt}
+            width={sample.width}
+            height={sample.height}
+            sizes="(max-width: 640px) 72vw, 220px"
+            data-fit={sample.fit ?? "cover"}
+          />
+          {sample.video ? (
+            // A solid triangle on its own circle: filled play-circle icons cut the triangle out,
+            // which let the thumbnail show through.
+            <span aria-hidden className={styles.workPlayIcon}>
+              <PlayIcon />
+            </span>
+          ) : null}
+        </span>
+        <span className={styles.workCaption}>{sample.caption}</span>
       </DialogTrigger>
       <DialogContent
         className={`${styles.workModal} ring-0`}
@@ -180,7 +179,7 @@ function WorkSampleDialog({ sample }: { sample: WorkSample }) {
         </div>
         <DialogTitle className={styles.workModalCaption}>{sample.caption}</DialogTitle>
         <DialogClose className={styles.workModalClose} aria-label="Close">
-          <IconCrossMedium aria-hidden mode="raw" />
+          <XMarkIcon aria-hidden />
         </DialogClose>
       </DialogContent>
     </Dialog>

@@ -20,11 +20,11 @@ Next.js 16, React 19, TypeScript, Tailwind v4, shadcn/ui, Base UI, WebGL2. Hoste
 
 Requires Node 22 and pnpm.
 
-Icons come from [Central Icons](https://centralicons.com/), which needs a license key
-(`CENTRAL_LICENSE_KEY`) at install time.
+Icons are [Heroicons](https://heroicons.com/) (20px solid), imported through
+`@/components/icons`. The GitHub mark is an inline SVG in `brand-icons.tsx`.
 
 ```sh
-pnpm install:deps   # installs with the key from 1Password
+pnpm install
 pnpm dev
 ```
 
@@ -39,5 +39,6 @@ Other scripts: `pnpm test`, `pnpm lint`, `pnpm format`, `pnpm typecheck`, `pnpm 
 
 ## Deploying
 
-Import into Vercel and set `CENTRAL_LICENSE_KEY` and `ENABLE_EXPERIMENTAL_COREPACK=1`
-(so Vercel uses the pinned pnpm version).
+Import into Vercel; no environment variables are needed. Vercel's pnpm switches itself to the
+pinned `packageManager` version. If a build shows pnpm 9 failing with `packages field missing`,
+also set `ENABLE_EXPERIMENTAL_COREPACK=1`.

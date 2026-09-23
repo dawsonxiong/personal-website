@@ -45,13 +45,12 @@ Sometime after launch, this site may grow an activity feed like `v1` (WakaTime /
 
 - Domain name (DNS is on Cloudflare, DNS-only records pointing at Vercel; hosting stays Vercel)
 - Visual direction
-- Central Icons license in 1Password (`.env.op` → `CENTRAL_LICENSE_KEY`; Vercel env for deploys, plus `ENABLE_EXPERIMENTAL_COREPACK=1`)
 
 ## Hard rules
 
 - Do not apply Go, Rust, or Cloudflare Worker defaults.
 - Never commit `.env.local`.
-- UI icons: Central Icons via `@/components/icons` — do not add `lucide-react` for app UI.
+- UI icons: Heroicons (`@heroicons/react/20/solid`) via `@/components/icons` — do not add `lucide-react` or another icon set for app UI. Brand marks (GitHub) are inline SVGs in `brand-icons.tsx`.
 - Do not add a second host.
 - Do not add auth, a database, or extra routes without being asked.
 - Short/easy tweaks (copy, spacing, text size): edit only — no `pnpm build` / `typecheck` / `lint` unless asked or types may break.

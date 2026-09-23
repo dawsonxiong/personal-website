@@ -549,16 +549,34 @@
   position: relative;
 }
 
+.workMedia {
+  position: relative;
+  display: block;
+  border-bottom: 1px solid var(--pool-rule);
+}
+
 .workPlayIcon {
   position: absolute;
-  top: calc(var(--work-image-height) / 2);
+  top: 50%;
   left: 50%;
-  width: 36px;
-  height: 36px;
-  color: var(--pool-ink);
+  display: grid;
+  place-items: center;
+  /* Same size as the carousel arrows beside it. */
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--pool-ink);
+  color: #fff;
   filter: drop-shadow(0 0 1px rgb(255 255 255 / 90%)) drop-shadow(0 2px 8px #123e6040);
   translate: -50% -50%;
   pointer-events: none;
+}
+
+/* The triangle's visual weight sits left of its box; nudge it right to look centred. */
+.workPlayIcon svg {
+  width: 13px;
+  height: 13px;
+  translate: 1px 0;
 }
 
 /* The scroller clips an outset outline (only its bottom edge survived the 2px top padding),
@@ -576,14 +594,13 @@
   object-fit: cover;
   object-position: top;
   background: rgb(255 255 255 / 58%);
-  border-bottom: 1px solid var(--pool-rule);
 }
 
 .workImage[data-fit="contain"] {
   object-fit: contain;
 }
 
-.workSample span {
+.workCaption {
   display: block;
   padding: 8px 12px;
 }

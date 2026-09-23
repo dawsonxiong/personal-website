@@ -1,3 +1,11 @@
-export { CENTRAL_ICON_VARIANT } from "./central-config";
-export { IconCrossMedium, IconPencil } from "./central-icons";
-export { PoolEditIcon } from "./pool-edit-icon";
+/**
+ * All UI icons go through here. Heroicons mini (20px solid) matches the site's 18px icon slots.
+ */
+export {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  PencilIcon,
+  PlayIcon,
+  XMarkIcon,
+} from "@heroicons/react/20/solid";
+export { GithubIcon } from "./brand-icons";

@@ -11,9 +11,9 @@ importers:
       '@base-ui/react':
         specifier: ^1.8.0
         version: 1.8.0(@types/react@19.3.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      central-icons:
-        specifier: npm:@central-icons-react/round-filled-radius-2-stroke-2@^1.1.296
-        version: '@central-icons-react/round-filled-radius-2-stroke-2@1.1.319(react@19.2.8)'
+      '@heroicons/react':
+        specifier: ^2.2.0
+        version: 2.2.0(react@19.2.8)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -230,11 +230,6 @@ packages:
       '@types/react':
         optional: true
 
-  '@central-icons-react/round-filled-radius-2-stroke-2@1.1.319':
-    resolution: {integrity: sha512-uVaURQwVkAeFsgTezgw6WuyEdhlXlUdNSm0Fy0gDpHDJpBWwJ0Wa1TTBI+npGW/fzPmEQ6oPHobye7ie7Z3Erw==}
-    peerDependencies:
-      react: '>=14.0.0 <= 19'
-
   '@dotenvx/dotenvx@1.75.1':
     resolution: {integrity: sha512-/BITOC9dmS/edY2zQwZNicQ059O6RKabtQfyEafV0nGtfYRNHYy1DIPiYVcov40+tob9hfmBnbR963dS+EQ1DQ==}
     hasBin: true
@@ -259,6 +254,11 @@ packages:
 
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
+
+  '@heroicons/react@2.2.0':
+    resolution: {integrity: sha512-LMcepvRaS9LYHJGsF0zzmgKCUim/X3N/DQKc4jepAXJ7l8QxJ1PmxJzqplF2Z3FE4PqBAIGyJAQ/w4B5dsqbtQ==}
+    peerDependencies:
+      react: '>= 16 || ^19.0.0-rc'
 
   '@hono/node-server@2.1.1':
     resolution: {integrity: sha512-ELuehkj5VCBdgEw9zs+ivkKwyzzUCSQuE96YmiPvn1ECBoZCczbFXJLeEGMTYjphP6gydh4pHMqEYPVMYUVgQg==}
@@ -2395,10 +2395,6 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.0
 
-  '@central-icons-react/round-filled-radius-2-stroke-2@1.1.319(react@19.2.8)':
-    dependencies:
-      react: 19.2.8
-
   '@dotenvx/dotenvx@1.75.1':
     dependencies:
       '@dotenvx/primitives': 0.8.0
@@ -2441,6 +2437,10 @@ snapshots:
       react-dom: 19.2.8(react@19.2.8)
 
   '@floating-ui/utils@0.2.12': {}
+
+  '@heroicons/react@2.2.0(react@19.2.8)':
+    dependencies:
+      react: 19.2.8
 
   '@hono/node-server@2.1.1(hono@4.13.7)':
     dependencies:
