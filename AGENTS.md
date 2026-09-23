@@ -41,9 +41,12 @@ Sometime after launch, this site may grow an activity feed like `v1` (WakaTime /
 - Exception already shipped: the misc tab reads Monkeytype personal bests from the public, keyless profile endpoint (`src/lib/monkeytype.ts`, cached an hour, static fallback). No store involved.
 - Do not create the table, worker, or Prisma schema until that work is explicit.
 
+## Domain
+
+`www.dawsonxiong.com` (apex 308s to www). DNS stays on Cloudflare: `A @` and `CNAME www` to Vercel, **DNS only** (grey cloud). Never proxy them; that breaks Vercel's certificates.
+
 ## Still open
 
-- Domain name (DNS is on Cloudflare, DNS-only records pointing at Vercel; hosting stays Vercel)
 - Visual direction
 
 ## Hard rules

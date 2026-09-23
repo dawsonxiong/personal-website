@@ -2,6 +2,8 @@
 
 My personal site: a portfolio set over an interactive pool.
 
+Live at [dawsonxiong.com](https://www.dawsonxiong.com).
+
 ![The about page over the WebGL pool](public/portfolio/personal-website/home.webp)
 
 ## Features

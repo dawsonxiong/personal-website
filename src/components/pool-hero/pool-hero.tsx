@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { PencilIcon } from "@/components/icons";
+import { PlusIcon } from "@/components/icons";
 import { createDuckMotion } from "./duck-motion";
 import { createFrameClock } from "./frame-clock";
 // import { PoolLadder } from "./pool-ladder";
@@ -485,8 +485,12 @@ export function PoolHero({ children }: { children: ReactNode }) {
             }
           }}
         >
-          <summary className={styles.addButton} aria-label="Edit the pool" title="Edit the pool">
-            <PencilIcon className={styles.controlIcon} aria-hidden />
+          <summary
+            className={styles.addButton}
+            aria-label="Add to the pool"
+            title="Add to the pool"
+          >
+            <PlusIcon className={styles.controlIcon} aria-hidden />
           </summary>
           <div className={styles.pickerPanel} data-pool-exclusion>
             <div className={styles.pickerHeading}>Add to the pool</div>

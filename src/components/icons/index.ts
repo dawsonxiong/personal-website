@@ -4,8 +4,8 @@
 export {
   ChevronLeftIcon,
   ChevronRightIcon,
-  PencilIcon,
   PlayIcon,
+  PlusIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 export { GithubIcon } from "./brand-icons";
