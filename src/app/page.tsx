@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { PoolHero } from "@/components/pool-hero/pool-hero";
 import { CopyEmailButton } from "@/components/portfolio/copy-email-button";
+import { IconGithub } from "@/components/icons/central-icons";
 import { PeelHand } from "@/components/portfolio/peel-hand";
 import { PortfolioTabs } from "@/components/portfolio/portfolio-tabs";
 import { WorkSamples } from "@/components/portfolio/work-samples";
@@ -41,9 +42,11 @@ export default async function Home() {
                   as a Senior Software Engineer.
                 </p>
                 <p>
-                  I specialize in backend systems and UI/UX design for web and mobile apps. If I’m
-                  not at the keyboard, you might find me at the gym or the poker table.
+                  I specialize in backend systems and UI/UX design for web and mobile apps. Now, I
+                  spend my free time on machine learning projects, and I’m especially interested in
+                  inference and reinforcement learning.
                 </p>
+                <p>If I’m not at the keyboard, you might find me at the gym or the poker table.</p>
                 <div className={styles.links}>
                   <CopyEmailButton className={styles.textLink} />
                   <a
@@ -132,19 +135,39 @@ export default async function Home() {
                 <ol>
                   {projects.map((project) => (
                     <li className={styles.entry} key={project.name}>
-                      <h2>
-                        <a href={project.href} target="_blank" rel="noopener noreferrer">
-                          {project.name}
-                        </a>
-                      </h2>
+                      <div className={styles.experienceTitle}>
+                        <h2 className={styles.projectName}>
+                          <a href={project.href} target="_blank" rel="noopener noreferrer">
+                            {project.name}
+                          </a>
+                          <a
+                            className={styles.repoLink}
+                            href={project.repo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`${project.name} on GitHub`}
+                          >
+                            <IconGithub aria-hidden mode="raw" />
+                          </a>
+                        </h2>
+                        <div className={styles.meta}>
+                          <span>{project.tagline}</span>
+                          <span>{project.date}</span>
+                        </div>
+                      </div>
                       <p>{project.description}</p>
                       <p className={styles.stack}>{project.stack}</p>
                       {project.details && (
                         <details className={styles.details}>
                           <summary>A little more</summary>
-                          <p>{project.details}</p>
+                          <ul className={styles.detailsList}>
+                            {project.details.map((detail) => (
+                              <li key={detail}>{detail}</li>
+                            ))}
+                          </ul>
                         </details>
                       )}
+                      {project.work ? <WorkSamples samples={project.work} /> : null}
                     </li>
                   ))}
                 </ol>
@@ -178,7 +201,7 @@ export default async function Home() {
                     </dl>
                   </li>
                   <li className={styles.entry}>
-                    <h2>Favourite albums right now</h2>
+                    <h2>Currently bumping</h2>
                     <ul className={styles.picks}>
                       {albums.map((album) => (
                         <li key={album.title}>

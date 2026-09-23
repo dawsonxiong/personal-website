@@ -6,5 +6,6 @@ export {
   IconChevronLeftMedium,
   IconChevronRightMedium,
   IconCrossMedium,
+  IconGithub,
   IconPencil,
 } from "central-icons";

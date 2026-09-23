@@ -347,7 +347,7 @@
 .pickerHeading {
   margin-bottom: 10px;
   padding-inline: 2px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: #123d5c;
 }
@@ -388,8 +388,8 @@
   position: relative;
   display: block;
   inset: auto;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   transform: none;
   pointer-events: none;
 }
@@ -403,7 +403,7 @@
   border-radius: 10px;
   background: rgb(255 255 255 / 35%);
   color: #123d5c;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
 }

@@ -206,6 +206,10 @@
     --intro-step: 3;
   }
 
+  [data-intro] .about > div > :nth-child(5) {
+    --intro-step: 4;
+  }
+
   [data-intro] .footer {
     animation: intro-rise 700ms ease 1750ms both;
   }
@@ -335,7 +339,7 @@
 }
 
 .entry {
-  padding-block: 32px;
+  padding-block: 24px;
   border-top: 1px solid var(--pool-rule);
 }
 
@@ -353,6 +357,28 @@
   font-weight: 550;
   line-height: 1.3;
   letter-spacing: -0.3px;
+}
+
+/* Name links to the live thing; the icon beside it goes to the code. */
+.projectName {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.repoLink {
+  display: inline-flex;
+  color: var(--pool-muted);
+  transition: color 140ms ease;
+}
+
+.repoLink svg {
+  width: 18px;
+  height: 18px;
+}
+
+.repoLink:hover {
+  color: var(--pool-ink);
 }
 
 .experienceHeading {
@@ -414,11 +440,11 @@
 }
 
 .workSamplesShell[data-fade-left] > .workSamples {
-  --fade-start: 28px;
+  --fade-start: 36px;
 }
 
 .workSamplesShell[data-fade-right] > .workSamples {
-  --fade-end: 28px;
+  --fade-end: 36px;
 }
 
 /* Shown only while there's more to scroll that way (same signal as the fade). */
@@ -480,12 +506,14 @@
   overscroll-behavior-inline: contain;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
+  /* Edges dim rather than vanish: a longer ramp that bottoms out at 35% keeps the
+     clipped card readable instead of cutting it off. */
   mask-image: linear-gradient(
     to right,
-    transparent,
+    rgb(0 0 0 / 35%),
     #000 var(--fade-start),
     #000 calc(100% - var(--fade-end)),
-    transparent
+    rgb(0 0 0 / 35%)
   );
   transition:
     --fade-start 140ms ease,
@@ -516,6 +544,39 @@
   background: rgb(255 255 255 / 74%);
 }
 
+/* A play badge over the poster marks the clips. Centred on the image, not the caption. */
+.workSample {
+  position: relative;
+}
+
+.workSample[data-video]::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--work-image-height) / 2);
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgb(255 255 255 / 60%);
+  border-radius: 50%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23031a2f' d='M9 6.5v11l9-5.5z'/%3E%3C/svg%3E")
+      center / 22px no-repeat,
+    rgb(246 249 251 / 82%);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px #123e6026;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+/* The scroller clips an outset outline (only its bottom edge survived the 2px top padding),
+   so the focus ring is drawn inside the card instead. */
+.portfolio .workSample:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--pool-ink);
+  border-radius: 10px;
+}
+
 .workImage {
   display: block;
   width: 100%;
@@ -535,13 +596,22 @@
   padding: 8px 12px;
 }
 
+/* Sized from the image: as wide as the image is at full height, capped by the viewport,
+   so the frame hugs tall screenshots instead of leaving empty gutters beside them. */
 .workModal {
-  width: min(92vw, 860px);
-  max-width: min(92vw, 860px);
+  --image-max-height: min(78dvh, 820px);
+  --modal-padding: 8px;
+  width: min(
+    92vw,
+    860px,
+    calc(var(--image-max-height) * var(--aspect, 1.6) + 2 * var(--modal-padding))
+  );
+  max-width: none;
   gap: 0;
-  padding: 8px 8px 10px;
+  padding: var(--modal-padding) var(--modal-padding) 12px;
   overflow: hidden;
   border: 0;
+  border-radius: 16px;
   background: #e8f5fbf7;
   box-shadow: 0 16px 48px #123e6029;
   color: var(--pool-ink);
@@ -550,22 +620,62 @@
 .workModalFrame {
   overflow: hidden;
   border-radius: 10px;
-  background: rgb(255 255 255 / 55%);
 }
 
 .workModalImage {
   display: block;
   width: 100%;
   height: auto;
-  max-height: min(78dvh, 820px);
+  max-height: var(--image-max-height);
   object-fit: contain;
   object-position: top;
+  /* Hairline drawn over the image so white screenshots keep an edge against the frame. */
+  outline: 1px solid var(--pool-rule);
+  outline-offset: -1px;
+  border-radius: 10px;
 }
 
 .workModalCaption {
-  margin: 10px 6px 2px;
+  margin: 12px 0 0;
+  padding-inline: 4px;
   color: var(--pool-muted);
-  letter-spacing: -0.2px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.workModalClose {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 60%);
+  border-radius: 50%;
+  background: rgb(246 249 251 / 82%);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px #123e6026;
+  color: var(--pool-ink);
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.workModalClose svg {
+  width: 18px;
+  height: 18px;
+}
+
+.workModalClose:hover {
+  background: #fff;
+}
+
+.workModalClose:focus-visible {
+  outline: 2px solid var(--pool-ink);
+  outline-offset: 2px;
 }
 
 .details {
@@ -583,11 +693,21 @@
   margin-top: 8px;
 }
 
+.detailsList {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  list-style: disc;
+}
+
+.detailsList li + li {
+  margin-top: 6px;
+}
+
 .bests {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px 12px;
-  margin: 16px 0 0;
+  margin: 12px 0 0;
 }
 
 .bests dt {
@@ -618,7 +738,9 @@
 
 .picks {
   list-style: none;
-  margin: 6px 0 0;
+  /* 2px here plus the first row's 10px padding makes the same 12px ink gap
+     under a heading as every other block. */
+  margin: 2px 0 0;
   padding: 0;
   line-height: 1.4;
 }
@@ -664,7 +786,7 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  margin-top: 16px;
+  margin-top: 12px;
 }
 
 .reset {
@@ -807,6 +929,14 @@
   position: relative;
   width: 168px;
   height: 128px;
+  /* Sideways, a card is 18px shorter than the box that holds it upright, which left the
+     face-down stack sitting lower under its heading than every other block. Pull it back
+     up while it lies down, and give the room back when the cards stand. */
+  translate: 0 -18px;
+}
+
+.cards[data-up] {
+  translate: 0 0;
 }
 
 .hole {
@@ -908,6 +1038,10 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .cards {
+    transition: translate 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   /* `top` is left out so the squeeze spread tracks the pointer; it only moves 3px
      between the two resting layouts anyway. */
   .hole {
