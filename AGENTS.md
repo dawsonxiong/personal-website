@@ -43,9 +43,9 @@ Sometime after launch, this site may grow an activity feed like `v1` (WakaTime /
 
 ## Still open
 
-- Domain
+- Domain name (DNS is on Cloudflare, DNS-only records pointing at Vercel; hosting stays Vercel)
 - Visual direction
-- Central Icons license in 1Password (`.env.op` → `CENTRAL_LICENSE_KEY`; Vercel env for deploys)
+- Central Icons license in 1Password (`.env.op` → `CENTRAL_LICENSE_KEY`; Vercel env for deploys, plus `ENABLE_EXPERIMENTAL_COREPACK=1`)
 
 ## Hard rules
 

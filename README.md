@@ -29,7 +29,17 @@ Plain `pnpm install` fails — the key is only in `.env.op`. For the same reason
 `verifyDepsBeforeRun` is off in `pnpm-workspace.yaml`; otherwise pnpm would run an
 implicit, keyless install before any script.
 
-Add the same `CENTRAL_LICENSE_KEY` in Vercel project settings so CI/preview builds can install the package.
+## Deploying (Vercel)
+
+Import the repo in Vercel (framework preset: Next.js) and set two environment variables for
+Production and Preview:
+
+- `CENTRAL_LICENSE_KEY`: same value as in 1Password, so the icon package's preinstall check passes.
+- `ENABLE_EXPERIMENTAL_COREPACK=1`: makes Vercel use the pinned `packageManager` (pnpm 11)
+  instead of guessing pnpm 9/10 from the lockfile, which would ignore `allowBuilds`.
+
+Node comes from `engines` in `package.json` (22.x). The domain's DNS lives on Cloudflare: add the
+records Vercel shows under Domains, set to **DNS only** (grey cloud), not proxied.
 
 Import icons only through `@/components/icons` (see `central-icons.ts` for the locked variant).
 
