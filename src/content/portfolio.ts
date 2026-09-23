@@ -301,6 +301,30 @@ export const projects = [
     ],
   },
   {
+    name: "Personal website",
+    href: "/",
+    repo: "https://github.com/dawsonxiong/personal-website",
+    tagline: "This site",
+    date: "Sep 2026",
+    description:
+      "My portfolio, set over an interactive pool. Drop in floaties and they drift, bob and bump into each other.",
+    stack: "Next.js 16, React 19, TypeScript, WebGL2, Tailwind v4, shadcn/ui, Base UI, Vercel",
+    details: [
+      "A WebGL2 fragment shader draws the water, caustics and floor shadows, and scales its buffer to hold the frame rate.",
+      "A small custom solver steps the floaties at 1/120 s with damped bounces and steers them around the content.",
+      "The misc tab pulls my Monkeytype personal bests from its public API, cached for an hour.",
+    ],
+    work: [
+      {
+        src: "/portfolio/personal-website/home.webp",
+        alt: "The about page: a frosted card introducing Dawson over a blue WebGL pool, with a rubber duck floating above it",
+        caption: "About page",
+        width: 1600,
+        height: 1000,
+      },
+    ],
+  },
+  {
     name: "Thock",
     href: "https://github.com/dawsonxiong/thock",
     repo: "https://github.com/dawsonxiong/thock",

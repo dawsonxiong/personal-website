@@ -21,7 +21,7 @@ export default async function Home() {
               <div>
                 <h2 className={styles.intro}>Hey, I’m Dawson.</h2>
                 <p>
-                  I’m currently studying computer science at the{" "}
+                  I’m studying computer science at the{" "}
                   <a
                     className={styles.schoolLink}
                     href="https://uwaterloo.ca"
@@ -38,13 +38,12 @@ export default async function Home() {
                     rel="noopener noreferrer"
                   >
                     General Learning (YC F24)
-                  </a>{" "}
-                  as a Senior Software Engineer.
+                  </a>
+                  .
                 </p>
                 <p>
-                  I specialize in backend systems and UI/UX design for web and mobile apps. Now, I
-                  spend my free time on machine learning projects, and I’m especially interested in
-                  inference and reinforcement learning.
+                  I specialize in backend systems and UI/UX for web and mobile apps. Now, I my free
+                  time goes to machine learning, mostly inference and reinforcement learning.
                 </p>
                 <p>If I’m not at the keyboard, you might find me at the gym or the poker table.</p>
                 <div className={styles.links}>

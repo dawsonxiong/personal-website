@@ -111,9 +111,6 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
         tabRefs.current[section]?.focus();
       }}
     >
-      <button className={styles.skip} onClick={() => panelRefs.current[active]?.focus()}>
-        Skip to content
-      </button>
       <header className={styles.header} data-pool-exclusion>
         {/* Visible headings live in the panels, which are hidden when not selected. */}
         <h1 className="sr-only">Dawson Xiong</h1>
