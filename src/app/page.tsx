@@ -42,7 +42,7 @@ export default async function Home() {
                   .
                 </p>
                 <p>
-                  I specialize in backend systems and UI/UX for web and mobile apps. Now, I my free
+                  I specialize in backend systems and UI/UX for web and mobile apps. Now, my free
                   time goes to machine learning, mostly inference and reinforcement learning.
                 </p>
                 <p>If I’m not at the keyboard, you might find me at the gym or the poker table.</p>

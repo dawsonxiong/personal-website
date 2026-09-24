@@ -58,7 +58,7 @@
   position: absolute;
   left: clamp(24px, calc((100vw - 550px) / 4), 16%);
   top: 32%;
-  width: clamp(1.75rem, calc((100vw - 600px) * 0.24), 6rem);
+  width: clamp(3rem, calc((100vw - 600px) * 0.24), 6rem);
   aspect-ratio: 1;
   transform: translate(-50%, -50%) rotate(-12deg);
   pointer-events: none;
@@ -66,36 +66,47 @@
   will-change: transform;
 }
 
+/* Set from pool-hero.tsx when the layout leaves the toy no open water. */
+.duck[data-stranded],
+.floatie[data-stranded] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .duck,
+  .floatie {
+    transition: opacity 300ms ease;
+  }
+}
+
 .ring {
   left: calc(100% - clamp(24px, calc((100vw - 550px) / 4), 14%));
   top: 51%;
-  width: clamp(1.75rem, calc((100vw - 600px) * 0.2), 5rem);
+  width: clamp(2.5rem, calc((100vw - 600px) * 0.2), 5rem);
 }
 
 .ball {
   left: clamp(24px, calc((100vw - 550px) / 4), 12%);
   top: 83%;
-  width: clamp(1.5rem, calc((100vw - 600px) * 0.15), 3.75rem);
+  width: clamp(2rem, calc((100vw - 600px) * 0.15), 3.75rem);
 }
 
 .donut,
-.watermelon,
-.turtle {
-  width: clamp(1.75rem, calc((100vw - 600px) * 0.2), 5rem);
+.volleyball,
+.frisbee {
+  width: clamp(2.5rem, calc((100vw - 600px) * 0.2), 5rem);
   border-radius: 50%;
 }
 
-.watermelon {
-  width: clamp(1.5rem, calc((100vw - 600px) * 0.15), 3.75rem);
+.volleyball {
+  width: clamp(2rem, calc((100vw - 600px) * 0.15), 3.75rem);
 }
 
 /* Inflatable vinyl, lit from the upper left like the duck render. The outer element only
    carries the contact shadow: a filter on a masked element would be clipped by its own mask. */
 .ring,
 .ball,
-.donut,
-.watermelon,
-.turtle {
+.donut {
   filter: drop-shadow(0 1px 1px rgb(10 80 116 / 18%)) drop-shadow(1px 3px 3px rgb(8 60 110 / 16%));
 }
 
@@ -182,9 +193,8 @@
   );
 }
 
-/* Spheres: a terminator falling away from the light, a hot spot, and a cool bounce off the water. */
-.ball .floatieBody,
-.watermelon .floatieBody {
+/* Sphere: a terminator falling away from the light, a hot spot, and a cool bounce off the water. */
+.ball .floatieBody {
   overflow: hidden;
 }
 
@@ -204,62 +214,25 @@
     );
 }
 
-.watermelon .floatieBody {
-  background:
-    radial-gradient(circle at 78% 82%, rgb(190 240 220 / 30%), transparent 30%),
-    radial-gradient(circle at 36% 30%, transparent 28%, rgb(6 30 20 / 55%) 100%),
-    radial-gradient(circle at 44% 40%, #2c5a37 0 5%, transparent 6%),
-    repeating-conic-gradient(from 5deg at 44% 40%, #78ab59 0deg 22deg, #2f6b3c 22deg 36deg);
-}
-
-.ball .floatieGloss,
-.watermelon .floatieGloss {
+.ball .floatieGloss {
   background:
     radial-gradient(ellipse 20% 12% at 33% 24%, #fff 30%, transparent 100%),
     radial-gradient(ellipse 52% 40% at 34% 27%, rgb(255 255 255 / 45%), transparent 100%);
   rotate: -28deg;
 }
 
-.turtleShell,
-.turtleHead,
-.turtleFeet {
-  position: absolute;
+.volleyball,
+.frisbee {
+  filter: drop-shadow(0 1px 1px rgb(10 80 116 / 18%)) drop-shadow(1px 3px 3px rgb(8 60 110 / 16%));
+}
+
+/* Drawn in floatie-art.tsx. */
+.volleyball svg,
+.frisbee svg {
   display: block;
-}
-
-.turtleShell {
-  inset: 22% 15% 8%;
-  border-radius: 48% 48% 44% 44%;
-  background:
-    radial-gradient(ellipse 20% 12% at 32% 22%, rgb(255 255 255 / 85%), transparent 100%),
-    radial-gradient(circle at 36% 30%, transparent 35%, rgb(10 40 25 / 45%) 100%),
-    radial-gradient(ellipse at 35% 24%, #a3b575, transparent 60%),
-    repeating-linear-gradient(60deg, transparent 0 19%, #45644366 20% 23%, transparent 24% 38%),
-    #668750;
-  border: 2px solid #547445;
-  box-shadow:
-    inset -4px -5px 5px #24492855,
-    inset 2px 3px 3px #d4e8a166;
-}
-
-.turtleHead {
-  left: 39%;
-  top: 1%;
-  width: 22%;
-  height: 29%;
-  border-radius: 48%;
-  background:
-    radial-gradient(circle at 25% 32%, #173d30 0 7%, transparent 9%),
-    radial-gradient(circle at 75% 32%, #173d30 0 7%, transparent 9%), #9abd79;
-}
-
-.turtleFeet {
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 15% 42%, #93b574 0 12%, transparent 13%),
-    radial-gradient(ellipse at 85% 42%, #93b574 0 12%, transparent 13%),
-    radial-gradient(ellipse at 22% 80%, #85a967 0 11%, transparent 12%),
-    radial-gradient(ellipse at 78% 80%, #85a967 0 11%, transparent 12%);
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 .spawned {
@@ -341,15 +314,15 @@
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 35%);
-  color: #031a2f;
+  color: var(--pool-ink);
 }
 
 .pickerHeading {
   margin-bottom: 10px;
   padding-inline: 2px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
-  color: #123d5c;
+  color: var(--pool-muted);
 }
 
 .pickerGrid {
@@ -402,7 +375,7 @@
   border: 0;
   border-radius: 10px;
   background: rgb(255 255 255 / 35%);
-  color: #123d5c;
+  color: var(--pool-muted);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -419,7 +392,7 @@
 }
 
 .picker :is(button, summary):focus-visible {
-  outline: 2px solid var(--pool-muted);
+  outline: 2px solid var(--pool-ink);
   outline-offset: 3px;
 }
 
@@ -445,7 +418,7 @@
 }
 
 .nudge:focus-visible {
-  outline: 2px solid var(--pool-muted);
+  outline: 2px solid var(--pool-ink);
   outline-offset: 3px;
 }
 

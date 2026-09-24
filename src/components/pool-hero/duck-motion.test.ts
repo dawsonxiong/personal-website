@@ -372,3 +372,52 @@ test("an entrance still arrives when the resting spot hugs a wall", () => {
   }
   assert.ok(frames < 240, `took ${frames} frames`);
 });
+
+// A 375px phone with a tab tall enough to fill the card: nav, card, footer text, add button.
+const phone = { width: 375, height: 812 };
+const phoneZones = [
+  { left: 0, top: 0, right: 375, bottom: 70 },
+  { left: 24, top: 86, right: 351, bottom: 689 },
+  { left: 24, top: 773, right: 190, bottom: 794 },
+  { left: 315, top: 752, right: 359, bottom: 796 },
+];
+
+test("a phone keeps the duck in the lane under a full card, even after its entrance", () => {
+  for (let heading = 0; heading < Math.PI * 2; heading += Math.PI / 4) {
+    const movement = createDuckMotion(randomSource());
+    movement.resize(phone.width, phone.height, 48);
+    movement.setExclusions(phoneZones);
+    movement.enterFrom(phone.width / 2, phone.height / 2, heading);
+    movement.depart();
+    for (let frame = 0; frame < 600; frame++) movement.step(1 / 60);
+    assert.equal(movement.stranded, false);
+    assertClear(movement.pose, phoneZones, phone.width, phone.height);
+    movement.flee(movement.pose.x, movement.pose.y, true, true);
+    for (let frame = 0; frame < 120; frame++) {
+      movement.step(1 / 60);
+      assertClear(movement.pose, phoneZones, phone.width, phone.height);
+    }
+  }
+});
+
+test("a toy with no open water is stranded until the layout leaves room", () => {
+  const movement = createDuckMotion(randomSource());
+  movement.resize(phone.width, phone.height, 48);
+  movement.setExclusions([{ left: 0, top: 0, right: 375, bottom: 812 }]);
+  assert.equal(movement.stranded, true);
+  movement.setExclusions(phoneZones);
+  assert.equal(movement.stranded, false);
+  assertClear(movement.pose, phoneZones, phone.width, phone.height);
+});
+
+test("extras can spawn into the phone lane", () => {
+  const bodies = [];
+  for (let i = 0; i < 3; i++) {
+    const movement = createDuckMotion(randomSource(), { x: 0.86, y: 0.3 }, 0.42);
+    movement.resize(phone.width, phone.height, 48);
+    movement.setExclusions(phoneZones);
+    assert.ok(placeFloatie(movement, bodies, phone.width, phone.height, phoneZones));
+    assertClear(movement.pose, phoneZones, phone.width, phone.height);
+    bodies.push(movement);
+  }
+});

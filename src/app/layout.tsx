@@ -27,7 +27,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={cn("font-sans", geist.variable)}>
       <body>
         {children}
-        <Toaster position="bottom-center" />
+        {/* On phones the toast spans the width; lift it clear of the pool's add button. */}
+        <Toaster position="bottom-center" mobileOffset={{ bottom: 76 }} />
       </body>
     </html>
   );

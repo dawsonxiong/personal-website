@@ -59,7 +59,7 @@ export function placeFloatie(
   for (const y of [0.3, 0.55, 0.75]) {
     for (const x of [0.86, 0.14]) candidates.push({ x: width * x, y: height * y });
   }
-  for (let y = 120; y <= height - 80; y += spacing) {
+  for (let y = body.radius + 8; y <= height - body.radius - 8; y += spacing / 2) {
     for (let x = body.radius + 8; x <= width - body.radius - 8; x += spacing) {
       candidates.push({ x, y });
     }

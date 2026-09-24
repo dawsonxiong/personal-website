@@ -9,15 +9,16 @@ function Toaster({ ...props }: ToasterProps) {
       className="toaster group"
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
-          "--border-radius": "var(--radius)",
+          // The same frosted glass as the carousel arrows and dialog close button.
+          "--normal-bg": "rgb(246 249 251 / 82%)",
+          "--normal-text": "var(--pool-ink)",
+          "--normal-border": "rgb(255 255 255 / 60%)",
+          "--border-radius": "16px",
         } as React.CSSProperties
       }
       toastOptions={{
         classNames: {
-          toast: "cn-toast",
+          toast: "cn-toast font-medium shadow-[0_4px_14px_#123e6026] backdrop-blur-[8px]",
         },
       }}
       {...props}

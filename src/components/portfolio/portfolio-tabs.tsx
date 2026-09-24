@@ -155,10 +155,13 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
           </div>
         ))}
       </main>
-      <footer className={styles.footer} data-pool-exclusion>
+      <footer className={styles.footer}>
         <div className={styles.barInner}>
-          {/* The page is prerendered, so the client's year can differ from the build's. */}
-          <span suppressHydrationWarning>© {new Date().getFullYear()} Dawson Xiong</span>
+          {/* The page is prerendered, so the client's year can differ from the build's.
+              Only the text is kept clear: the rest of the strip is water the floaties can use. */}
+          <span suppressHydrationWarning data-pool-exclusion>
+            © {new Date().getFullYear()} Dawson Xiong
+          </span>
         </div>
       </footer>
     </div>

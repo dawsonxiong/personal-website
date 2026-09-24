@@ -133,5 +133,8 @@
   html {
     @apply font-sans;
     color-scheme: light;
+    /* The pool is fixed and the card scrolls inside itself; a rubber-banding page would
+       slide the content off the water it was measured against. */
+    overscroll-behavior: none;
   }
 }

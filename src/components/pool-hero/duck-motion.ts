@@ -73,6 +73,21 @@ export function createDuckMotion(
     for (const x of [minX, maxX]) {
       for (const y of [minY, maxY]) candidates.push({ x, y });
     }
+    // Zones can overlap (the card and the add button on a phone), so a candidate that lands
+    // in a neighbour gets one more projection out of it.
+    const firstPass = candidates.length;
+    for (let i = 0; i < firstPass; i++) {
+      const x = clamp(candidates[i].x, minX, maxX);
+      const y = clamp(candidates[i].y, minY, maxY);
+      const blocker = exclusions.find((zone) => inside(x, y, zone));
+      if (!blocker) continue;
+      candidates.push(
+        { x: blocker.left, y },
+        { x: blocker.right, y },
+        { x, y: blocker.top },
+        { x, y: blocker.bottom },
+      );
+    }
     for (const candidate of candidates) {
       const x = clamp(candidate.x, minX, maxX);
       const y = clamp(candidate.y, minY, maxY);
@@ -117,6 +132,10 @@ export function createDuckMotion(
     },
     get entering() {
       return seek !== null;
+    },
+    /** Resting inside content because the layout leaves no open water anywhere. */
+    get stranded() {
+      return !seek && exclusions.some((zone) => inside(pose.x, pose.y, zone));
     },
     /**
      * Start at (x, y) and wait there; `depart` begins the swim. Without a heading the
@@ -180,8 +199,10 @@ export function createDuckMotion(
       const margin = size * 0.55 + 8;
       minX = Math.min(margin, width * 0.5);
       maxX = Math.max(minX, width - margin);
-      minY = Math.min(Math.max(margin, 120), height * 0.5);
-      maxY = Math.max(minY, height - Math.max(margin, 80));
+      // The nav, footer text and controls are measured exclusions, so the walls only need
+      // to keep the sprite on screen. Fixed bands here used to swallow the mobile lane.
+      minY = Math.min(margin, height * 0.5);
+      maxY = Math.max(minY, height - margin);
       acceleration = clamp(Math.min(width, height) * 1.8, 950, 1550);
       // The layout owner calls setExclusions with fresh rectangles after resize.
       // Projecting against the previous viewport first can move a toy across the pool.

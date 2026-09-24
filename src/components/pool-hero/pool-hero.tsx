@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@/components/icons";
 import { createDuckMotion } from "./duck-motion";
+import { FrisbeeArt, VolleyballArt } from "./floatie-art";
 import { createFrameClock } from "./frame-clock";
 // import { PoolLadder } from "./pool-ladder";
 import {
@@ -38,14 +39,8 @@ function FloatieArt({ kind }: { kind: FloatieKind }) {
         draggable={false}
       />
     );
-  if (kind === "turtle")
-    return (
-      <>
-        <span className={styles.turtleFeet} />
-        <span className={styles.turtleHead} />
-        <span className={styles.turtleShell} />
-      </>
-    );
+  if (kind === "volleyball") return <VolleyballArt />;
+  if (kind === "frisbee") return <FrisbeeArt />;
   return (
     <>
       <span className={styles.floatieBody} />
@@ -137,8 +132,15 @@ export function PoolHero({ children }: { children: ReactNode }) {
       for (const { element, motion: movement } of floaties) {
         const pose = surfacePose(movement.pose, elapsed);
         element.style.transform = `translate3d(${pose.x}px, ${pose.y}px, 0) translate(-50%, -50%) rotate(${pose.angle}rad)`;
+        // With no open water (a short phone screen, a tall tab), hide the toy rather than
+        // let it drift under the text. It surfaces again once the layout leaves room.
+        element.toggleAttribute("data-stranded", movement.stranded);
       }
-      waterEffects.update(bodies, elapsed, emitWake);
+      waterEffects.update(
+        bodies.filter((body) => !body.stranded),
+        elapsed,
+        emitWake,
+      );
       renderer?.draw(elapsed, waterEffects);
     };
 

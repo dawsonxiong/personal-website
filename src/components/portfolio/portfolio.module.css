@@ -1,5 +1,6 @@
 /*
  * Type: 48 display, 30 stat, 19 heading, 17 body, 15 secondary, 13 caption.
+ * Phones (≤640px): 34 display, 18 heading, 16 body, 14 secondary.
  * Space: 4 / 8 / 12 / 16 / 24 / 32.
  */
 .portfolio {
@@ -1095,10 +1096,22 @@
   border-radius: 2px;
 }
 
+/* Up to here the side gutters are too narrow for the duck, so a tall card keeps a strip of
+   open water above the footer. Without it the pool is fully covered and the duck hides. */
+@media (max-width: 820px) {
+  .column {
+    --pool-lane: 84px;
+    max-height: calc(100% - var(--column-gap) - var(--pool-lane));
+    margin-bottom: var(--pool-lane);
+  }
+}
+
 @media (max-width: 640px) {
   .portfolio {
     --content-inline: calc(100% - 48px);
     --column-gap: 16px;
+    font-size: 16px;
+    line-height: 1.6;
   }
 
   .header {
@@ -1138,6 +1151,15 @@
   .logoLink {
     width: 36px;
     height: 36px;
+  }
+
+  .meta,
+  .stack,
+  .links,
+  .details,
+  .pickArtist,
+  .footer {
+    font-size: 14px;
   }
 
   .meta {
