@@ -8,11 +8,11 @@ Live at [dawsonxiong.com](https://www.dawsonxiong.com).
 
 ## Features
 
-- A WebGL2 shader draws the water, caustics, shadows and wakes, with no 3D engine.
-- Floaties drift, bob and bump into each other using a small custom physics solver.
-- They steer around the text so the content stays readable.
-- About, experience, projects and misc tabs, with keyboard navigation and linkable hashes.
-- Respects reduced motion, and pauses when the tab is hidden.
+- The water, caustics, shadows and wakes are drawn by a WebGL2 shader, without three.js or any other 3D engine
+- Floaties drift around, bob and bump into each other, using a small physics solver I wrote
+- They also steer around the text so they don't cover it
+- About, experience, projects and misc tabs. Arrow keys work and each tab has its own URL hash
+- Honours reduced motion, and pauses when you switch tabs
 
 ## Stack
 
@@ -41,6 +41,6 @@ Other scripts: `pnpm test`, `pnpm lint`, `pnpm format`, `pnpm typecheck`, `pnpm 
 
 ## Deploying
 
-Import into Vercel; no environment variables are needed. Vercel's pnpm switches itself to the
-pinned `packageManager` version. If a build shows pnpm 9 failing with `packages field missing`,
+Import it into Vercel. It doesn't need any environment variables, and Vercel's pnpm switches to the
+pinned `packageManager` version on its own. If a build shows pnpm 9 failing with `packages field missing`,
 also set `ENABLE_EXPERIMENTAL_COREPACK=1`.
