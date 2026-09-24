@@ -756,7 +756,7 @@
 }
 
 /* Cover on the left, title over artist beside it, the pair centred on the cover. */
-.picks li {
+.pick {
   display: grid;
   grid-template-columns: 48px minmax(0, 1fr);
   grid-template-rows: 1fr auto auto 1fr;
@@ -764,13 +764,122 @@
   padding-block: 10px;
 }
 
-.picks li > * {
+.pick > * {
   grid-column: 2;
 }
 
-.picks .cover {
+.pick .cover {
   grid-column: 1;
   grid-row: 1 / -1;
+}
+
+/* An album row opens into its track list, Apple Music style. */
+.albumSummary {
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  list-style: none;
+  cursor: pointer;
+}
+
+.albumSummary::-webkit-details-marker {
+  display: none;
+}
+
+.albumSummary:focus-visible {
+  outline: 2px solid var(--pool-link-rule);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.albumSummary .pickTitle {
+  width: fit-content;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.albumSummary:hover .pickTitle {
+  text-decoration-color: var(--pool-link-rule);
+}
+
+.albumChevron {
+  grid-column: 3;
+  grid-row: 1 / -1;
+  align-self: center;
+  width: 18px;
+  height: 18px;
+  color: var(--pool-muted);
+}
+
+.album[open] .albumChevron {
+  rotate: 180deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .albumSummary .pickTitle {
+    transition: text-decoration-color 140ms ease;
+  }
+
+  .albumChevron {
+    transition: rotate 180ms ease;
+  }
+}
+
+.tracks {
+  list-style: none;
+  margin: 2px 0 6px;
+  padding: 0;
+  font-size: 15px;
+}
+
+/* Number under the cover, title (and any guest credit) under the album title,
+   star and length on the right. */
+.track {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto auto;
+  column-gap: 16px;
+  align-items: baseline;
+  padding-block: 9px;
+  border-top: 1px solid var(--pool-rule);
+}
+
+.trackNumber,
+.trackLength {
+  color: var(--pool-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.trackNumber {
+  grid-row: 1;
+  text-align: center;
+}
+
+.trackTitle {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.trackArtist {
+  grid-column: 2;
+  grid-row: 2;
+  color: var(--pool-muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.trackStar {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center;
+  width: 14px;
+  height: 14px;
+  color: #e7a92a;
+}
+
+.trackLength {
+  grid-column: 4;
+  grid-row: 1;
+  font-size: 14px;
 }
 
 .cover {
@@ -1159,6 +1268,10 @@
   .details,
   .pickArtist,
   .footer {
+    font-size: 14px;
+  }
+
+  .tracks {
     font-size: 14px;
   }
 

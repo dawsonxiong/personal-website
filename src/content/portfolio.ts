@@ -574,22 +574,92 @@ export const projects = [
   },
 ] satisfies Project[];
 
+interface Track {
+  title: string;
+  /** Only when the credit differs from the album artist, like Apple Music's track list. */
+  artist?: string;
+  /** m:ss */
+  length?: string;
+  /** Shows a star beside the track. */
+  favourite?: boolean;
+}
+
+interface Album {
+  title: string;
+  artist: string;
+  cover: string;
+  tracks: Track[];
+}
+
 // Hand-picked, in no particular order.
-export const albums = [
+export const albums: Album[] = [
   {
     title: "9 Months & 50 Hours",
     artist: "Fred again.. & Latin Mafia",
     cover: "/portfolio/covers/9-months-50-hours.jpg",
+    tracks: [
+      { title: "Hey Hey", length: "2:05" },
+      { title: "Alvafro", artist: "LATIN MAFIA & Fred again..", length: "3:58" },
+      { title: "Bonita" },
+      { title: "benjy chord" },
+      { title: "Cmon (LATIN MAFIA & Fred edit)", artist: "Fred again.. & Brian Eno" },
+      { title: "Quiereme", artist: "LATIN MAFIA, Fred again.. & bby" },
+      {
+        title: "casino143 (Rue De La Fortuna Remix)",
+        artist: "IVOXYGEN, LATIN MAFIA & Fred again..",
+      },
+      { title: "Film Scene Soundtrack", artist: "Fred again.., KatzPascale & LATIN MAFIA" },
+      { title: "Open Eye Signal (under the fabric)", artist: "Jon Hopkins" },
+      { title: "Piensas En Mi" },
+      { title: "Halo", artist: "Fred again.., LATIN MAFIA & Lil Yachty" },
+      { title: "Te Estoy Correteando", artist: "LATIN MAFIA & Fred again.." },
+      { title: "Mabe", artist: "Fred again.., LATIN MAFIA & Mabe Fratti" },
+      { title: "I wish it wasnt" },
+    ],
   },
   {
     title: "Blonde",
     artist: "Frank Ocean",
     cover: "/portfolio/covers/blonde.jpg",
+    tracks: [
+      { title: "Nikes", length: "5:14" },
+      { title: "Ivy", length: "4:09" },
+      { title: "Pink + White", length: "3:04" },
+      { title: "Be Yourself", length: "1:26" },
+      { title: "Solo", length: "4:17" },
+      { title: "Skyline To", length: "3:04" },
+      { title: "Self Control", length: "4:09" },
+      { title: "Good Guy", length: "1:06" },
+      { title: "Nights", length: "5:07" },
+      { title: "Solo (Reprise)", length: "1:18" },
+      { title: "Pretty Sweet", length: "2:38" },
+      { title: "Facebook Story", length: "1:08" },
+      { title: "Close to You", length: "1:25" },
+      { title: "White Ferrari", length: "4:08" },
+      { title: "Seigfried", length: "5:34" },
+      { title: "Godspeed", length: "2:57" },
+      { title: "Futura Free", length: "9:24" },
+    ],
   },
   {
     title: "Nothing Was the Same",
     artist: "Drake",
     cover: "/portfolio/covers/nothing-was-the-same.jpg",
+    tracks: [
+      { title: "Tuscan Leather", length: "6:06" },
+      { title: "Furthest Thing", length: "4:27" },
+      { title: "Started from the Bottom", length: "2:54" },
+      { title: "Wu-Tang Forever", length: "3:38" },
+      { title: "Own It", length: "4:11" },
+      { title: "Worst Behavior", length: "4:30" },
+      { title: "From Time", artist: "Drake & Jhené Aiko", length: "5:22" },
+      { title: "Hold On, We’re Going Home", artist: "Drake & Majid Jordan", length: "3:48" },
+      { title: "Connect", length: "5:11" },
+      { title: "The Language", length: "3:44" },
+      { title: "305 to My City", artist: "Drake & Detail", length: "4:16" },
+      { title: "Too Much", length: "4:22" },
+      { title: "Pound Cake / Paris Morton Music 2", artist: "Drake & JAY-Z", length: "7:13" },
+    ],
   },
 ];
 

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { PoolHero } from "@/components/pool-hero/pool-hero";
 import { CopyEmailButton } from "@/components/portfolio/copy-email-button";
-import { GithubIcon } from "@/components/icons";
+import { ChevronDownIcon, GithubIcon, StarIcon } from "@/components/icons";
 import { PeelHand } from "@/components/portfolio/peel-hand";
 import { PortfolioTabs } from "@/components/portfolio/portfolio-tabs";
 import { WorkSamples } from "@/components/portfolio/work-samples";
@@ -204,15 +204,35 @@ export default async function Home() {
                     <ul className={styles.picks}>
                       {albums.map((album) => (
                         <li key={album.title}>
-                          <Image
-                            className={styles.cover}
-                            src={album.cover}
-                            alt=""
-                            width={48}
-                            height={48}
-                          />
-                          <span className={styles.pickTitle}>{album.title}</span>
-                          <span className={styles.pickArtist}>{album.artist}</span>
+                          <details className={styles.album}>
+                            <summary className={`${styles.pick} ${styles.albumSummary}`}>
+                              <Image
+                                className={styles.cover}
+                                src={album.cover}
+                                alt=""
+                                width={48}
+                                height={48}
+                              />
+                              <span className={styles.pickTitle}>{album.title}</span>
+                              <span className={styles.pickArtist}>{album.artist}</span>
+                              <ChevronDownIcon className={styles.albumChevron} aria-hidden="true" />
+                            </summary>
+                            <ol className={styles.tracks}>
+                              {album.tracks.map((track, index) => (
+                                <li className={styles.track} key={track.title}>
+                                  <span className={styles.trackNumber}>{index + 1}</span>
+                                  <span className={styles.trackTitle}>{track.title}</span>
+                                  {track.artist ? (
+                                    <span className={styles.trackArtist}>{track.artist}</span>
+                                  ) : null}
+                                  {track.favourite ? (
+                                    <StarIcon className={styles.trackStar} aria-label="Favourite" />
+                                  ) : null}
+                                  <span className={styles.trackLength}>{track.length}</span>
+                                </li>
+                              ))}
+                            </ol>
+                          </details>
                         </li>
                       ))}
                     </ul>
@@ -221,7 +241,7 @@ export default async function Home() {
                     <h2>Songs</h2>
                     <ul className={styles.picks}>
                       {songs.map((song) => (
-                        <li key={song.title}>
+                        <li className={styles.pick} key={song.title}>
                           <Image
                             className={styles.cover}
                             src={song.cover}
