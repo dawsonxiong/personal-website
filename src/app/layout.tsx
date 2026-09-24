@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         {/* On phones the toast spans the width; lift it clear of the pool's add button. */}
         <Toaster position="bottom-center" mobileOffset={{ bottom: 76 }} />
+        <Analytics />
       </body>
     </html>
   );
