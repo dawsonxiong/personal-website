@@ -618,7 +618,7 @@ export const albums: Album[] = [
         artist: "Fred again.., KatzPascale & LATIN MAFIA",
         length: "2:45",
       },
-      { title: "Open Eye Signal (under the fabric)", artist: "Jon Hopkins" },
+      { title: "Open Eye Signal (under the fabric)", artist: "Jon Hopkins", length: "4:02" },
       { title: "Piensas En Mi", length: "3:01" },
       { title: "Halo", artist: "Fred again.., LATIN MAFIA & Lil Yachty", length: "3:03" },
       { title: "Te Estoy Correteando", artist: "LATIN MAFIA & Fred again..", length: "3:13" },
