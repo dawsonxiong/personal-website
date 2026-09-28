@@ -574,22 +574,113 @@ export const projects = [
   },
 ] satisfies Project[];
 
-// Hand-picked, in no particular order.
-export const albums = [
+interface Track {
+  title: string;
+  /** Only when the credit differs from the album artist, like Apple Music's track list. */
+  artist?: string;
+  /** m:ss */
+  length?: string;
+  /** Shows a star beside the track. */
+  favourite?: boolean;
+}
+
+interface Album {
+  title: string;
+  artist: string;
+  cover: string;
+  tracks: Track[];
+}
+
+// Hand-picked, in no particular order. Titles, credits and lengths as Apple Music lists them.
+export const albums: Album[] = [
   {
-    title: "9 Months & 50 Hours",
-    artist: "Fred again.. & Latin Mafia",
+    title: "9 months & 50 hours",
+    artist: "Fred again.. & LATIN MAFIA",
     cover: "/portfolio/covers/9-months-50-hours.jpg",
+    tracks: [
+      { title: "Hey Hey", length: "2:05", favourite: true },
+      { title: "Alvafro", artist: "LATIN MAFIA & Fred again..", length: "3:58", favourite: true },
+      { title: "Bonita", length: "3:06" },
+      { title: "benjy chord", length: "2:45" },
+      {
+        title: "Cmon (LATIN MAFIA & Fred edit)",
+        artist: "Fred again.. & Brian Eno",
+        length: "4:15",
+      },
+      {
+        title: "Quiereme",
+        artist: "LATIN MAFIA, Fred again.. & bby",
+        length: "2:55",
+        favourite: true,
+      },
+      {
+        title: "casino143 (Rue De La Fortuna Remix)",
+        artist: "IVOXYGEN, LATIN MAFIA & Fred again..",
+        length: "2:59",
+      },
+      {
+        title: "Film Scene Soundtrack",
+        artist: "Fred again.., KatzPascale & LATIN MAFIA",
+        length: "2:45",
+      },
+      { title: "Open Eye Signal (under the fabric)", artist: "Jon Hopkins", length: "4:01" },
+      { title: "Piensas En Mi", length: "3:18", favourite: true },
+      { title: "Halo", artist: "Fred again.., LATIN MAFIA & Lil Yachty", length: "3:03" },
+      {
+        title: "Te Estoy Correteando",
+        artist: "LATIN MAFIA & Fred again..",
+        length: "3:14",
+        favourite: true,
+      },
+      { title: "Mabe", artist: "Fred again.., LATIN MAFIA & Mabe Fratti", length: "4:54" },
+      { title: "I wish it wasnt", length: "3:46", favourite: true },
+    ],
   },
   {
     title: "Blonde",
     artist: "Frank Ocean",
     cover: "/portfolio/covers/blonde.jpg",
+    tracks: [
+      { title: "Nikes", length: "5:14", favourite: true },
+      { title: "Ivy", length: "4:09", favourite: true },
+      { title: "Pink + White", length: "3:05", favourite: true },
+      { title: "Be Yourself", length: "1:27" },
+      { title: "Solo", length: "4:17" },
+      { title: "Skyline To", length: "3:05" },
+      { title: "Self Control", length: "4:10", favourite: true },
+      { title: "Good Guy", length: "1:07" },
+      { title: "Nights", length: "5:07", favourite: true },
+      { title: "Solo (Reprise)", length: "1:19" },
+      { title: "Pretty Sweet", length: "2:38" },
+      { title: "Facebook Story", length: "1:09" },
+      { title: "Close to You", length: "1:26" },
+      { title: "White Ferrari", length: "4:09", favourite: true },
+      { title: "Seigfried", length: "5:35", favourite: true },
+      { title: "Godspeed", length: "2:58" },
+      { title: "Futura Free", length: "9:24", favourite: true },
+    ],
   },
   {
     title: "Nothing Was the Same",
     artist: "Drake",
     cover: "/portfolio/covers/nothing-was-the-same.jpg",
+    tracks: [
+      { title: "Tuscan Leather", length: "6:06", favourite: true },
+      { title: "Furthest Thing", length: "4:27", favourite: true },
+      { title: "Started From the Bottom", length: "2:54" },
+      { title: "Wu-Tang Forever", length: "3:38" },
+      { title: "Own It", length: "4:12" },
+      { title: "Worst Behavior", length: "4:31" },
+      { title: "From Time (feat. Jhene Aiko)", length: "5:22", favourite: true },
+      { title: "Hold On, We’re Going Home (feat. Majid Jordan)", length: "3:51", favourite: true },
+      { title: "Connect", length: "4:56" },
+      { title: "The Language", length: "3:44" },
+      { title: "305 To My City (feat. Detail)", length: "4:16" },
+      { title: "Too Much", length: "4:22" },
+      { title: "Pound Cake / Paris Morton Music 2 (feat. JAŸ-Z)", length: "7:14", favourite: true },
+      { title: "Come Thru", length: "3:57" },
+      { title: "All Me (feat. 2 Chainz & Big Sean)", length: "4:32" },
+    ],
   },
 ];
 
