@@ -6,6 +6,12 @@ import { syncScrollEdgeFade } from "./scroll-edge-fade";
 
 const sections = ["about", "experience", "projects", "misc"] as const;
 type Section = (typeof sections)[number];
+const labels: Record<Section, string> = {
+  about: "About",
+  experience: "Experience",
+  projects: "Projects",
+  misc: "Misc",
+};
 const isSection = (value: string): value is Section =>
   sections.some((section) => section === value);
 
@@ -131,7 +137,7 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
                 onClick={() => select(section)}
                 onKeyDown={(event) => onTabKeyDown(event, section)}
               >
-                {section}
+                {labels[section]}
               </button>
             ))}
           </div>
