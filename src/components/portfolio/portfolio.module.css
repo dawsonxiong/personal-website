@@ -827,20 +827,22 @@
 
 .tracks {
   list-style: none;
-  margin: 2px 0 6px;
+  margin: 2px 0 0;
   padding: 0;
   font-size: 15px;
 }
 
 /* Number under the cover, title (and any guest credit) under the album title,
-   star and length on the right. */
+   length on the right. Like Apple Music, the rule starts at the title so the
+   numbers hang in open space. */
 .track {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) auto auto;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
   column-gap: 16px;
   align-items: baseline;
   padding-block: 9px;
-  border-top: 1px solid var(--pool-rule);
+  background: linear-gradient(var(--pool-rule), var(--pool-rule)) 64px 0 / calc(100% - 64px) 1px
+    no-repeat;
 }
 
 .trackNumber,
@@ -850,6 +852,7 @@
 }
 
 .trackNumber {
+  grid-column: 1;
   grid-row: 1;
   text-align: center;
 }
@@ -867,21 +870,33 @@
   font-weight: 500;
 }
 
+/* A quiet mark at the left of the number column, level with the title's first line. */
 .trackStar {
-  grid-column: 3;
+  grid-column: 1;
   grid-row: 1;
-  /* Centre on the title's first line, so it stays level with the length when the title wraps. */
+  justify-self: start;
   align-self: start;
-  margin-top: calc((1lh - 14px) / 2);
-  width: 14px;
-  height: 14px;
-  color: #e7a92a;
+  margin-top: calc((1lh - 10px) / 2);
+  width: 10px;
+  height: 10px;
+  color: var(--pool-muted);
+  opacity: 0.55;
 }
 
 .trackLength {
-  grid-column: 4;
+  grid-column: 3;
   grid-row: 1;
   font-size: 14px;
+}
+
+.tracksSummary {
+  margin: 0 0 6px;
+  padding: 10px 0 4px 64px;
+  background: linear-gradient(var(--pool-rule), var(--pool-rule)) 64px 0 / calc(100% - 64px) 1px
+    no-repeat;
+  color: var(--pool-muted);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .cover {

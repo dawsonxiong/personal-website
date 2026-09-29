@@ -226,12 +226,17 @@ export default async function Home() {
                                     <span className={styles.trackArtist}>{track.artist}</span>
                                   ) : null}
                                   {track.favourite ? (
-                                    <StarIcon className={styles.trackStar} aria-label="Favourite" />
+                                    <StarIcon
+                                      className={styles.trackStar}
+                                      role="img"
+                                      aria-label="Favourite"
+                                    />
                                   ) : null}
                                   <span className={styles.trackLength}>{track.length}</span>
                                 </li>
                               ))}
                             </ol>
+                            <p className={styles.tracksSummary}>{describeTracks(album.tracks)}</p>
                           </details>
                         </li>
                       ))}
@@ -269,4 +274,21 @@ export default async function Home() {
       />
     </PoolHero>
   );
+}
+
+/** "14 songs, 45 minutes", like the line under an Apple Music album. */
+function describeTracks(tracks: { length?: string }[]) {
+  const seconds = tracks.reduce((total, { length }) => {
+    if (!length) return total;
+    const [minutes, secs] = length.split(":").map(Number);
+    return total + minutes * 60 + secs;
+  }, 0);
+  const totalMinutes = Math.round(seconds / 60);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  const plural = (count: number, unit: string) => `${count} ${unit}${count === 1 ? "" : "s"}`;
+  const duration = hours
+    ? `${plural(hours, "hour")} ${plural(minutes, "minute")}`
+    : plural(minutes, "minute");
+  return `${plural(tracks.length, "song")}, ${duration}`;
 }

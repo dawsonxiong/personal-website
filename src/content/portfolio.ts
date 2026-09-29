@@ -576,11 +576,11 @@ export const projects = [
 
 interface Track {
   title: string;
-  /** Only when the credit differs from the album artist, like Apple Music's track list. */
+  /** Only when it credits someone beyond the album artist, so most rows stay one line. */
   artist?: string;
   /** m:ss */
   length?: string;
-  /** Shows a star beside the track. */
+  /** Marks the track with a star in the number column. */
   favourite?: boolean;
 }
 
@@ -591,7 +591,8 @@ interface Album {
   tracks: Track[];
 }
 
-// Hand-picked, in no particular order. Titles, credits and lengths as Apple Music lists them.
+// Hand-picked, in no particular order. Titles, credits and lengths as Apple Music lists them,
+// minus credits that only reorder the album artists.
 export const albums: Album[] = [
   {
     title: "9 months & 50 hours",
@@ -599,7 +600,7 @@ export const albums: Album[] = [
     cover: "/portfolio/covers/9-months-50-hours.jpg",
     tracks: [
       { title: "Hey Hey", length: "2:05", favourite: true },
-      { title: "Alvafro", artist: "LATIN MAFIA & Fred again..", length: "3:58", favourite: true },
+      { title: "Alvafro", length: "3:58", favourite: true },
       { title: "Bonita", length: "3:06" },
       { title: "benjy chord", length: "2:45" },
       {
@@ -626,12 +627,7 @@ export const albums: Album[] = [
       { title: "Open Eye Signal (under the fabric)", artist: "Jon Hopkins", length: "4:01" },
       { title: "Piensas En Mi", length: "3:18", favourite: true },
       { title: "Halo", artist: "Fred again.., LATIN MAFIA & Lil Yachty", length: "3:03" },
-      {
-        title: "Te Estoy Correteando",
-        artist: "LATIN MAFIA & Fred again..",
-        length: "3:14",
-        favourite: true,
-      },
+      { title: "Te Estoy Correteando", length: "3:14", favourite: true },
       { title: "Mabe", artist: "Fred again.., LATIN MAFIA & Mabe Fratti", length: "4:54" },
       { title: "I wish it wasnt", length: "3:46", favourite: true },
     ],
