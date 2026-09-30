@@ -217,7 +217,7 @@ export const projects = [
         src: "/portfolio/beacon/join-search-poster.webp",
         video: "/portfolio/beacon/join-search.mp4",
         alt: "Screen recording of the Beacon iOS app opening to its join screen, with the hub link, a Scan the QR code button and Join search",
-        caption: "Opening the Expo app",
+        caption: "Opening the Expo app to join a search",
         width: 720,
         height: 1566,
         fit: "contain",
@@ -225,7 +225,7 @@ export const projects = [
       {
         src: "/portfolio/beacon/phone-detection.webp",
         alt: "Beacon phone view mid-search: a heading strip pointing towards the stage, a Person 52% match box drawn around someone at a desk, two hazard boxes, and a minimap showing 1% searched",
-        caption: "Using YOLOE and OSNet to detect people and threats from a phone camera",
+        caption: "Using YOLOE and OSNet to detect people and threats",
         width: 1179,
         height: 2556,
         fit: "contain",
