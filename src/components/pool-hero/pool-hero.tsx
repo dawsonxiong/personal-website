@@ -163,7 +163,9 @@ export function PoolHero({ children }: { children: ReactNode }) {
       if (departAt !== null && introClock.currentTime >= departAt) {
         departAt = null;
         duckMotion.depart();
-        setIntro("swim");
+        // The loop pauses in a background tab, so this can land after the intro has ended.
+        // Re-arming data-intro then would replay the whole reveal and blank the page.
+        setIntro((current) => (current === "done" ? current : "swim"));
       }
       if (delta > 0) {
         elapsed += delta;

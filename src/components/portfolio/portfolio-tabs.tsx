@@ -17,6 +17,9 @@ const isSection = (value: string): value is Section =>
 
 export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }) {
   const [active, setActive] = useState<Section>("about");
+  // Showing a hidden panel restarts its CSS animations, so once the reader has switched
+  // tabs the About intro reveal must not replay (see portfolio.module.css).
+  const [switched, setSwitched] = useState(false);
   const tabRefs = useRef<Partial<Record<Section, HTMLButtonElement>>>({});
   const panelRefs = useRef<Partial<Record<Section, HTMLDivElement>>>({});
 
@@ -25,12 +28,16 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
       const hash = window.location.hash.slice(1);
       setActive(isSection(hash) ? hash : "about");
     };
+    const onHistory = () => {
+      setSwitched(true);
+      syncHash();
+    };
     syncHash();
-    window.addEventListener("hashchange", syncHash);
-    window.addEventListener("popstate", syncHash);
+    window.addEventListener("hashchange", onHistory);
+    window.addEventListener("popstate", onHistory);
     return () => {
-      window.removeEventListener("hashchange", syncHash);
-      window.removeEventListener("popstate", syncHash);
+      window.removeEventListener("hashchange", onHistory);
+      window.removeEventListener("popstate", onHistory);
     };
   }, []);
 
@@ -68,6 +75,7 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
   const select = (section: Section) => {
     if (section === active) return;
     setActive(section);
+    setSwitched(true);
     window.history.pushState(null, "", `#${section}`);
   };
 
@@ -98,6 +106,7 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
   return (
     <div
       className={styles.portfolio}
+      data-tab-switched={switched ? "" : undefined}
       onClick={(event) => {
         // Keep in-content links to another section inside the tab interface too.
         if (!(event.target instanceof Element)) return;
