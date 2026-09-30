@@ -347,6 +347,20 @@ export const projects = [
         height: 1041,
       },
       {
+        src: "/portfolio/thock/race-typing-tokyonight.webp",
+        alt: "Thock mid-race: lanes for dawson, alex and wendy with pace trails, and alex's and wendy's cursors shown as coloured blocks inside the text",
+        caption: "Mid-race, with rivals' cursors in the text",
+        width: 1600,
+        height: 1041,
+      },
+      {
+        src: "/portfolio/thock/race-results-tokyonight.webp",
+        alt: "Thock race results after round two: places, wpm and finishing times for dawson, alex and wendy, each racer's pace on a shared clock, and a tally of wins",
+        caption: "Race results after two rounds",
+        width: 1600,
+        height: 1041,
+      },
+      {
         src: "/portfolio/thock/typing-tokyonight.webp",
         alt: "Thock mid-test with typed words in white, a mistyped letter in red and upcoming words dimmed, live wpm in the corner",
         caption: "Mid-test",
