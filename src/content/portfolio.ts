@@ -225,7 +225,7 @@ export const projects = [
       {
         src: "/portfolio/beacon/phone-detection.webp",
         alt: "Beacon phone view mid-search: a heading strip pointing towards the stage, a Person 52% match box drawn around someone at a desk, two hazard boxes, and a minimap showing 1% searched",
-        caption: "Using YOLOE and OSNet to detect people and threats",
+        caption: "Using YOLOE and OSNet to detect people and threats from a phone camera",
         width: 1179,
         height: 2556,
         fit: "contain",
@@ -287,7 +287,7 @@ export const projects = [
       {
         src: "/portfolio/pulse/story-thread-v2.webp",
         alt: "A Pulse story opened over the feed: title, source and age, Summary and Article tabs, a link to the original, the summary text, and a threaded comments section with a reply nested under the first comment, a display-name field and a comment box",
-        caption: "Story summary with a comment thread",
+        caption: "Story summary with comments",
         width: 1600,
         height: 1000,
       },
@@ -349,7 +349,7 @@ export const projects = [
       {
         src: "/portfolio/thock/race-typing-tokyonight.webp",
         alt: "Thock mid-race: lanes for dawson, alex and wendy with pace trails, and alex's and wendy's cursors shown as coloured blocks inside the text",
-        caption: "Mid-race, with rivals' cursors in the text",
+        caption: "Multiplayer mode",
         width: 1600,
         height: 1041,
       },
@@ -542,7 +542,7 @@ export const projects = [
       {
         src: "/portfolio/linkedit/home.webp",
         alt: "LinkedIt home page with an info panel and two phone mockups holding the company and position search form",
-        caption: "Home",
+        caption: "Home page",
         width: 1600,
         height: 866,
       },
