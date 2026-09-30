@@ -349,7 +349,7 @@ export const projects = [
       {
         src: "/portfolio/thock/race-typing-tokyonight.webp",
         alt: "Thock mid-race: lanes for dawson, alex and wendy with pace trails, and alex's and wendy's cursors shown as coloured blocks inside the text",
-        caption: "Mid-race, with rivals' cursors in the text",
+        caption: "Multiplayer mode",
         width: 1600,
         height: 1041,
       },
