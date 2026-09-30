@@ -189,6 +189,7 @@ interface Project {
   date: string;
   /** One sentence. */
   description: string;
+  /** Languages first, then the frameworks and libraries that define it; no hosting or minor utilities. */
   stack: string;
   /** How it works, a few short bullets under "A little more". */
   details?: string[];
@@ -204,8 +205,7 @@ export const projects = [
     date: "Sep 2026",
     description:
       "Turns the phones in a crowded room into a camera network to find a missing person.",
-    stack:
-      "Swift 6, ARKit, SwiftUI, Expo, Python, FastAPI, WebSockets, YOLOE, OSNet, Baseten, OpenAI, Cloudflare Tunnel",
+    stack: "Swift, Python, JavaScript, SwiftUI, ARKit, Expo, FastAPI, Three.js, YOLOE",
     details: [
       "Phones scan a QR code, calibrate on printed markers, and stream frames plus ARKit pose to a FastAPI hub.",
       "A YOLOE and OSNet re-ID service on a Baseten GPU matches each frame to the reference photos in about 127 ms.",
@@ -269,8 +269,7 @@ export const projects = [
     date: "Sep 2026",
     description:
       "A Chrome extension that replaces the new tab with a high-signal developer news feed. Think daily.dev but much cleaner.",
-    stack:
-      "Next.js, React, TypeScript, Prisma, Supabase Postgres, Upstash Redis, WXT, Chrome Manifest V3, Tailwind, Vercel",
+    stack: "TypeScript, Next.js, React, WXT, Prisma, Supabase Postgres, Upstash Redis, Tailwind",
     details: [
       "A daily cron pulls about 40 RSS feeds and clusters duplicate coverage by title similarity in a 48-hour window.",
       "The feed API ranks stories by recency, tag match and source authority. Titles are never rewritten.",
@@ -308,7 +307,7 @@ export const projects = [
     date: "Sep 2026",
     description:
       "My portfolio, set over an interactive pool. Drop in floaties and they drift, bob and bump into each other.",
-    stack: "Next.js 16, React 19, TypeScript, WebGL2, Tailwind v4, shadcn/ui, Base UI, Vercel",
+    stack: "TypeScript, GLSL, Next.js 16, React 19, WebGL2, Tailwind v4, shadcn/ui",
     details: [
       "A WebGL2 fragment shader draws the water, caustics and floor shadows, and scales its buffer to hold the frame rate.",
       "A small custom solver steps the floaties at 1/120 s with damped bounces and steers them around the content.",
@@ -332,7 +331,7 @@ export const projects = [
     date: "Aug 2026",
     description:
       "MonkeyType straight in the terminal, with blazing fast performance. Built using Go.",
-    stack: "Go, Bubble Tea v2, Lip Gloss, Cobra",
+    stack: "Go, Bubble Tea v2, Cobra",
     details: [
       "One Bubble Tea model drives the test, results and stats screens at 120 FPS.",
       "Every run is appended to a JSONL log that feeds the per-second chart and the trend sparklines.",
@@ -391,7 +390,7 @@ export const projects = [
     date: "Mar–Aug 2026",
     description: "Use Kanye's Stem Player right in the browser. Splits any song into its stems.",
     stack:
-      "React Router 7, Cloudflare Workers, R2, Workers KV, Modal, Demucs, Three.js, React Three Fiber, Web Audio, Zustand",
+      "TypeScript, Python, React Router 7, Cloudflare Workers, React Three Fiber, Web Audio, Modal, Demucs",
     details: [
       "Uploads go straight to Cloudflare R2; a Modal GPU runs Demucs and posts four stems back through a webhook.",
       "A Web Audio graph plays the stems in sync; dragging the LED grooves on the model sets each level.",
@@ -415,8 +414,7 @@ export const projects = [
     date: "Mar–Sep 2026",
     description:
       "A performance-first Rust macOS app with 22 file tools, from video compression and Whisper transcription to PDF splitting.",
-    stack:
-      "Rust, Tauri 2, Tokio, React, TypeScript, Vite, Zustand, Tailwind, FFmpeg, whisper.cpp, Hugging Face",
+    stack: "Rust, TypeScript, Tauri 2, Tokio, React, Tailwind, FFmpeg, whisper.cpp",
     details: [
       "React builds a typed job and checks which engines are installed over Tauri IPC before anything runs.",
       "Rust hands each job to FFmpeg, ImageMagick, Pandoc or whisper.cpp and streams progress back as events.",
@@ -487,8 +485,7 @@ export const projects = [
     date: "Sep–Oct 2025",
     description:
       "A daily mood tracker where friends who share their history show up as extra lines on your chart.",
-    stack:
-      "Next.js, React, TypeScript, Prisma Postgres, Auth.js, Google OAuth, Recharts, Tailwind, shadcn/ui, Vercel",
+    stack: "TypeScript, Next.js, React, Prisma Postgres, Auth.js, Recharts, Tailwind, shadcn/ui",
     details: [
       "Log a mood from 0 to 10 with tags and a note; sharing is one-directional and per person.",
       "Google sign-in through Auth.js with database sessions in Prisma.",
@@ -532,7 +529,7 @@ export const projects = [
     tagline: "Sponsor contact finder · Best Beginner Hack, GeeseHacks 2025",
     date: "Jan 2025",
     description: "Finds the right people to contact at a company for sponsorship.",
-    stack: "Python, Selenium, Flask, React, Vite, Tailwind",
+    stack: "Python, JavaScript, Flask, Selenium, React, Vite, Tailwind",
     details: [
       "Type a company and a role; a Flask endpoint drives headless Chrome through a LinkedIn people search.",
       "Hits are filtered by role and company and returned as JSON to a React front end of profile cards.",
@@ -555,7 +552,7 @@ export const projects = [
     tagline: "Handwritten math to LaTeX",
     date: "Nov 2024–Apr 2025",
     description: "Turns a photo of a handwritten or printed equation into LaTeX.",
-    stack: "Python, PyTorch, OpenCV, Flask, Next.js, Tailwind",
+    stack: "Python, JavaScript, PyTorch, OpenCV, Flask, Next.js, Tailwind",
     details: [
       "OpenCV cleans the image, finds each symbol’s contour and re-merges split glyphs like = and i.",
       "Each crop is normalised to 64×64 and classified by a PyTorch CNN, then assembled into LaTeX left to right.",
