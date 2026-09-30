@@ -316,7 +316,7 @@ export const projects = [
     ],
     work: [
       {
-        src: "/portfolio/personal-website/home.webp",
+        src: "/portfolio/personal-website/home-v2.webp",
         alt: "The about page: a frosted card introducing Dawson over a blue WebGL pool, with a rubber duck floating above it",
         caption: "About page",
         width: 1600,
