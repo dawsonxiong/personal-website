@@ -214,7 +214,7 @@ export const projects = [
       "Searchers join by scanning a QR code and calibrate by pointing at a printed marker. Their phones then stream camera frames and ARKit position to a FastAPI hub.",
       "A GPU service on Baseten uses YOLOE to spot people in each frame and OSNet to compare them with the reference photos. A match comes back in about 127 ms.",
       "The operator’s console shows every phone on a map, with a heatmap of where the person likely is. It guides searchers with arrows, screen flashes and haptics.",
-      "I built the iOS client and most of the console. The client has 413 tests, and ARKit lives in one file so everything else tests without a phone.",
+      "I built the iOS client and most of the console.",
     ],
     work: [
       {
@@ -428,7 +428,7 @@ export const projects = [
       "The React UI builds a typed job, then asks the Rust backend whether the tools it needs are installed. A missing one is flagged before anything runs.",
       "Rust hands the job to FFmpeg, ImageMagick, Pandoc or whisper.cpp and streams progress back to the UI as it goes.",
       "If only the container changes, like MP4 to MOV with the same codecs, ffprobe spots it. The file is repackaged instead of re-encoded, which is near-instant.",
-      "It handles 29 input formats and 202 valid conversions, covered by about 470 tests.",
+      "It handles 29 input formats and 202 valid conversions.",
     ],
     work: [
       {
