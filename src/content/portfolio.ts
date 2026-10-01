@@ -180,10 +180,12 @@ export const experience = [
 
 interface Project {
   name: string;
-  /** Where the name links: the live site or package page when there is one, else the repo. */
-  href: string;
+  /** The live site or package page the name links to; without one the name is plain text. */
+  href?: string;
   /** Shown as a GitHub icon beside the name. */
   repo: string;
+  /** Hackathon submission, shown as a Devpost icon beside the GitHub one. */
+  devpost?: string;
   /** One line under the name, like a job title: what it is, plus any award. */
   tagline: string;
   date: string;
@@ -199,8 +201,8 @@ interface Project {
 export const projects = [
   {
     name: "Beacon",
-    href: "https://github.com/owenguoo/htn26",
     repo: "https://github.com/owenguoo/htn26",
+    devpost: "https://devpost.com/software/swarm-sight",
     tagline: "Multi-phone person search · Hack the North 2026 finalist",
     date: "Sep 2026",
     description:
@@ -301,7 +303,7 @@ export const projects = [
   },
   {
     name: "Personal website",
-    href: "/",
+    href: "https://dawsonxiong.com",
     repo: "https://github.com/dawsonxiong/personal-website",
     tagline: "This site",
     date: "Sep 2026",
@@ -325,7 +327,6 @@ export const projects = [
   },
   {
     name: "Thock",
-    href: "https://github.com/dawsonxiong/thock",
     repo: "https://github.com/dawsonxiong/thock",
     tagline: "Typing test for the terminal",
     date: "Aug 2026",
@@ -384,13 +385,13 @@ export const projects = [
   },
   {
     name: "Stem Player",
-    href: "https://github.com/dawsonxiong/stemplayer",
+    href: "https://stemplayer.dawsonxiong.workers.dev",
     repo: "https://github.com/dawsonxiong/stemplayer",
     tagline: "Split any song into stems and mix them on a 3D device",
     date: "Mar–Aug 2026",
     description: "Use Kanye's Stem Player right in the browser. Splits any song into its stems.",
     stack:
-      "TypeScript, Python, React Router 7, Cloudflare Workers, React Three Fiber, Web Audio, Modal, Demucs",
+      "TypeScript, Python, vinext, Cloudflare Workers, React Three Fiber, Web Audio, Modal, Demucs",
     details: [
       "Uploads go straight to Cloudflare R2; a Modal GPU runs Demucs and posts four stems back through a webhook.",
       "A Web Audio graph plays the stems in sync; dragging the LED grooves on the model sets each level.",
@@ -408,7 +409,6 @@ export const projects = [
   },
   {
     name: "ConvertKit",
-    href: "https://github.com/dawsonxiong/ConvertKit",
     repo: "https://github.com/dawsonxiong/ConvertKit",
     tagline: "Local macOS file converter",
     date: "Mar–Sep 2026",
@@ -524,8 +524,8 @@ export const projects = [
   },
   {
     name: "LinkedIt",
-    href: "https://github.com/dawsonxiong/LinkedIt",
     repo: "https://github.com/dawsonxiong/LinkedIt",
+    devpost: "https://devpost.com/software/linkedit",
     tagline: "Sponsor contact finder · Best Beginner Hack, GeeseHacks 2025",
     date: "Jan 2025",
     description: "Finds the right people to contact at a company for sponsorship.",
@@ -547,7 +547,6 @@ export const projects = [
   },
   {
     name: "LaTeX.ly",
-    href: "https://github.com/dawsonxiong/LaTeX.ly",
     repo: "https://github.com/dawsonxiong/LaTeX.ly",
     tagline: "Handwritten math to LaTeX",
     date: "Nov 2024–Apr 2025",

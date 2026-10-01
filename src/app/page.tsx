@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { PoolHero } from "@/components/pool-hero/pool-hero";
 import { CopyEmailButton } from "@/components/portfolio/copy-email-button";
-import { ChevronDownIcon, GithubIcon, StarIcon } from "@/components/icons";
+import { ChevronDownIcon, DevpostIcon, GithubIcon, StarIcon } from "@/components/icons";
 import { PeelHand } from "@/components/portfolio/peel-hand";
 import { PortfolioTabs } from "@/components/portfolio/portfolio-tabs";
 import { WorkSamples } from "@/components/portfolio/work-samples";
@@ -136,9 +136,13 @@ export default async function Home() {
                     <li className={styles.entry} key={project.name}>
                       <div className={styles.experienceTitle}>
                         <h2 className={styles.projectName}>
-                          <a href={project.href} target="_blank" rel="noopener noreferrer">
-                            {project.name}
-                          </a>
+                          {project.href ? (
+                            <a href={project.href} target="_blank" rel="noopener noreferrer">
+                              {project.name}
+                            </a>
+                          ) : (
+                            project.name
+                          )}
                           <a
                             className={styles.repoLink}
                             href={project.repo}
@@ -148,6 +152,17 @@ export default async function Home() {
                           >
                             <GithubIcon />
                           </a>
+                          {project.devpost ? (
+                            <a
+                              className={styles.repoLink}
+                              href={project.devpost}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${project.name} on Devpost`}
+                            >
+                              <DevpostIcon />
+                            </a>
+                          ) : null}
                         </h2>
                         <div className={styles.meta}>
                           <span>{project.tagline}</span>

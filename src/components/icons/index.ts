@@ -10,4 +10,4 @@ export {
   StarIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-export { GithubIcon } from "./brand-icons";
+export { DevpostIcon, GithubIcon } from "./brand-icons";
