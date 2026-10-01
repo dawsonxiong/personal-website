@@ -435,6 +435,66 @@
   margin-top: 8px;
 }
 
+/* A one-line install command with a copy button, in a quiet well under the stack. */
+.command {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  width: fit-content;
+  margin-top: 12px;
+  padding: 6px 6px 6px 12px;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 30%);
+  box-shadow: inset 0 0 0 1px var(--pool-rule);
+}
+
+.command code {
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+}
+
+.command button {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: 4px;
+  border-radius: 6px;
+  color: var(--pool-muted);
+  cursor: pointer;
+  transition: color 140ms ease;
+}
+
+.command button:hover {
+  color: var(--pool-ink);
+}
+
+.command svg,
+.download svg {
+  width: 16px;
+  height: 16px;
+}
+
+.download {
+  margin-top: 12px;
+}
+
+.download a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.entry .download p {
+  margin-top: 4px;
+  color: var(--pool-muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
 .workSamplesShell {
   --work-image-height: 142px;
   position: relative;

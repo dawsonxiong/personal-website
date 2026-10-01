@@ -2,9 +2,12 @@
  * All UI icons go through here. Heroicons mini (20px solid) matches the site's 18px icon slots.
  */
 export {
+  ArrowDownTrayIcon,
+  CheckIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  ClipboardDocumentIcon,
   PlayIcon,
   PlusIcon,
   StarIcon,

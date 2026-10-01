@@ -1,7 +1,14 @@
 import Image from "next/image";
 import { PoolHero } from "@/components/pool-hero/pool-hero";
+import { CopyCommand } from "@/components/portfolio/copy-command";
 import { CopyEmailButton } from "@/components/portfolio/copy-email-button";
-import { ChevronDownIcon, DevpostIcon, GithubIcon, StarIcon } from "@/components/icons";
+import {
+  ArrowDownTrayIcon,
+  ChevronDownIcon,
+  DevpostIcon,
+  GithubIcon,
+  StarIcon,
+} from "@/components/icons";
 import { PeelHand } from "@/components/portfolio/peel-hand";
 import { PortfolioTabs } from "@/components/portfolio/portfolio-tabs";
 import { WorkSamples } from "@/components/portfolio/work-samples";
@@ -171,6 +178,18 @@ export default async function Home() {
                       </div>
                       <p>{project.description}</p>
                       <p className={styles.stack}>{project.stack}</p>
+                      {project.install?.command ? (
+                        <CopyCommand className={styles.command} command={project.install.command} />
+                      ) : null}
+                      {project.install?.download ? (
+                        <div className={styles.download}>
+                          <a className={styles.textLink} href={project.install.download}>
+                            <ArrowDownTrayIcon aria-hidden="true" />
+                            {project.install.label}
+                          </a>
+                          {project.install.note ? <p>{project.install.note}</p> : null}
+                        </div>
+                      ) : null}
                       {project.details && (
                         <details className={styles.details}>
                           <summary>More</summary>
