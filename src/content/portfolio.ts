@@ -191,7 +191,7 @@ interface Project {
   description: string;
   /** Languages first, then the frameworks and libraries that define it; no hosting or minor utilities. */
   stack: string;
-  /** How it works, a few short bullets under "A little more". */
+  /** How it works, a few short bullets under "More". */
   details?: string[];
   work?: WorkSample[];
 }

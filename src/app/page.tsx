@@ -158,7 +158,7 @@ export default async function Home() {
                       <p className={styles.stack}>{project.stack}</p>
                       {project.details && (
                         <details className={styles.details}>
-                          <summary>A little more</summary>
+                          <summary>More</summary>
                           <ul className={styles.detailsList}>
                             {project.details.map((detail) => (
                               <li key={detail}>{detail}</li>
