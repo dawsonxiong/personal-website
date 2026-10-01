@@ -11,6 +11,7 @@ import {
 } from "@/components/icons";
 import { PeelHand } from "@/components/portfolio/peel-hand";
 import { PortfolioTabs } from "@/components/portfolio/portfolio-tabs";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { WorkSamples } from "@/components/portfolio/work-samples";
 import { albums, experience, pokerHand, projects, songs } from "@/content/portfolio";
 import { MONKEYTYPE_PROFILE, getPersonalBests } from "@/lib/monkeytype";
@@ -183,11 +184,19 @@ export default async function Home() {
                       ) : null}
                       {project.install?.download ? (
                         <div className={styles.download}>
-                          <a className={styles.textLink} href={project.install.download}>
-                            <ArrowDownTrayIcon aria-hidden="true" />
-                            {project.install.label}
-                          </a>
-                          {project.install.note ? <p>{project.install.note}</p> : null}
+                          <Tooltip>
+                            <TooltipTrigger
+                              render={
+                                <a className={styles.textLink} href={project.install.download} />
+                              }
+                            >
+                              <ArrowDownTrayIcon aria-hidden="true" />
+                              {project.install.label}
+                            </TooltipTrigger>
+                            {project.install.tooltip ? (
+                              <TooltipContent>{project.install.tooltip}</TooltipContent>
+                            ) : null}
+                          </Tooltip>
                         </div>
                       ) : null}
                       {project.details && (

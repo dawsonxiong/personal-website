@@ -488,13 +488,6 @@
   gap: 6px;
 }
 
-.entry .download p {
-  margin-top: 4px;
-  color: var(--pool-muted);
-  font-size: 13px;
-  font-weight: 500;
-}
-
 .workSamplesShell {
   --work-image-height: 142px;
   position: relative;

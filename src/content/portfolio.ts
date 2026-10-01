@@ -187,13 +187,17 @@ interface Project {
   /** Hackathon submission, shown as a Devpost icon beside the GitHub one. */
   devpost?: string;
   /** How to get it: a file to download, or a command to copy. */
-  install?: { download: string; label: string; note?: string } | { command: string };
+  install?: { download: string; label: string; tooltip?: string } | { command: string };
   /** One line under the name, like a job title: what it is, plus any award. */
   tagline: string;
   date: string;
   /** One sentence. */
   description: string;
-  /** Languages first, then the frameworks and libraries that define it; no hosting or minor utilities. */
+  /**
+   * Languages, then frameworks, then libraries (styling last), then data, infrastructure and
+   * models, each group following the language order. No version numbers, hosting-only services
+   * or minor utilities.
+   */
   stack: string;
   /** How it works, a few short bullets under "More". */
   details?: string[];
@@ -209,7 +213,7 @@ export const projects = [
     date: "Sep 2026",
     description:
       "Turns the phones in a crowded room into a camera network to find a missing person.",
-    stack: "Swift, Python, JavaScript, SwiftUI, ARKit, Expo, FastAPI, Three.js, YOLOE",
+    stack: "Swift, Python, JavaScript, SwiftUI, FastAPI, Expo, ARKit, Three.js, YOLOE",
     details: [
       "Searchers join by scanning a QR code and calibrate by pointing at a printed marker. Their phones then stream camera frames and ARKit position to a FastAPI hub.",
       "A GPU service on Baseten uses YOLOE to spot people in each frame and OSNet to compare them with the reference photos. A match comes back in about 127 ms.",
@@ -273,7 +277,7 @@ export const projects = [
     date: "Sep 2026",
     description:
       "A Chrome extension that replaces the new tab with a high-signal developer news feed. Think daily.dev but much cleaner.",
-    stack: "TypeScript, Next.js, React, WXT, Prisma, Supabase Postgres, Upstash Redis, Tailwind",
+    stack: "TypeScript, Next.js, React, WXT, Tailwind, Prisma, Postgres, Redis",
     details: [
       "Once a day, a cron job pulls about 40 RSS feeds. Stories with similar titles published within 48 hours of each other are merged into one card.",
       "The feed ranks stories by how recent they are, how well they match your tags and how trusted the source is. Headlines are never rewritten.",
@@ -311,7 +315,7 @@ export const projects = [
     date: "Sep 2026",
     description:
       "My portfolio, set over an interactive pool. Drop in floaties and they drift, bob and bump into each other.",
-    stack: "TypeScript, GLSL, Next.js 16, React 19, WebGL2, Tailwind v4, shadcn/ui",
+    stack: "TypeScript, GLSL, Next.js, React, WebGL2, Tailwind, shadcn/ui",
     details: [
       "A WebGL2 shader draws the water, the caustics and the shadows on the pool floor. If the frame rate drops, it renders at a lower resolution to keep up.",
       "The floaties run on a small custom physics solver. It steps every 1/120 s, softens their bounces and steers them around the page content.",
@@ -335,7 +339,7 @@ export const projects = [
     date: "Aug 2026",
     description:
       "MonkeyType straight in the terminal, with blazing fast performance. Built using Go.",
-    stack: "Go, Bubble Tea v2, Cobra",
+    stack: "Go, Bubble Tea, Cobra",
     details: [
       "The whole app is one Bubble Tea model, Go’s terminal UI framework. It runs the test, results, stats and LAN race screens and redraws at 120 FPS.",
       "Every run is added as a line to a JSONL log. That log feeds the per-second chart and the trend sparklines.",
@@ -394,7 +398,7 @@ export const projects = [
     date: "Mar–Aug 2026",
     description: "Use Kanye's Stem Player right in the browser. Splits any song into its stems.",
     stack:
-      "TypeScript, Python, vinext, Cloudflare Workers, React Three Fiber, Web Audio, Modal, Demucs",
+      "TypeScript, Python, vinext, React Three Fiber, Web Audio, Cloudflare Workers, Modal, Demucs",
     details: [
       "Drop in a song or paste a YouTube link. Uploads go straight to Cloudflare R2, then a Modal GPU job splits the track into four stems with Demucs.",
       "The stems come back through a webhook and play in sync through Web Audio. Drag along the LED grooves on the 3D device to turn each one up or down.",
@@ -417,13 +421,14 @@ export const projects = [
       download:
         "https://github.com/dawsonxiong/ConvertKit/releases/latest/download/ConvertKit_aarch64.dmg",
       label: "Download for macOS",
-      note: "Apple Silicon. It isn’t notarized, so on first launch choose Open Anyway in System Settings › Privacy & Security.",
+      tooltip:
+        "Apple Silicon. It isn’t notarized, so on first launch choose Open Anyway in System Settings › Privacy & Security.",
     },
     tagline: "Local macOS file converter",
     date: "Mar–Sep 2026",
     description:
       "A performance-first Rust macOS app with 22 file tools, from video compression and Whisper transcription to PDF splitting.",
-    stack: "Rust, TypeScript, Tauri 2, Tokio, React, Tailwind, FFmpeg, whisper.cpp",
+    stack: "Rust, TypeScript, Tauri, React, Tokio, Tailwind, FFmpeg, whisper.cpp",
     details: [
       "The React UI builds a typed job, then asks the Rust backend whether the tools it needs are installed. A missing one is flagged before anything runs.",
       "Rust hands the job to FFmpeg, ImageMagick, Pandoc or whisper.cpp and streams progress back to the UI as it goes.",
@@ -494,7 +499,7 @@ export const projects = [
     date: "Sep–Oct 2025",
     description:
       "A daily mood tracker where friends who share their history show up as extra lines on your chart.",
-    stack: "TypeScript, Next.js, React, Prisma Postgres, Auth.js, Recharts, Tailwind, shadcn/ui",
+    stack: "TypeScript, Next.js, React, Auth.js, Recharts, Tailwind, shadcn/ui, Prisma, Postgres",
     details: [
       "Log your mood from 0 to 10 with tags and a note. Sharing goes one way and is set per person, so you choose exactly who sees your history.",
       "You sign in with Google through Auth.js, and sessions are stored in the database with Prisma.",
@@ -538,7 +543,7 @@ export const projects = [
     tagline: "Sponsor contact finder · Best Beginner Hack, GeeseHacks 2025",
     date: "Jan 2025",
     description: "Finds the right people to contact at a company for sponsorship.",
-    stack: "Python, JavaScript, Flask, Selenium, React, Vite, Tailwind",
+    stack: "Python, JavaScript, Flask, React, Selenium, Vite, Tailwind",
     details: [
       "Type in a company and a role. A Flask endpoint then drives a headless Chrome browser through a LinkedIn people search.",
       "It keeps only the people whose role matches both, then sends them back as JSON for the React front end to show as profile cards.",
@@ -560,7 +565,7 @@ export const projects = [
     tagline: "Handwritten math to LaTeX",
     date: "Nov 2024–Apr 2025",
     description: "Turns a photo of a handwritten or printed equation into LaTeX.",
-    stack: "Python, JavaScript, PyTorch, OpenCV, Flask, Next.js, Tailwind",
+    stack: "Python, JavaScript, Flask, Next.js, PyTorch, OpenCV, Tailwind",
     details: [
       "OpenCV cleans up the image and finds the outline of each symbol. Symbols that come apart into pieces, like = and i, get merged back together.",
       "Each symbol is cropped, resized to 64×64 and classified by a PyTorch CNN. The results are read left to right and assembled into LaTeX.",
