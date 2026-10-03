@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { PoolHero } from "@/components/pool-hero/pool-hero";
 import { CopyCommand } from "@/components/portfolio/copy-command";
-import { CopyEmailButton } from "@/components/portfolio/copy-email-button";
+import { EmailLink } from "@/components/portfolio/email-link";
 import {
   ArrowDownTrayIcon,
   ChevronDownIcon,
@@ -55,7 +55,7 @@ export default async function Home() {
                 </p>
                 <p>If I’m not at the keyboard, you might find me at the gym or the poker table.</p>
                 <div className={styles.links}>
-                  <CopyEmailButton className={styles.textLink} />
+                  <EmailLink className={styles.textLink} />
                   <a
                     className={styles.textLink}
                     href="https://github.com/dawsonxiong"
