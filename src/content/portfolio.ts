@@ -285,8 +285,8 @@ export const projects = [
     ],
     work: [
       {
-        src: "/portfolio/pulse/feed-v2.webp",
-        alt: "Pulse new-tab page showing a grid of developer news stories with source icon, age, vote and save buttons, a tag sidebar, and For you / Latest, Filter and Search controls",
+        src: "/portfolio/pulse/feed-v3.webp",
+        alt: "Pulse new-tab page showing a grid of developer news stories, each with a thumbnail, source icon, age, and vote and save buttons, beside a tag sidebar with For you / Latest, Filter and Search controls",
         caption: "New-tab feed",
         width: 1600,
         height: 1000,
