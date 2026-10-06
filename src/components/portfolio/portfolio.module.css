@@ -682,6 +682,7 @@
 }
 
 .workModalFrame {
+  position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
@@ -709,9 +710,27 @@
 }
 
 .workModalClose {
-  position: absolute;
   top: 16px;
   right: 16px;
+}
+
+/* Same glass circle as the close button, centred on the image's side edges. */
+.workModalArrow {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.workModalArrow[data-direction="previous"] {
+  left: 8px;
+}
+
+.workModalArrow[data-direction="next"] {
+  right: 8px;
+}
+
+.workModalClose,
+.workModalArrow {
+  position: absolute;
   display: grid;
   place-items: center;
   width: 32px;
@@ -728,16 +747,19 @@
   transition: background-color 140ms ease;
 }
 
-.workModalClose svg {
+.workModalClose svg,
+.workModalArrow svg {
   width: 18px;
   height: 18px;
 }
 
-.workModalClose:hover {
+.workModalClose:hover,
+.workModalArrow:hover {
   background: #fff;
 }
 
-.workModalClose:focus-visible {
+.workModalClose:focus-visible,
+.workModalArrow:focus-visible {
   outline: 2px solid var(--pool-ink);
   outline-offset: 2px;
 }

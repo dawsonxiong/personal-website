@@ -26,7 +26,7 @@ export const experience = [
   {
     company: "Scott’s SAT Prep",
     href: "https://www.scottssatprep.com",
-    role: "Founding Software Engineer",
+    role: "Founding Engineer",
     date: "Aug 2026–present",
     description:
       "Built 1500 Blueprint’s study planner, practice tools, and account management, and bolstered the platform’s security.",
@@ -215,10 +215,10 @@ export const projects = [
       "Turns the phones in a crowded room into a camera network to find a missing person.",
     stack: "Swift, Python, JavaScript, SwiftUI, FastAPI, Expo, ARKit, Three.js, YOLOE",
     details: [
-      "Searchers join by scanning a QR code and calibrate by pointing at a printed marker. Their phones then stream camera frames and ARKit position to a FastAPI hub.",
-      "A GPU service on Baseten uses YOLOE to spot people in each frame and OSNet to compare them with the reference photos. A match comes back in about 127 ms.",
-      "The operator’s console shows every phone on a map, with a heatmap of where the person likely is. It guides searchers with arrows, screen flashes and haptics.",
-      "I built the iOS client and most of the console.",
+      "Searchers scan a QR code to join. A Swift app then streams each phone’s camera frames and ARKit position over WebSockets to a FastAPI hub.",
+      "A Baseten GPU service spots people with YOLOE and matches them to reference photos with OSNet in about 127 ms.",
+      "VGGT rebuilds the room in 3D from the phones’ frames, and the console guides searchers with a live heatmap, arrows, flashes and haptics.",
+      "In simulation, a PPO policy rescued 47.6% more people than greedy search.",
     ],
     work: [
       {
@@ -279,9 +279,9 @@ export const projects = [
       "A Chrome extension that replaces the new tab with a high-signal developer news feed. Think daily.dev but much cleaner.",
     stack: "TypeScript, Next.js, React, WXT, Tailwind, Prisma, Postgres, Redis",
     details: [
-      "Once a day, a cron job pulls about 40 RSS feeds. Stories with similar titles published within 48 hours of each other are merged into one card.",
-      "The feed ranks stories by how recent they are, how well they match your tags and how trusted the source is. Headlines are never rewritten.",
-      "Your tags, votes and reading list are saved in chrome.storage, so you don’t need an account.",
+      "A daily Vercel cron job pulls about 40 RSS feeds from blogs and tech sites.",
+      "Headlines that overlap within 48 hours are merged into one card per story.",
+      "Stories are ranked by recency, your tags and how trusted the source is.",
     ],
     work: [
       {
@@ -308,30 +308,6 @@ export const projects = [
     ],
   },
   {
-    name: "Personal website",
-    href: "https://dawsonxiong.com",
-    repo: "https://github.com/dawsonxiong/personal-website",
-    tagline: "This site",
-    date: "Sep 2026",
-    description:
-      "My portfolio, set over an interactive pool. Drop in floaties and they drift, bob and bump into each other.",
-    stack: "TypeScript, GLSL, Next.js, React, WebGL2, Tailwind, shadcn/ui",
-    details: [
-      "A WebGL2 shader draws the water, the caustics and the shadows on the pool floor. If the frame rate drops, it renders at a lower resolution to keep up.",
-      "The floaties run on a small custom physics solver. It steps every 1/120 s, softens their bounces and steers them around the page content.",
-      "The misc tab shows my Monkeytype personal bests, pulled from Monkeytype’s public API and cached for an hour.",
-    ],
-    work: [
-      {
-        src: "/portfolio/personal-website/home-v2.webp",
-        alt: "The about page: a frosted card introducing Dawson over a blue WebGL pool, with a rubber duck floating above it",
-        caption: "About page",
-        width: 1600,
-        height: 1000,
-      },
-    ],
-  },
-  {
     name: "Thock",
     repo: "https://github.com/dawsonxiong/thock",
     install: { command: "go install github.com/dawsonxiong/thock@latest" },
@@ -341,9 +317,10 @@ export const projects = [
       "MonkeyType straight in the terminal, with blazing fast performance. Built using Go.",
     stack: "Go, Bubble Tea, Cobra",
     details: [
-      "The whole app is one Bubble Tea model, Go’s terminal UI framework. It runs the test, results, stats and LAN race screens and redraws at 120 FPS.",
-      "Every run is added as a line to a JSONL log. That log feeds the per-second chart and the trend sparklines.",
-      "Handling a keystroke and rebuilding the screen takes about 4 µs, roughly 2,000× faster than a 120 FPS frame allows.",
+      "The whole app is one Bubble Tea model that runs every screen at 120 FPS.",
+      "It uses Monkeytype’s scoring, so fixed typos still count against accuracy.",
+      "Race rooms announce themselves on your network and show everyone’s cursor live. Each room’s two-word code also spells its address.",
+      "Each keystroke and redraw takes about 4 µs, 2,000× under a 120 FPS frame.",
     ],
     work: [
       {
@@ -400,9 +377,9 @@ export const projects = [
     stack:
       "TypeScript, Python, vinext, React Three Fiber, Web Audio, Cloudflare Workers, Modal, Demucs",
     details: [
-      "Drop in a song or paste a YouTube link. Uploads go straight to Cloudflare R2, then a Modal GPU job splits the track into four stems with Demucs.",
-      "The stems come back through a webhook and play in sync through Web Audio. Drag along the LED grooves on the 3D device to turn each one up or down.",
-      "There are also echo, reverb and filter effects, a speed control, a mix recorder, keyboard shortcuts and three colourways.",
+      "Upload a song or paste a link. The file goes straight to Cloudflare R2, then a Modal GPU job splits it into four stems with Demucs.",
+      "The stems come back through a webhook and play in sync with Web Audio. Drag the sliders on the 3D model to turn each one up or down.",
+      "It also has echo, reverb and filter effects, a speed control and a mix recorder.",
     ],
     work: [
       {
@@ -422,7 +399,7 @@ export const projects = [
         "https://github.com/dawsonxiong/ConvertKit/releases/latest/download/ConvertKit_aarch64.dmg",
       label: "Download for macOS",
       tooltip:
-        "Apple Silicon. It isn’t notarized, so on first launch choose Open Anyway in System Settings › Privacy & Security.",
+        "Apple Silicon. On first launch, choose Open Anyway in System Settings > Privacy & Security.",
     },
     tagline: "Local macOS file converter",
     date: "Mar–Sep 2026",
@@ -430,10 +407,10 @@ export const projects = [
       "A performance-first Rust macOS app with 22 file tools, from video compression and Whisper transcription to PDF splitting.",
     stack: "Rust, TypeScript, Tauri, React, Tokio, Tailwind, FFmpeg, whisper.cpp",
     details: [
-      "The React UI builds a typed job, then asks the Rust backend whether the tools it needs are installed. A missing one is flagged before anything runs.",
-      "Rust hands the job to FFmpeg, ImageMagick, Pandoc or whisper.cpp and streams progress back to the UI as it goes.",
-      "If only the container changes, like MP4 to MOV with the same codecs, ffprobe spots it. The file is repackaged instead of re-encoded, which is near-instant.",
-      "It handles 29 input formats and 202 valid conversions.",
+      "The React UI sends typed jobs to Rust over Tauri. Rust runs FFmpeg, ImageMagick, Pandoc or whisper.cpp and streams progress back.",
+      "If only the container changes, like MP4 to MOV, ffprobe catches it and the file is repackaged instead of re-encoded, which is near-instant.",
+      "Each Tokio job has its own cancellation token, so encodes stop cleanly.",
+      "It handles 29 input formats and 202 conversions, all offline.",
     ],
     work: [
       {
@@ -473,12 +450,11 @@ export const projects = [
     tagline: "Native LaTeX rendering for React Native",
     date: "Mar 2026",
     description:
-      "An npm package that renders LaTeX in React Native as native SVG, with no WebView.",
+      "An npm package that renders LaTeX in React Native as a native SVG, with no WebView. Peak 143 weekly downloads.",
     stack: "TypeScript, React Native, MathJax, react-native-svg",
     details: [
-      "MathView turns LaTeX into SVG paths with MathJax and draws them with react-native-svg. It works offline and renders instantly.",
-      "Inline and display math can sit alongside plain text in one string. The KaTeX WebView mode is still there as an option.",
-      "It started as a fork of iAmAdheil’s renderer, which I extended with the native SVG mode.",
+      "MathJax turns LaTeX into SVG paths and react-native-svg draws them natively, so it works offline and renders instantly.",
+      "Inline and display math mix with plain text, with a KaTeX WebView fallback.",
     ],
     work: [
       {
@@ -492,51 +468,6 @@ export const projects = [
     ],
   },
   {
-    name: "how do you feel?",
-    href: "https://how-do-you-feel.vercel.app",
-    repo: "https://github.com/dawsonxiong/how-do-you-feel",
-    tagline: "A mood tracker you can share",
-    date: "Sep–Oct 2025",
-    description:
-      "A daily mood tracker where friends who share their history show up as extra lines on your chart.",
-    stack: "TypeScript, Next.js, React, Auth.js, Recharts, Tailwind, shadcn/ui, Prisma, Postgres",
-    details: [
-      "Log your mood from 0 to 10 with tags and a note. Sharing goes one way and is set per person, so you choose exactly who sees your history.",
-      "You sign in with Google through Auth.js, and sessions are stored in the database with Prisma.",
-      "An iOS Shortcut can log a mood without opening the app. It calls an endpoint that checks a personal API token.",
-    ],
-    work: [
-      {
-        src: "/portfolio/how-do-you-feel/home.webp",
-        alt: "how do you feel? home screen: a mood form set to 8/10, happy, with tags and a note, beside a history chart plotting six weeks of moods for You, Dawson and Alex",
-        caption: "Mood logging and history",
-        width: 1600,
-        height: 913,
-      },
-      {
-        src: "/portfolio/how-do-you-feel/connections.webp",
-        alt: "Connections dialog: an exact-email search finding Wendy with an add button, and connections Dawson, sharing both ways, and Alex, who shares their mood with you",
-        caption: "Sharing moods with friends",
-        width: 1200,
-        height: 1316,
-      },
-      // {
-      //   src: "/portfolio/how-do-you-feel/mobile-setup.webp",
-      //   alt: "Shortcuts and homescreen setup dialog with steps for adding the app to the home screen and building an iOS Shortcut around the submit URL",
-      //   caption: "iOS Shortcuts setup",
-      //   width: 1200,
-      //   height: 1590,
-      // },
-      {
-        src: "/portfolio/how-do-you-feel/dark.webp",
-        alt: "The same home screen in dark mode, with the mood form and the three-person history chart",
-        caption: "Dark mode",
-        width: 1600,
-        height: 913,
-      },
-    ],
-  },
-  {
     name: "LinkedIt",
     repo: "https://github.com/dawsonxiong/LinkedIt",
     devpost: "https://devpost.com/software/linkedit",
@@ -545,9 +476,8 @@ export const projects = [
     description: "Finds the right people to contact at a company for sponsorship.",
     stack: "Python, JavaScript, Flask, React, Selenium, Vite, Tailwind",
     details: [
-      "Type in a company and a role. A Flask endpoint then drives a headless Chrome browser through a LinkedIn people search.",
-      "It keeps only the people whose role matches both, then sends them back as JSON for the React front end to show as profile cards.",
-      "I wrote the scraper and the API, and my teammates built the front end.",
+      "Flask drives headless Chrome with Selenium to search LinkedIn.",
+      "Matches come back as JSON and show up as profile cards in React.",
     ],
     work: [
       {
@@ -567,9 +497,10 @@ export const projects = [
     description: "Turns a photo of a handwritten or printed equation into LaTeX.",
     stack: "Python, JavaScript, Flask, Next.js, PyTorch, OpenCV, Tailwind",
     details: [
-      "OpenCV cleans up the image and finds the outline of each symbol. Symbols that come apart into pieces, like = and i, get merged back together.",
-      "Each symbol is cropped, resized to 64×64 and classified by a PyTorch CNN. The results are read left to right and assembled into LaTeX.",
-      "I trained five versions of the model on 49k+ symbol images: 24k generated across 25 fonts and 25k handwritten ones from CROHME.",
+      "OpenCV splits the photo into symbols, rejoining broken ones like = and i.",
+      "An 81-class PyTorch CNN reads each 64×64 symbol, left to right, into LaTeX.",
+      "I trained five versions of the model on 49k+ symbols: 24k rendered across 25 fonts and 25k handwritten from CROHME.",
+      "A Flask API serves the model to a Next.js front end.",
     ],
     work: [
       {
