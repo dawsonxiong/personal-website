@@ -72,11 +72,14 @@ export function WorkSamples({ samples }: { samples: WorkSample[] }) {
     });
   };
 
-  const canPage = samples.length > 1;
-  // Wraps at the ends, so the arrows never disable and drop focus.
+  const lastIndex = samples.length - 1;
+  const canPage = lastIndex > 0;
+  // Stops at the ends: the first sample has no previous arrow, the last no next arrow.
   const page = (direction: -1 | 1) => {
-    setIndex((current) => (current + direction + samples.length) % samples.length);
+    setIndex((current) => Math.min(lastIndex, Math.max(0, current + direction)));
   };
+  const previousArrowRef = useRef<HTMLButtonElement>(null);
+  const nextArrowRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open || !canPage) return;
@@ -153,27 +156,36 @@ export function WorkSamples({ samples }: { samples: WorkSample[] }) {
             <DialogDescription className="sr-only">{sample.alt}</DialogDescription>
             <div className={styles.workModalFrame}>
               <WorkSampleMedia key={sample.src} sample={sample} />
-              {canPage ? (
-                <>
-                  <button
-                    type="button"
-                    className={styles.workModalArrow}
-                    data-direction="previous"
-                    aria-label="Previous image"
-                    onClick={() => page(-1)}
-                  >
-                    <ChevronLeftIcon aria-hidden />
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.workModalArrow}
-                    data-direction="next"
-                    aria-label="Next image"
-                    onClick={() => page(1)}
-                  >
-                    <ChevronRightIcon aria-hidden />
-                  </button>
-                </>
+              {/* An arrow that is about to disappear hands focus to the other one. */}
+              {index > 0 ? (
+                <button
+                  ref={previousArrowRef}
+                  type="button"
+                  className={styles.workModalArrow}
+                  data-direction="previous"
+                  aria-label="Previous image"
+                  onClick={() => {
+                    if (index === 1) nextArrowRef.current?.focus();
+                    page(-1);
+                  }}
+                >
+                  <ChevronLeftIcon aria-hidden />
+                </button>
+              ) : null}
+              {index < lastIndex ? (
+                <button
+                  ref={nextArrowRef}
+                  type="button"
+                  className={styles.workModalArrow}
+                  data-direction="next"
+                  aria-label="Next image"
+                  onClick={() => {
+                    if (index === lastIndex - 1) previousArrowRef.current?.focus();
+                    page(1);
+                  }}
+                >
+                  <ChevronRightIcon aria-hidden />
+                </button>
               ) : null}
             </div>
             <DialogTitle className={styles.workModalCaption}>{sample.caption}</DialogTitle>

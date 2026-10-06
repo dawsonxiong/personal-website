@@ -421,18 +421,11 @@ export const projects = [
         height: 1105,
       },
       {
-        src: "/portfolio/convertkit/compress-result.webp",
-        alt: "ConvertKit’s compress-video result: the MP4 went from 72.5 MB to 2.4 MB, 97% smaller",
+        src: "/portfolio/convertkit/compress-compare.webp",
+        alt: "The same frame from a screen recording before and after ConvertKit compressed it: the 72.5 MB 4K H.264 original beside the 2.4 MB 1080p HEVC output, with the text equally sharp in both",
         caption: "Compressed video, 97% smaller",
         width: 1600,
-        height: 1105,
-      },
-      {
-        src: "/portfolio/convertkit/extract-text.webp",
-        alt: "ConvertKit’s extract-text tool after pulling 5.6 KB of text out of a math assignment PDF",
-        caption: "Extract text from a PDF",
-        width: 1600,
-        height: 1105,
+        height: 1000,
       },
       {
         src: "/portfolio/convertkit/dashboard.webp",
