@@ -1071,7 +1071,8 @@
 
 .cardPips {
   position: absolute;
-  inset: 20px 32px;
+  /* Columns as far apart as the corner indices allow, the same distance from each side. */
+  inset: 20px 30px;
 }
 
 .cardPip {
@@ -1090,8 +1091,9 @@
 
 .cardArt {
   position: absolute;
+  /* Centred on the card, with equal margins left and right and top and bottom. */
   top: 18px;
-  left: 21px;
+  left: 19px;
   width: 48px;
   height: 86px;
 }
