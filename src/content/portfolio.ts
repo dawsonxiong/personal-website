@@ -272,7 +272,8 @@ export const projects = [
     href: "https://stemplayer.dawsonxiong.workers.dev",
     repo: "https://github.com/dawsonxiong/stemplayer",
     tagline: "Split any song into stems and mix them on a 3D device",
-    description: "Use Kanye's Stem Player right in the browser. Splits any song into its stems.",
+    description:
+      "Use Kanye's Stem Player right in the browser. Splits any song into its stems. Cut a split from a minute to under 8 s, with sound in 1.5 s while it separates.",
     stack:
       "TypeScript, Python, vinext, React Three Fiber, Web Audio, Cloudflare Workers, Modal, Demucs",
     details: [
