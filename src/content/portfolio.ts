@@ -378,7 +378,7 @@ export const projects = [
       {
         src: "/portfolio/stem-player/split-poster.webp",
         video: "/portfolio/stem-player/split.mp4",
-        alt: "Screen recording of Stem Player: pasting a YouTube link to Mr. Brightside, the stems loading onto the 3D device, then turning the vocals and drums down and isolating the vocals and bass",
+        alt: "Screen recording of Stem Player: pasting a YouTube link to Mr. Brightside, the progress steps as a GPU splits it into stems, then turning the vocals and drums down and isolating the vocals and bass",
         caption: "Splitting and mixing a song",
         width: 1600,
         height: 1000,
