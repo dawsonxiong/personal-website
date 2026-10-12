@@ -176,7 +176,12 @@ export function createDuckMotion(
       contain();
       limitSpeed();
     },
-    setExclusions(zones: ExclusionZone[]) {
+    /**
+     * With `swim`, a toy that the new layout covers swims out to open water instead of
+     * jumping there. Only pass it while the scene is animating; a paused scene must
+     * move the toy at once so it never rests over text.
+     */
+    setExclusions(zones: ExclusionZone[], swim = false) {
       const padding = pose.size * 0.55 + 8;
       exclusions = zones.map((zone) => ({
         left: zone.left - padding,
@@ -184,13 +189,23 @@ export function createDuckMotion(
         top: zone.top - padding,
         bottom: zone.bottom + padding,
       }));
+      if (swim && !seek && !held) {
+        contain(false);
+        // On a phone the nearest open water can be half a screen away, and a jump that
+        // far reads as a teleport.
+        const open = openWaterNear(pose);
+        if (open.x !== pose.x || open.y !== pose.y) seek = open;
+      }
       contain();
     },
 
     resize(nextWidth: number, nextHeight: number, size: number) {
+      // A height-only change is a mobile browser's toolbar showing or hiding. The pool's
+      // top edge stays put, so rescaling would shift the toy by the toolbar's height.
+      const toolbar = width === nextWidth && height > 0;
       pose.x = width ? (pose.x / width) * nextWidth : nextWidth * start.x;
-      pose.y = height ? (pose.y / height) * nextHeight : nextHeight * start.y;
-      if (seek && width && height) {
+      if (!toolbar) pose.y = height ? (pose.y / height) * nextHeight : nextHeight * start.y;
+      if (seek && width && height && !toolbar) {
         seek = { x: (seek.x / width) * nextWidth, y: (seek.y / height) * nextHeight };
       }
       width = nextWidth;

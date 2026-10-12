@@ -421,3 +421,36 @@ test("extras can spawn into the phone lane", () => {
     bodies.push(movement);
   }
 });
+
+test("a layout change that covers a playing toy swims it out instead of jumping", () => {
+  const movement = createDuckMotion(randomSource(), { x: 0.5, y: 0.1 });
+  movement.resize(phone.width, phone.height, 48);
+  movement.setExclusions([{ left: 0, top: 0, right: 375, bottom: 20 }], true);
+  // The card settles over the toy, leaving open water only below it.
+  movement.setExclusions(phoneZones, true);
+  assert.ok(movement.entering, "swims rather than jumping");
+  let previous = { x: movement.pose.x, y: movement.pose.y };
+  let frames = 0;
+  while (movement.entering && frames < 600) {
+    movement.step(1 / 60);
+    const step = Math.hypot(movement.pose.x - previous.x, movement.pose.y - previous.y);
+    assert.ok(step < 20, `moved ${step}px in one frame`);
+    previous = { x: movement.pose.x, y: movement.pose.y };
+    frames++;
+  }
+  assert.ok(frames < 240, `took ${frames} frames`);
+  for (let frame = 0; frame < 120; frame++) {
+    movement.step(1 / 60);
+    assertClear(movement.pose, phoneZones, phone.width, phone.height);
+  }
+});
+
+test("a mobile toolbar showing or hiding leaves the toy where it was", () => {
+  const movement = createDuckMotion(randomSource(), { x: 0.3, y: 0.7 });
+  movement.resize(393, 659, 48);
+  const before = { x: movement.pose.x, y: movement.pose.y };
+  movement.resize(393, 740, 48);
+  assert.deepEqual([movement.pose.x, movement.pose.y], [before.x, before.y]);
+  movement.resize(393, 659, 48);
+  assert.deepEqual([movement.pose.x, movement.pose.y], [before.x, before.y]);
+});

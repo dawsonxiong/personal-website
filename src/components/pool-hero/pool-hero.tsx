@@ -201,7 +201,8 @@ export function PoolHero({ children }: { children: ReactNode }) {
 
     const measureExclusions = () => {
       const zones = readExclusions();
-      for (const { motion: movement } of floaties) movement.setExclusions(zones);
+      const swim = renderer !== null && motionEnabled() && !document.hidden && inView;
+      for (const { motion: movement } of floaties) movement.setExclusions(zones, swim);
       resolveFloatieCollisions(bodies);
     };
 
