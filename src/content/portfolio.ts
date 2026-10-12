@@ -338,20 +338,6 @@ export const projects = [
         height: 1041,
       },
       {
-        src: "/portfolio/thock/race-results-tokyonight.webp",
-        alt: "Thock race results after round two: places, wpm and finishing times for dawson, alex and wendy, each racer's pace on a shared clock, and a tally of wins",
-        caption: "Race results after two rounds",
-        width: 1600,
-        height: 1041,
-      },
-      {
-        src: "/portfolio/thock/typing-tokyonight.webp",
-        alt: "Thock mid-test with typed words in white, a mistyped letter in red and upcoming words dimmed, live wpm in the corner",
-        caption: "Mid-test",
-        width: 1600,
-        height: 1041,
-      },
-      {
         src: "/portfolio/thock/results-tokyonight.webp",
         alt: "Thock results after a real 30-second test: 116 wpm, 99% accuracy, a raw-wpm-per-second bar chart with the one mistake marked",
         caption: "Results after a 30s test",
@@ -383,9 +369,17 @@ export const projects = [
     ],
     work: [
       {
-        src: "/portfolio/stem-player/device.webp",
-        alt: "Stem Player web app with a 3D render of the tan device, its four LED grooves lit, above an upload zone",
-        caption: "The device, waiting for a track",
+        src: "/portfolio/stem-player/home-v2.webp",
+        alt: "Stem Player home page: a 3D render of the tan device with its four LED grooves lit, beside the headline Split any song into vocals, drums, bass and everything else, a Choose a song button and a box to paste a YouTube, SoundCloud, Spotify or Apple Music link",
+        caption: "Upload a song or paste a link",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/portfolio/stem-player/split-poster.webp",
+        video: "/portfolio/stem-player/split.mp4",
+        alt: "Screen recording of Stem Player: pasting a YouTube link to Mr. Brightside, the progress steps as a GPU splits it into stems, then turning the vocals and drums down and isolating the vocals and bass",
+        caption: "Splitting and mixing a song",
         width: 1600,
         height: 1000,
       },
