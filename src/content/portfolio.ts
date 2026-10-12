@@ -190,7 +190,6 @@ interface Project {
   install?: { download: string; label: string; tooltip?: string } | { command: string };
   /** One line under the name, like a job title: what it is, plus any award. */
   tagline: string;
-  date: string;
   /** One sentence. */
   description: string;
   /**
@@ -210,7 +209,6 @@ export const projects = [
     repo: "https://github.com/owenguoo/htn26",
     devpost: "https://devpost.com/software/swarm-sight",
     tagline: "Multi-phone person search · Hack the North 2026 finalist",
-    date: "Sep 2026",
     description:
       "Turns the phones in a crowded room into a camera network to find a missing person.",
     stack: "Swift, Python, JavaScript, SwiftUI, FastAPI, Expo, ARKit, Three.js, YOLOE",
@@ -270,95 +268,10 @@ export const projects = [
     ],
   },
   {
-    name: "Pulse",
-    href: "https://pulse-kappa-green.vercel.app",
-    repo: "https://github.com/dawsonxiong/pulse",
-    tagline: "Developer news on every new tab",
-    date: "Sep 2026",
-    description:
-      "A Chrome extension that replaces the new tab with a high-signal developer news feed. Think daily.dev but much cleaner.",
-    stack: "TypeScript, Next.js, React, WXT, Tailwind, Prisma, Postgres, Redis",
-    details: [
-      "A daily Vercel cron job pulls about 40 RSS feeds from blogs and tech sites.",
-      "Headlines that overlap within 48 hours are merged into one card per story.",
-      "Stories are ranked by recency, your tags and how trusted the source is.",
-    ],
-    work: [
-      {
-        src: "/portfolio/pulse/feed-v3.webp",
-        alt: "Pulse new-tab page showing a grid of developer news stories, each with a thumbnail, source icon, age, and vote and save buttons, beside a tag sidebar with For you / Latest, Filter and Search controls",
-        caption: "New-tab feed",
-        width: 1600,
-        height: 1000,
-      },
-      {
-        src: "/portfolio/pulse/story-thread-v2.webp",
-        alt: "A Pulse story opened over the feed: title, source and age, Summary and Article tabs, a link to the original, the summary text, and a threaded comments section with a reply nested under the first comment, a display-name field and a comment box",
-        caption: "Story summary with comments",
-        width: 1600,
-        height: 1000,
-      },
-      {
-        src: "/portfolio/pulse/edit-tags-v2.webp",
-        alt: "Pulse’s Edit tags page: languages, tools and topics as toggle chips, with TypeScript, Rust, Go, React, Next.js and Databases selected",
-        caption: "Picking your tags",
-        width: 1600,
-        height: 1000,
-      },
-    ],
-  },
-  {
-    name: "Thock",
-    repo: "https://github.com/dawsonxiong/thock",
-    install: { command: "go install github.com/dawsonxiong/thock@latest" },
-    tagline: "Typing test for the terminal",
-    date: "Aug 2026",
-    description:
-      "MonkeyType straight in the terminal, with blazing fast performance. Built using Go.",
-    stack: "Go, Bubble Tea, Cobra",
-    details: [
-      "The whole app is one Bubble Tea model that runs every screen at 120 FPS.",
-      "It uses Monkeytype’s scoring, so fixed typos still count against accuracy.",
-      "Race rooms announce themselves on your network and show everyone’s cursor live. Each room’s two-word code also spells its address.",
-      "Each keystroke and redraw takes about 4 µs, 2,000× under a 120 FPS frame.",
-    ],
-    work: [
-      {
-        src: "/portfolio/thock/start-tokyonight.webp",
-        alt: "Thock start screen: the ASCII thock banner above the time and word-list options, with the first three lines of words waiting to be typed",
-        caption: "Start screen",
-        width: 1600,
-        height: 1041,
-      },
-      {
-        src: "/portfolio/thock/race-typing-tokyonight.webp",
-        alt: "Thock mid-race: lanes for dawson, alex and wendy with pace trails, and alex's and wendy's cursors shown as coloured blocks inside the text",
-        caption: "Multiplayer mode",
-        width: 1600,
-        height: 1041,
-      },
-      {
-        src: "/portfolio/thock/results-tokyonight.webp",
-        alt: "Thock results after a real 30-second test: 116 wpm, 99% accuracy, a raw-wpm-per-second bar chart with the one mistake marked",
-        caption: "Results after a 30s test",
-        width: 1600,
-        height: 1041,
-      },
-      {
-        src: "/portfolio/thock/stats-tokyonight.webp",
-        alt: "Thock stats screen over ten runs: best and average wpm, a run-history chart, accuracy and consistency sparklines, and a per-mode table",
-        caption: "Stats across ten runs",
-        width: 1600,
-        height: 1041,
-      },
-    ],
-  },
-  {
     name: "Stem Player",
     href: "https://stemplayer.dawsonxiong.workers.dev",
     repo: "https://github.com/dawsonxiong/stemplayer",
     tagline: "Split any song into stems and mix them on a 3D device",
-    date: "Mar–Aug 2026",
     description: "Use Kanye's Stem Player right in the browser. Splits any song into its stems.",
     stack:
       "TypeScript, Python, vinext, React Three Fiber, Web Audio, Cloudflare Workers, Modal, Demucs",
@@ -403,7 +316,6 @@ export const projects = [
         "Apple Silicon. On first launch, choose Open Anyway in System Settings > Privacy & Security.",
     },
     tagline: "Local macOS file converter",
-    date: "Mar–Sep 2026",
     description:
       "A performance-first Rust macOS app with 22 file tools, from video compression and Whisper transcription to PDF splitting.",
     stack: "Rust, TypeScript, Tauri, React, Tokio, Tailwind, FFmpeg, whisper.cpp",
@@ -438,11 +350,55 @@ export const projects = [
     ],
   },
   {
+    name: "Thock",
+    repo: "https://github.com/dawsonxiong/thock",
+    install: { command: "go install github.com/dawsonxiong/thock@latest" },
+    tagline: "Typing test for the terminal",
+    description:
+      "MonkeyType straight in the terminal, with blazing fast performance. Built using Go.",
+    stack: "Go, Bubble Tea, Cobra",
+    details: [
+      "The whole app is one Bubble Tea model that runs every screen at 120 FPS.",
+      "It uses Monkeytype’s scoring, so fixed typos still count against accuracy.",
+      "Race rooms announce themselves on your network and show everyone’s cursor live. Each room’s two-word code also spells its address.",
+      "Each keystroke and redraw takes about 4 µs, 2,000× under a 120 FPS frame.",
+    ],
+    work: [
+      {
+        src: "/portfolio/thock/start-tokyonight.webp",
+        alt: "Thock start screen: the ASCII thock banner above the time and word-list options, with the first three lines of words waiting to be typed",
+        caption: "Start screen",
+        width: 1600,
+        height: 1041,
+      },
+      {
+        src: "/portfolio/thock/race-typing-tokyonight.webp",
+        alt: "Thock mid-race: lanes for dawson, alex and wendy with pace trails, and alex's and wendy's cursors shown as coloured blocks inside the text",
+        caption: "Multiplayer mode",
+        width: 1600,
+        height: 1041,
+      },
+      {
+        src: "/portfolio/thock/results-tokyonight.webp",
+        alt: "Thock results after a real 30-second test: 116 wpm, 99% accuracy, a raw-wpm-per-second bar chart with the one mistake marked",
+        caption: "Results after a 30s test",
+        width: 1600,
+        height: 1041,
+      },
+      {
+        src: "/portfolio/thock/stats-tokyonight.webp",
+        alt: "Thock stats screen over ten runs: best and average wpm, a run-history chart, accuracy and consistency sparklines, and a per-mode table",
+        caption: "Stats across ten runs",
+        width: 1600,
+        height: 1041,
+      },
+    ],
+  },
+  {
     name: "react-native-latex-renderer",
     href: "https://www.npmjs.com/package/@dawsonxiong/react-native-latex-renderer",
     repo: "https://github.com/dawsonxiong/react-native-LaTeX-renderer",
     tagline: "Native LaTeX rendering for React Native",
-    date: "Mar 2026",
     description:
       "An npm package that renders LaTeX in React Native as a native SVG, with no WebView. Peak 143 weekly downloads.",
     stack: "TypeScript, React Native, MathJax, react-native-svg",
@@ -462,24 +418,39 @@ export const projects = [
     ],
   },
   {
-    name: "LinkedIt",
-    repo: "https://github.com/dawsonxiong/LinkedIt",
-    devpost: "https://devpost.com/software/linkedit",
-    tagline: "Sponsor contact finder · Best Beginner Hack, GeeseHacks 2025",
-    date: "Jan 2025",
-    description: "Finds the right people to contact at a company for sponsorship.",
-    stack: "Python, JavaScript, Flask, React, Selenium, Vite, Tailwind",
+    name: "Pulse",
+    href: "https://pulse-kappa-green.vercel.app",
+    repo: "https://github.com/dawsonxiong/pulse",
+    tagline: "Developer news on every new tab",
+    description:
+      "A Chrome extension that replaces the new tab with a high-signal developer news feed. Think daily.dev but much cleaner.",
+    stack: "TypeScript, Next.js, React, WXT, Tailwind, Prisma, Postgres, Redis",
     details: [
-      "Flask drives headless Chrome with Selenium to search LinkedIn.",
-      "Matches come back as JSON and show up as profile cards in React.",
+      "A daily Vercel cron job pulls about 40 RSS feeds from blogs and tech sites.",
+      "Headlines that overlap within 48 hours are merged into one card per story.",
+      "Stories are ranked by recency, your tags and how trusted the source is.",
     ],
     work: [
       {
-        src: "/portfolio/linkedit/home.webp",
-        alt: "LinkedIt home page with an info panel and two phone mockups holding the company and position search form",
-        caption: "Home page",
+        src: "/portfolio/pulse/feed-v3.webp",
+        alt: "Pulse new-tab page showing a grid of developer news stories, each with a thumbnail, source icon, age, and vote and save buttons, beside a tag sidebar with For you / Latest, Filter and Search controls",
+        caption: "New-tab feed",
         width: 1600,
-        height: 866,
+        height: 1000,
+      },
+      {
+        src: "/portfolio/pulse/story-thread-v2.webp",
+        alt: "A Pulse story opened over the feed: title, source and age, Summary and Article tabs, a link to the original, the summary text, and a threaded comments section with a reply nested under the first comment, a display-name field and a comment box",
+        caption: "Story summary with comments",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/portfolio/pulse/edit-tags-v2.webp",
+        alt: "Pulse’s Edit tags page: languages, tools and topics as toggle chips, with TypeScript, Rust, Go, React, Next.js and Databases selected",
+        caption: "Picking your tags",
+        width: 1600,
+        height: 1000,
       },
     ],
   },
@@ -487,7 +458,6 @@ export const projects = [
     name: "LaTeX.ly",
     repo: "https://github.com/dawsonxiong/LaTeX.ly",
     tagline: "Handwritten math to LaTeX",
-    date: "Nov 2024–Apr 2025",
     description: "Turns a photo of a handwritten or printed equation into LaTeX.",
     stack: "Python, JavaScript, Flask, Next.js, PyTorch, OpenCV, Tailwind",
     details: [
@@ -518,6 +488,27 @@ export const projects = [
         caption: "Upload",
         width: 1600,
         height: 1000,
+      },
+    ],
+  },
+  {
+    name: "LinkedIt",
+    repo: "https://github.com/dawsonxiong/LinkedIt",
+    devpost: "https://devpost.com/software/linkedit",
+    tagline: "Sponsor contact finder · Best Beginner Hack, GeeseHacks 2025",
+    description: "Finds the right people to contact at a company for sponsorship.",
+    stack: "Python, JavaScript, Flask, React, Selenium, Vite, Tailwind",
+    details: [
+      "Flask drives headless Chrome with Selenium to search LinkedIn.",
+      "Matches come back as JSON and show up as profile cards in React.",
+    ],
+    work: [
+      {
+        src: "/portfolio/linkedit/home.webp",
+        alt: "LinkedIt home page with an info panel and two phone mockups holding the company and position search form",
+        caption: "Home page",
+        width: 1600,
+        height: 866,
       },
     ],
   },

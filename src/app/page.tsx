@@ -174,7 +174,6 @@ export default async function Home() {
                         </h2>
                         <div className={styles.meta}>
                           <span>{project.tagline}</span>
-                          <span>{project.date}</span>
                         </div>
                       </div>
                       <p>{project.description}</p>
@@ -183,11 +182,14 @@ export default async function Home() {
                         <CopyCommand className={styles.command} command={project.install.command} />
                       ) : null}
                       {project.install?.download ? (
-                        <div className={styles.download}>
+                        <div>
                           <Tooltip>
                             <TooltipTrigger
                               render={
-                                <a className={styles.textLink} href={project.install.download} />
+                                <a
+                                  className={styles.downloadLink}
+                                  href={project.install.download}
+                                />
                               }
                             >
                               <ArrowDownTrayIcon aria-hidden="true" />

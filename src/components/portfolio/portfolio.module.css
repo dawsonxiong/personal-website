@@ -435,18 +435,36 @@
   margin-top: 8px;
 }
 
-/* A one-line install command with a copy button, in a quiet well under the stack. */
-.command {
-  display: flex;
+/* Install actions under the stack: a download or a copyable command, as one quiet glass pill. */
+.command,
+.downloadLink {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   max-width: 100%;
-  width: fit-content;
-  margin-top: 12px;
-  padding: 6px 6px 6px 12px;
-  border-radius: 10px;
-  background: rgb(255 255 255 / 30%);
+  height: 34px;
+  margin-top: 14px;
+  border-radius: 9px;
+  background: rgb(255 255 255 / 28%);
   box-shadow: inset 0 0 0 1px var(--pool-rule);
+  color: var(--pool-ink);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.downloadLink {
+  padding: 0 14px 0 12px;
+  text-decoration: none;
+  transition: background-color 140ms ease;
+}
+
+.downloadLink:hover {
+  background: rgb(255 255 255 / 45%);
+}
+
+.command {
+  padding: 0 4px 0 12px;
 }
 
 .command code {
@@ -456,36 +474,47 @@
   white-space: nowrap;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 13px;
+  /* The scroll box clips at its edges, so the line must clear descenders like g and y. */
+  line-height: 20px;
+}
+
+/* A shell prompt says "paste this in a terminal" without a label. */
+.command code::before {
+  content: "$ ";
+  color: var(--pool-muted);
+  opacity: 0.6;
+  user-select: none;
 }
 
 .command button {
   display: inline-flex;
   flex-shrink: 0;
-  padding: 4px;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
   border-radius: 6px;
   color: var(--pool-muted);
+  opacity: 0.75;
   cursor: pointer;
-  transition: color 140ms ease;
+  transition:
+    background-color 140ms ease,
+    opacity 140ms ease;
 }
 
 .command button:hover {
-  color: var(--pool-ink);
+  background: rgb(255 255 255 / 45%);
+  opacity: 1;
 }
 
 .command svg,
-.download svg {
-  width: 16px;
-  height: 16px;
+.downloadLink svg {
+  width: 15px;
+  height: 15px;
 }
 
-.download {
-  margin-top: 12px;
-}
-
-.download a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.downloadLink svg {
+  color: var(--pool-muted);
 }
 
 .workSamplesShell {
@@ -494,15 +523,8 @@
   margin-top: 16px;
 }
 
-.workSamplesShell[data-fade-left] > .workSamples {
-  --fade-start: 36px;
-}
-
-.workSamplesShell[data-fade-right] > .workSamples {
-  --fade-end: 36px;
-}
-
-/* Shown only while there's more to scroll that way (same signal as the fade). */
+/* Shown only while there's more to scroll that way. The tab panel already fades top and
+   bottom, so the row itself cuts off cleanly and lets the arrows say there's more. */
 .workSamplesArrow {
   position: absolute;
   /* Centred on the thumbnails: scroller top padding plus half the image. */
@@ -561,18 +583,6 @@
   overscroll-behavior-inline: contain;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
-  /* Edges dim rather than vanish: a longer ramp that bottoms out at 35% keeps the
-     clipped card readable instead of cutting it off. */
-  mask-image: linear-gradient(
-    to right,
-    rgb(0 0 0 / 35%),
-    #000 var(--fade-start),
-    #000 calc(100% - var(--fade-end)),
-    rgb(0 0 0 / 35%)
-  );
-  transition:
-    --fade-start 140ms ease,
-    --fade-end 140ms ease;
 }
 
 .workSamples::-webkit-scrollbar {
