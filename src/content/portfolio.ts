@@ -27,7 +27,7 @@ export const experience = [
     company: "Scott’s SAT Prep",
     href: "https://www.scottssatprep.com",
     role: "Founding Engineer",
-    date: "Aug 2026–present",
+    date: "Aug–Oct 2026",
     description:
       "Built 1500 Blueprint’s study planner, practice tools, and account management, and bolstered the platform’s security.",
     logo: "/portfolio/organizations/scotts-sat-prep.svg",
@@ -372,7 +372,7 @@ export const projects = [
         src: "/portfolio/stem-player/split-poster.webp",
         video: "/portfolio/stem-player/split.mp4",
         alt: "Screen recording of Stem Player: pasting a YouTube link to Mr. Brightside, the progress steps as a GPU splits it into stems, then turning the vocals and drums down and isolating the vocals and bass",
-        caption: "Splitting and mixing a song",
+        caption: "Mixing a song (audio on)",
         width: 1600,
         height: 1000,
       },
