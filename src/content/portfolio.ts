@@ -369,6 +369,14 @@ export const projects = [
     ],
     work: [
       {
+        src: "/portfolio/stem-player/split-poster.webp",
+        video: "/portfolio/stem-player/split.mp4",
+        alt: "Screen recording of Stem Player: pasting a YouTube link to Mr. Brightside, the progress steps as a GPU splits it into stems, then turning the vocals and drums down and isolating the vocals and bass",
+        caption: "Splitting and mixing a song",
+        width: 1600,
+        height: 1000,
+      },
+      {
         src: "/portfolio/stem-player/home-v2.webp",
         alt: "Stem Player home page: a 3D render of the tan device with its four LED grooves lit, beside the headline Split any song into vocals, drums, bass and everything else, a Choose a song button and a box to paste a YouTube, SoundCloud, Spotify or Apple Music link",
         caption: "Upload a song or paste a link",
@@ -376,10 +384,9 @@ export const projects = [
         height: 1000,
       },
       {
-        src: "/portfolio/stem-player/split-poster.webp",
-        video: "/portfolio/stem-player/split.mp4",
-        alt: "Screen recording of Stem Player: pasting a YouTube link to Mr. Brightside, the progress steps as a GPU splits it into stems, then turning the vocals and drums down and isolating the vocals and bass",
-        caption: "Splitting and mixing a song",
+        src: "/portfolio/stem-player/effects.webp",
+        alt: "Stem Player playing Mr. Brightside with the effects panel open: Echo, Reverb and Filter tabs, with Echo's time, repeats and mix sliders, above the volume and speed controls",
+        caption: "Echo, reverb and filter effects",
         width: 1600,
         height: 1000,
       },
