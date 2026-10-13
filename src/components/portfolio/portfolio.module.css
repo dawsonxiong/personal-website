@@ -1032,105 +1032,16 @@
   flex-shrink: 0;
   width: 88px;
   height: 124px;
+  overflow: hidden;
   border: 1px solid var(--pool-rule);
   border-radius: 9px;
   background: #fff;
-  color: #16181d;
-  line-height: 1;
-}
-
-.playingCard[data-color="red"] {
-  color: #d3222f;
 }
 
 .cardFace {
-  position: absolute;
-  inset: 0;
-}
-
-.cardFace [data-flipped] {
-  rotate: 180deg;
-}
-
-.cardIndex {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 17px;
-}
-
-.cardIndex[data-flipped] {
-  inset: auto 3px 3px auto;
-}
-
-.cardRank {
-  font-size: 27px;
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -2.6px;
-  transform: scaleX(0.7);
-}
-
-.cardIndexSuit {
-  margin-top: -2px;
-  font-size: 16px;
-}
-
-.cardPips {
-  position: absolute;
-  /* Columns as far apart as the corner indices allow, the same distance from each side. */
-  inset: 20px 30px;
-}
-
-.cardPip {
-  position: absolute;
-  font-size: 16px;
-  translate: -50% -50%;
-}
-
-.cardAce {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-size: 46px;
-}
-
-.cardArt {
-  position: absolute;
-  /* Centred on the card, with equal margins left and right and top and bottom. */
-  top: 18px;
-  left: 19px;
-  width: 48px;
-  height: 86px;
-}
-
-.cardCourt {
-  position: absolute;
-  inset: 13px 20px;
-  display: flex;
-  flex-direction: column;
-  border: 1.5px solid currentcolor;
-  border-radius: 3px;
-  background: linear-gradient(to bottom right, #fdf0d2 0 48.5%, #d9a441 48.5% 51.5%, #dce9fb 51.5%);
-}
-
-.cardCourtHalf {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1px;
-  font-size: 22px;
-  font-weight: 700;
-}
-
-.cardCourtHalf span + span {
-  font-size: 13px;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* Face-down stack: cards lie sideways, the second offset so the first one's corner shows.
