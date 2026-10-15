@@ -27,9 +27,9 @@ export const experience = [
     company: "Scott’s SAT Prep",
     href: "https://www.scottssatprep.com",
     role: "Founding Engineer",
-    date: "Aug–Oct 2026",
+    date: "Aug 2026–Oct 2026",
     description:
-      "Built 1500 Blueprint’s study planner, practice tools, and account management, and bolstered the platform’s security.",
+      "Built 1500 Blueprint’s study planner, practice tools, pricing page, and account management, and bolstered the platform’s security.",
     logo: "/portfolio/organizations/scotts-sat-prep.svg",
     work: [
       {
@@ -47,14 +47,14 @@ export const experience = [
     role: "Senior Software Engineer",
     date: "May 2025–Aug 2026",
     description:
-      "Helped grow RevisionDojo from 250K to 750K+ users. Shipped the mobile app (20k+ downloads, 4.8 stars) and high-retention learning features.",
+      "Helped grow RevisionDojo from 250K to 750K+ users, OnePrep to 450K+ users, MathsGenie to 1M+ users. Shipped the mobile app (20k+ downloads, 4.8 stars) and lots of high-retention learning features.",
     logo: "/portfolio/organizations/general-learning.svg",
     work: [
       {
         src: "/portfolio/revisiondojo/mobile-tour-poster.webp",
         video: "/portfolio/revisiondojo/mobile-tour.mp4",
         alt: "Screen recording of the RevisionDojo iOS app: the subject home and study plan, the weekly planner, a Jojo AI quiz, achievements, lessons, notes with definitions, and flashcards",
-        caption: "Mobile app",
+        caption: "RevisionDojo iOS app",
         width: 720,
         height: 1566,
         fit: "contain",
@@ -209,14 +209,13 @@ export const projects = [
     repo: "https://github.com/owenguoo/htn26",
     devpost: "https://devpost.com/software/swarm-sight",
     tagline: "Multi-phone person search · Hack the North 2026 finalist",
-    description:
-      "Turns the phones in a crowded room into a camera network to find a missing person.",
+    description: "Turns everyone’s phone into a camera network to find a missing person",
     stack: "Swift, Python, JavaScript, SwiftUI, FastAPI, Expo, ARKit, Three.js, YOLOE",
     details: [
-      "Searchers scan a QR code to join. A Swift app then streams each phone’s camera frames and ARKit position over WebSockets to a FastAPI hub.",
-      "A Baseten GPU service spots people with YOLOE and matches them to reference photos with OSNet in about 127 ms.",
-      "VGGT rebuilds the room in 3D from the phones’ frames, and the console guides searchers with a live heatmap, arrows, flashes and haptics.",
-      "In simulation, a PPO policy rescued 47.6% more people than greedy search.",
+      "Searchers scan a QR code to join, then a Swift app streams each phone’s camera frames and ARKit position over WebSockets to a FastAPI hub",
+      "A Baseten GPU service spots people with YOLOE and matches them to reference photos with OSNet in about 127 ms",
+      "VGGT rebuilds the room in 3D from the phones’ frames, and the console guides searchers with a live heatmap, arrows, flashes and haptics",
+      "In simulation, a PPO policy rescued 47.6% more people than greedy search",
     ],
     work: [
       {
@@ -272,14 +271,14 @@ export const projects = [
     href: "https://stemplayer.dawsonxiong.workers.dev",
     repo: "https://github.com/dawsonxiong/stemplayer",
     tagline: "Split any song into stems and mix them on a 3D device",
-    description:
-      "Use Kanye's Stem Player right in the browser. Splits any song into its stems. Cut a split from a minute to under 8 s, with sound in 1.5 s while it separates.",
+    description: "Use Kanye's Stem Player right in the browser. Splits any song into its stems.",
     stack:
       "TypeScript, Python, vinext, React Three Fiber, Web Audio, Cloudflare Workers, Modal, Demucs",
     details: [
-      "Upload a song or paste a link. The file goes straight to Cloudflare R2, then a Modal GPU job splits it into four stems with Demucs.",
-      "The stems come back through a webhook and play in sync with Web Audio. Drag the sliders on the 3D model to turn each one up or down.",
-      "It also has echo, reverb and filter effects, a speed control and a mix recorder.",
+      "Upload a song or paste a link and the file goes straight to Cloudflare R2, then a Modal GPU job splits it into four stems with Demucs",
+      "The stems come back through a webhook and play in sync with Web Audio, and the sliders on the 3D model turn each one up or down",
+      "It also has echo, reverb and filter effects, a speed control and a mix recorder",
+      "Cut a split from a minute to under 8 s, with sound in 1.5 s while it separates",
     ],
     work: [
       {
@@ -318,13 +317,13 @@ export const projects = [
     },
     tagline: "Local macOS file converter",
     description:
-      "A performance-first Rust macOS app with 22 file tools, from video compression and Whisper transcription to PDF splitting.",
+      "A performance-first Rust macOS app with 22 file conversion tools, from video transcription to PDF splitting.",
     stack: "Rust, TypeScript, Tauri, React, Tokio, Tailwind, FFmpeg, whisper.cpp",
     details: [
-      "The React UI sends typed jobs to Rust over Tauri. Rust runs FFmpeg, ImageMagick, Pandoc or whisper.cpp and streams progress back.",
-      "If only the container changes, like MP4 to MOV, ffprobe catches it and the file is repackaged instead of re-encoded, which is near-instant.",
-      "Each Tokio job has its own cancellation token, so encodes stop cleanly.",
-      "It handles 29 input formats and 202 conversions, all offline.",
+      "The React UI sends typed jobs to Rust over Tauri, which runs FFmpeg, ImageMagick, Pandoc or whisper.cpp and streams progress back",
+      "If only the container changes, like MP4 to MOV, ffprobe catches it and the file is repackaged instead of re-encoded, which is near-instant",
+      "Each Tokio job has its own cancellation token, so encodes stop cleanly",
+      "It handles 29 input formats and 202 conversions, all offline",
     ],
     work: [
       {
@@ -355,14 +354,13 @@ export const projects = [
     repo: "https://github.com/dawsonxiong/thock",
     install: { command: "go install github.com/dawsonxiong/thock@latest" },
     tagline: "Typing test for the terminal",
-    description:
-      "MonkeyType straight in the terminal, with blazing fast performance. Built using Go.",
+    description: "MonkeyType in the terminal, with blazing fast performance built using Go.",
     stack: "Go, Bubble Tea, Cobra",
     details: [
-      "The whole app is one Bubble Tea model that runs every screen at 120 FPS.",
-      "It uses Monkeytype’s scoring, so fixed typos still count against accuracy.",
-      "Race rooms announce themselves on your network and show everyone’s cursor live. Each room’s two-word code also spells its address.",
-      "Each keystroke and redraw takes about 4 µs, 2,000× under a 120 FPS frame.",
+      "The whole app is one Bubble Tea model that runs every screen at 120 FPS",
+      "It uses Monkeytype’s scoring, so fixed typos still count against accuracy",
+      "Race rooms announce themselves on your network and show everyone’s cursor live, and each room’s two-word code also spells its address",
+      "Each keystroke and redraw takes about 4 µs, 2,000× under a 120 FPS frame",
     ],
     work: [
       {
@@ -404,8 +402,8 @@ export const projects = [
       "An npm package that renders LaTeX in React Native as a native SVG, with no WebView. Peak 143 weekly downloads.",
     stack: "TypeScript, React Native, MathJax, react-native-svg",
     details: [
-      "MathJax turns LaTeX into SVG paths and react-native-svg draws them natively, so it works offline and renders instantly.",
-      "Inline and display math mix with plain text, with a KaTeX WebView fallback.",
+      "MathJax turns LaTeX into SVG paths and react-native-svg draws them natively, so it works offline and renders instantly",
+      "Inline and display math mix with plain text, with a KaTeX WebView fallback",
     ],
     work: [
       {
@@ -424,12 +422,12 @@ export const projects = [
     repo: "https://github.com/dawsonxiong/pulse",
     tagline: "Developer news on every new tab",
     description:
-      "A Chrome extension that replaces the new tab with a high-signal developer news feed. Think daily.dev but much cleaner.",
+      "A Chrome extension that replaces the new tab with a high-signal developer news feed. Think daily.dev but cleaner and more relevant.",
     stack: "TypeScript, Next.js, React, WXT, Tailwind, Prisma, Postgres, Redis",
     details: [
-      "A daily Vercel cron job pulls about 40 RSS feeds from blogs and tech sites.",
-      "Headlines that overlap within 48 hours are merged into one card per story.",
-      "Stories are ranked by recency, your tags and how trusted the source is.",
+      "A daily Vercel cron job pulls about 40 RSS feeds from blogs and tech sites",
+      "Headlines that overlap within 48 hours are merged into one card per story",
+      "Stories are ranked by recency, your tags and how trusted the source is",
     ],
     work: [
       {
@@ -462,10 +460,10 @@ export const projects = [
     description: "Turns a photo of a handwritten or printed equation into LaTeX.",
     stack: "Python, JavaScript, Flask, Next.js, PyTorch, OpenCV, Tailwind",
     details: [
-      "OpenCV splits the photo into symbols, rejoining broken ones like = and i.",
-      "An 81-class PyTorch CNN reads each 64×64 symbol, left to right, into LaTeX.",
-      "I trained five versions of the model on 49k+ symbols: 24k rendered across 25 fonts and 25k handwritten from CROHME.",
-      "A Flask API serves the model to a Next.js front end.",
+      "OpenCV splits the photo into symbols, rejoining broken ones like = and i",
+      "An 81-class PyTorch CNN reads each 64×64 symbol, left to right, into LaTeX",
+      "I trained five versions of the model on 49k+ symbols: 24k rendered across 25 fonts and 25k handwritten from CROHME",
+      "A Flask API serves the model to a Next.js front end",
     ],
     work: [
       {
@@ -500,8 +498,8 @@ export const projects = [
     description: "Finds the right people to contact at a company for sponsorship.",
     stack: "Python, JavaScript, Flask, React, Selenium, Vite, Tailwind",
     details: [
-      "Flask drives headless Chrome with Selenium to search LinkedIn.",
-      "Matches come back as JSON and show up as profile cards in React.",
+      "Flask drives headless Chrome with Selenium to search LinkedIn",
+      "Matches come back as JSON and show up as profile cards in React",
     ],
     work: [
       {

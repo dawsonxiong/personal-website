@@ -18,7 +18,7 @@ function Toaster({ ...props }: ToasterProps) {
       }
       toastOptions={{
         classNames: {
-          toast: "cn-toast font-medium shadow-[0_4px_14px_#123e6026] backdrop-blur-[8px]",
+          toast: "cn-toast font-medium backdrop-blur-[8px]",
         },
       }}
       {...props}

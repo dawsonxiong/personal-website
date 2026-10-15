@@ -540,7 +540,6 @@
   background: rgb(246 249 251 / 82%);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  box-shadow: 0 4px 14px #123e6026;
   color: var(--pool-ink);
   cursor: pointer;
   opacity: 0;
@@ -632,7 +631,6 @@
   border-radius: 50%;
   background: var(--pool-ink);
   color: #fff;
-  filter: drop-shadow(0 0 1px rgb(255 255 255 / 90%)) drop-shadow(0 2px 8px #123e6040);
   translate: -50% -50%;
   pointer-events: none;
 }
@@ -687,7 +685,6 @@
   border: 0;
   border-radius: 16px;
   background: #e8f5fbf7;
-  box-shadow: 0 16px 48px #123e6029;
   color: var(--pool-ink);
 }
 
@@ -751,7 +748,6 @@
   background: rgb(246 249 251 / 82%);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  box-shadow: 0 4px 14px #123e6026;
   color: var(--pool-ink);
   cursor: pointer;
   transition: background-color 140ms ease;
@@ -983,7 +979,6 @@
   width: 48px;
   height: 48px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px #123e601f;
 }
 
 .pickTitle {
@@ -1045,7 +1040,7 @@
 }
 
 /* Face-down stack: cards lie sideways, the second offset so the first one's corner shows.
-   Once up, they fan out upright. --i is the card's index, --fold how far it is bent over. */
+   Once up, they stand side by side, square to the page. --i is the card's index, --fold how far it is bent over. */
 .cards {
   --fold: 0px;
   --spread: 0px;
@@ -1083,9 +1078,10 @@
 }
 
 .cards[data-up] .hole {
-  left: calc(var(--i) * 80px);
-  translate: 0 calc(var(--i) * 3px);
-  rotate: calc(var(--i) * 11deg - 5deg);
+  /* Overlapped like hole cards at an online table: the second card covers the first's
+     right half, leaving its corner index showing. */
+  left: calc(var(--i) * 46px);
+  rotate: 0deg;
 }
 
 .holeInner,
@@ -1132,16 +1128,19 @@
   width: var(--fold);
   border-radius: 9px 0 0 9px;
   background: linear-gradient(to left, #0c2f4a3d, transparent 16px);
+  opacity: var(--shade-alpha, 1);
 }
 
-.cards[data-up] .holeBack,
-.cards[data-up] .holeShade {
+/* data-up starts the swing upright before the fold has finished; data-flat marks the
+   fold as done. */
+.cards[data-flat] .holeBack,
+.cards[data-flat] .holeShade {
   display: none;
 }
 
 /* Face-up the fold shift nets to zero; drop it so the boxes sit where they look. */
-.cards[data-up] .holeInner,
-.cards[data-up] .holeFlap {
+.cards[data-flat] .holeInner,
+.cards[data-flat] .holeFlap {
   translate: 0 0;
   clip-path: none;
 }
@@ -1179,9 +1178,9 @@
       translate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
+  /* Spread apart a little on hover, staying square. */
   .cards[data-up]:hover .hole {
-    translate: calc(var(--i) * 8px - 3px) calc(var(--i) * 5px - 5px);
-    rotate: calc(var(--i) * 21deg - 10deg);
+    translate: calc(var(--i) * 8px - 4px) 0;
   }
 }
 

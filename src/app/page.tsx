@@ -255,6 +255,7 @@ export default async function Home() {
                                 className={styles.cover}
                                 src={album.cover}
                                 alt=""
+                                quality={90}
                                 width={48}
                                 height={48}
                               />
@@ -295,6 +296,7 @@ export default async function Home() {
                             className={styles.cover}
                             src={song.cover}
                             alt=""
+                            quality={90}
                             width={40}
                             height={40}
                           />
