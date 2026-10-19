@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
 import styles from "./portfolio.module.css";
 import { syncScrollEdgeFade } from "./scroll-edge-fade";
 
@@ -14,6 +21,9 @@ const labels: Record<Section, string> = {
 };
 const isSection = (value: string): value is Section =>
   sections.some((section) => section === value);
+const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// Longer than the card's height transition in portfolio.module.css, in case it never ends.
+const RESIZE_FALLBACK_MS = 600;
 
 export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }) {
   const [active, setActive] = useState<Section>("about");
@@ -22,6 +32,20 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
   const [switched, setSwitched] = useState(false);
   const tabRefs = useRef<Partial<Record<Section, HTMLButtonElement>>>({});
   const panelRefs = useRef<Partial<Record<Section, HTMLDivElement>>>({});
+  const navRef = useRef<HTMLDivElement>(null);
+  const columnRef = useRef<HTMLElement>(null);
+  // The card's height just before a switch, so it can ease to the new panel's height.
+  const fromHeight = useRef<number | null>(null);
+  const endResize = useRef<(() => void) | null>(null);
+
+  const beforeSwitch = (next: Section) => {
+    const column = columnRef.current;
+    if (!column) return;
+    fromHeight.current = column.getBoundingClientRect().height;
+    // New panels slide in from the side of the tab you moved towards.
+    column.dataset.direction =
+      sections.indexOf(next) < sections.indexOf(active) ? "back" : "forward";
+  };
 
   useEffect(() => {
     const syncHash = () => {
@@ -29,6 +53,8 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
       setActive(isSection(hash) ? hash : "about");
     };
     const onHistory = () => {
+      const hash = window.location.hash.slice(1);
+      beforeSwitchRef.current(isSection(hash) ? hash : "about");
       setSwitched(true);
       syncHash();
     };
@@ -40,6 +66,59 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
       window.removeEventListener("popstate", onHistory);
     };
   }, []);
+
+  // Keeps the history listener above on the latest `active` without re-subscribing.
+  const beforeSwitchRef = useRef(beforeSwitch);
+  beforeSwitchRef.current = beforeSwitch;
+
+  // Slide the underline to the selected tab, and follow it if the labels reflow.
+  useLayoutEffect(() => {
+    const nav = navRef.current;
+    const tab = tabRefs.current[active];
+    if (!nav || !tab) return;
+    const place = () => {
+      nav.style.setProperty("--indicator-x", `${tab.offsetLeft}px`);
+      nav.style.setProperty("--indicator-width", `${tab.offsetWidth}px`);
+    };
+    place();
+    const observer = new ResizeObserver(place);
+    observer.observe(nav);
+    return () => observer.disconnect();
+  }, [active]);
+
+  // Ease the card from the old panel's height to the new one's.
+  useLayoutEffect(() => {
+    const column = columnRef.current;
+    const from = fromHeight.current;
+    fromHeight.current = null;
+    if (!column || from === null || prefersReducedMotion()) return;
+    endResize.current?.();
+    column.style.height = "";
+    const to = column.getBoundingClientRect().height;
+    if (Math.abs(to - from) < 1) return;
+    column.style.height = `${from}px`;
+    // Flush the old height so the change to the new one transitions.
+    void column.offsetHeight;
+    column.dataset.resizing = "";
+    column.style.height = `${to}px`;
+
+    // Hand the height back to the layout once the resize finishes.
+    const finish = () => {
+      window.clearTimeout(timer);
+      column.removeEventListener("transitionend", onEnd);
+      delete column.dataset.resizing;
+      column.style.height = "";
+      endResize.current = null;
+    };
+    const onEnd = (event: TransitionEvent) => {
+      if (event.target === column && event.propertyName === "height") finish();
+    };
+    const timer = window.setTimeout(finish, RESIZE_FALLBACK_MS);
+    column.addEventListener("transitionend", onEnd);
+    endResize.current = finish;
+  }, [active]);
+
+  useEffect(() => () => endResize.current?.(), []);
 
   useEffect(() => {
     const panel = panelRefs.current[active];
@@ -74,6 +153,7 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
 
   const select = (section: Section) => {
     if (section === active) return;
+    beforeSwitch(section);
     setActive(section);
     setSwitched(true);
     window.history.pushState(null, "", `#${section}`);
@@ -130,7 +210,7 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
         {/* Visible headings live in the panels, which are hidden when not selected. */}
         <h1 className="sr-only">Dawson Xiong</h1>
         <div className={styles.barInner}>
-          <div className={styles.nav} role="tablist" aria-label="Portfolio sections">
+          <div className={styles.nav} role="tablist" aria-label="Portfolio sections" ref={navRef}>
             {sections.map((section) => (
               <button
                 key={section}
@@ -149,10 +229,11 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
                 {labels[section]}
               </button>
             ))}
+            <span className={styles.indicator} aria-hidden="true" />
           </div>
         </div>
       </header>
-      <main className={styles.column} data-pool-exclusion>
+      <main className={styles.column} data-pool-exclusion ref={columnRef}>
         {sections.map((section) => (
           <div
             key={section}
@@ -170,15 +251,6 @@ export function PortfolioTabs({ panels }: { panels: Record<Section, ReactNode> }
           </div>
         ))}
       </main>
-      <footer className={styles.footer}>
-        <div className={styles.barInner}>
-          {/* The page is prerendered, so the client's year can differ from the build's.
-              Only the text is kept clear: the rest of the strip is water the floaties can use. */}
-          <span suppressHydrationWarning data-pool-exclusion>
-            © {new Date().getFullYear()} Dawson Xiong
-          </span>
-        </div>
-      </footer>
     </div>
   );
 }

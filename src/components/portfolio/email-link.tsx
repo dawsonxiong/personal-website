@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 const EMAIL = "dawsonxiong@gmail.com";
 const SUBJECT = "Hey Dawson";
-const BODY = "I thought your site was really cool... by the way my name is ";
+const BODY = "I thought your personal website was really cool... by the way my name is ";
 
 const MAILTO = `mailto:${EMAIL}?subject=${encodeURIComponent(SUBJECT)}&body=${encodeURIComponent(BODY)}`;
 
