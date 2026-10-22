@@ -7,6 +7,7 @@ import {
   ChevronDownIcon,
   DevpostIcon,
   GithubIcon,
+  InformationCircleIcon,
   StarIcon,
 } from "@/components/icons";
 import { PeelHand } from "@/components/portfolio/peel-hand";
@@ -95,7 +96,7 @@ export default async function Home() {
           experience: (
             <section className={styles.section}>
               <div>
-                <ol>
+                <ol className={styles.entryList}>
                   {experience.map((job) => (
                     <li className={styles.entry} key={job.company}>
                       <div className={styles.experienceHeading}>
@@ -139,7 +140,7 @@ export default async function Home() {
           projects: (
             <section className={styles.section}>
               <div>
-                <ol>
+                <ol className={styles.entryList}>
                   {projects.map((project) => (
                     <li className={styles.entry} key={project.name}>
                       <div className={styles.experienceTitle}>
@@ -177,28 +178,31 @@ export default async function Home() {
                         </div>
                       </div>
                       <p>{project.description}</p>
-                      <p className={styles.stack}>{project.stack}</p>
+                      <ul className={styles.stack} aria-label="Built with">
+                        {project.stack.split(", ").map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
                       {project.install?.command ? (
                         <CopyCommand className={styles.command} command={project.install.command} />
                       ) : null}
                       {project.install?.download ? (
-                        <div>
-                          <Tooltip>
-                            <TooltipTrigger
-                              render={
-                                <a
-                                  className={styles.downloadLink}
-                                  href={project.install.download}
-                                />
-                              }
-                            >
-                              <ArrowDownTrayIcon aria-hidden="true" />
-                              {project.install.label}
-                            </TooltipTrigger>
-                            {project.install.tooltip ? (
+                        <div className={styles.download}>
+                          <a className={styles.downloadLink} href={project.install.download}>
+                            <ArrowDownTrayIcon aria-hidden="true" />
+                            {project.install.label}
+                          </a>
+                          {project.install.tooltip ? (
+                            <Tooltip>
+                              <TooltipTrigger
+                                className={styles.downloadInfo}
+                                aria-label="Install notes"
+                              >
+                                <InformationCircleIcon aria-hidden="true" />
+                              </TooltipTrigger>
                               <TooltipContent>{project.install.tooltip}</TooltipContent>
-                            ) : null}
-                          </Tooltip>
+                            </Tooltip>
+                          ) : null}
                         </div>
                       ) : null}
                       {project.details && (
@@ -221,7 +225,7 @@ export default async function Home() {
           misc: (
             <section className={styles.section}>
               <div>
-                <ol>
+                <ol className={styles.entryList}>
                   <li className={styles.entry}>
                     <h2>
                       <a href={MONKEYTYPE_PROFILE} target="_blank" rel="noopener noreferrer">

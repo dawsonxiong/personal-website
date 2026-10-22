@@ -61,6 +61,9 @@ export function PeelHand({ cards }: { cards: readonly Card[] }) {
   const settle = useRef<{ swing: boolean; done?: () => void }>({ swing: false });
   const drag = useRef<{
     startY: number;
+    // The fold when the drag began (the hover lift, on a mouse), so the card follows the
+    // pointer from where it was and drags back down to flat rather than stopping there.
+    startFold: number;
     moved: boolean;
     samples: { time: number; fold: number }[];
   } | null>(null);
@@ -138,7 +141,7 @@ export function PeelHand({ cards }: { cards: readonly Card[] }) {
     if (!drag.current) return;
     const distance = drag.current.startY - event.clientY;
     if (Math.abs(distance) > 4) drag.current.moved = true;
-    const value = Math.min(Math.max(distance / 2, HINT), RELEASE);
+    const value = Math.min(Math.max(drag.current.startFold + distance / 2, 0), RELEASE);
     const now = performance.now();
     const { samples } = drag.current;
     samples.push({ time: now, fold: value });
@@ -185,7 +188,12 @@ export function PeelHand({ cards }: { cards: readonly Card[] }) {
           aria-label="Squeeze your cards"
           onPointerDown={(event) => {
             event.currentTarget.setPointerCapture(event.pointerId);
-            drag.current = { startY: event.clientY, moved: false, samples: [] };
+            drag.current = {
+              startY: event.clientY,
+              startFold: fold.current.value,
+              moved: false,
+              samples: [],
+            };
           }}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerEnd}

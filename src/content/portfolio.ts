@@ -210,7 +210,7 @@ export const projects = [
     devpost: "https://devpost.com/software/swarm-sight",
     tagline: "Multi-phone person search · Hack the North 2026 finalist",
     description: "Turns everyone’s phone into a camera network to find a missing person",
-    stack: "Swift, Python, JavaScript, SwiftUI, FastAPI, Expo, ARKit, Three.js, YOLOE",
+    stack: "Swift, Python, JavaScript, SwiftUI, FastAPI, Expo, Three.js, YOLOE",
     details: [
       "Searchers scan a QR code to join, then a Swift app streams each phone’s camera frames and ARKit position over WebSockets to a FastAPI hub",
       "A Baseten GPU service spots people with YOLOE and matches them to reference photos with OSNet in about 127 ms",
@@ -272,8 +272,7 @@ export const projects = [
     repo: "https://github.com/dawsonxiong/stemplayer",
     tagline: "Split any song into stems and mix them on a 3D device",
     description: "Use Kanye's Stem Player right in the browser. Splits any song into its stems.",
-    stack:
-      "TypeScript, Python, vinext, React Three Fiber, Web Audio, Cloudflare Workers, Modal, Demucs",
+    stack: "TypeScript, Python, vinext, React Three Fiber, Cloudflare Workers, Modal, Demucs",
     details: [
       "Upload a song or paste a link and the file goes straight to Cloudflare R2, then a Modal GPU job splits it into four stems with Demucs",
       "The stems come back through a webhook and play in sync with Web Audio, and the sliders on the 3D model turn each one up or down",
@@ -400,7 +399,7 @@ export const projects = [
     tagline: "Native LaTeX rendering for React Native",
     description:
       "An npm package that renders LaTeX in React Native as a native SVG, with no WebView. Peak 143 weekly downloads.",
-    stack: "TypeScript, React Native, MathJax, react-native-svg",
+    stack: "TypeScript, React Native, MathJax",
     details: [
       "MathJax turns LaTeX into SVG paths and react-native-svg draws them natively, so it works offline and renders instantly",
       "Inline and display math mix with plain text, with a KaTeX WebView fallback",
@@ -423,7 +422,7 @@ export const projects = [
     tagline: "Developer news on every new tab",
     description:
       "A Chrome extension that replaces the new tab with a high-signal developer news feed. Think daily.dev but cleaner and more relevant.",
-    stack: "TypeScript, Next.js, React, WXT, Tailwind, Prisma, Postgres, Redis",
+    stack: "TypeScript, Next.js, React, WXT, Tailwind, Prisma, Postgres, Redis, Vercel",
     details: [
       "A daily Vercel cron job pulls about 40 RSS feeds from blogs and tech sites",
       "Headlines that overlap within 48 hours are merged into one card per story",

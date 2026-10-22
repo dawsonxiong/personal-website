@@ -191,8 +191,18 @@
     --enter-from: -12px;
   }
 
+  /* The shared card fades away for the tabs whose entries have their own cards. */
+  .column {
+    transition:
+      background-color 240ms ease,
+      box-shadow 240ms ease;
+  }
+
   .column[data-resizing] {
-    transition: height 280ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition:
+      height 280ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 240ms ease,
+      box-shadow 240ms ease;
   }
 
   .indicator {
@@ -372,7 +382,7 @@
 }
 
 .entry {
-  padding-block: 24px;
+  padding-block: 28px;
   border-top: 1px solid var(--pool-rule);
 }
 
@@ -383,6 +393,37 @@
 
 .entry:last-child {
   padding-bottom: 4px;
+}
+
+/* Experience, projects and misc: each entry is its own glass card on the water, so the shared
+   card behind the panel steps aside while one of those tabs is showing. */
+.column:has(> .panel:not([hidden]) .entryList) {
+  background-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.panel:has(.entryList) {
+  padding: 0;
+}
+
+.entryList {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+.entryList > .entry,
+.entryList > .entry:first-child,
+.entryList > .entry:last-child {
+  padding: 28px 24px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--content-surface);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 35%);
 }
 
 .entry h2 {
@@ -442,12 +483,36 @@
   object-fit: contain;
 }
 
-.meta,
-.stack {
+.meta {
   color: var(--pool-muted);
   font-size: 15px;
   font-weight: 500;
   line-height: 1.4;
+}
+
+/* The stack is a list, set as one quiet line: smaller than the tagline and split by dots,
+   so it reads as a set of tools rather than another sentence. */
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--pool-muted);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.stack li {
+  white-space: nowrap;
+}
+
+/* The dot hangs off the item before it, so a wrapped line never starts with one. */
+.stack li:not(:last-child)::after {
+  content: "·";
+  padding-inline: 4px;
+  opacity: 0.55;
 }
 
 .meta {
@@ -460,10 +525,11 @@
 
 .entry p {
   margin-top: 12px;
+  line-height: 1.5;
 }
 
 .entry .stack {
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 /* Install actions under the stack: a download or a copyable command, as one quiet glass pill. */
@@ -492,6 +558,43 @@
 
 .downloadLink:hover {
   background: rgb(255 255 255 / 45%);
+}
+
+/* The download button with its install notes beside it, behind an info icon. */
+.download {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.download .downloadLink {
+  margin-top: 0;
+}
+
+.downloadInfo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--pool-muted);
+  cursor: help;
+  transition: color 140ms ease;
+}
+
+.downloadInfo:hover,
+.downloadInfo[data-popup-open] {
+  color: var(--pool-ink);
+}
+
+.downloadInfo svg {
+  width: 18px;
+  height: 18px;
 }
 
 .command {
@@ -808,8 +911,59 @@
 }
 
 .details summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   width: fit-content;
+  list-style: none;
   cursor: pointer;
+}
+
+.details summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A small chevron in place of the browser's triangle, turning down when open. */
+.details summary::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin-inline: 2px 1px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  rotate: -45deg;
+  translate: 0 -0.5px;
+}
+
+.details[open] summary::before {
+  rotate: 45deg;
+  translate: 0 -2px;
+}
+
+/* Opens by easing its height where the browser can animate to auto; elsewhere it just
+   opens, as before. */
+@media (prefers-reduced-motion: no-preference) {
+  .details {
+    interpolate-size: allow-keywords;
+  }
+
+  .details summary::before {
+    transition:
+      rotate 200ms ease,
+      translate 200ms ease;
+  }
+
+  .details::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 260ms cubic-bezier(0.22, 1, 0.36, 1),
+      content-visibility 260ms allow-discrete;
+  }
+
+  .details[open]::details-content {
+    block-size: auto;
+  }
 }
 
 .details p {
@@ -1267,6 +1421,17 @@
 
   .panel {
     padding: 24px 16px;
+  }
+
+  .entryList {
+    gap: 12px;
+  }
+
+  .entryList > .entry,
+  .entryList > .entry:first-child,
+  .entryList > .entry:last-child {
+    padding: 24px 16px;
+    border-radius: 16px;
   }
 
   .section {

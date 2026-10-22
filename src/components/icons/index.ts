@@ -8,6 +8,7 @@ export {
   ChevronLeftIcon,
   ChevronRightIcon,
   ClipboardDocumentIcon,
+  InformationCircleIcon,
   PlayIcon,
   PlusIcon,
   StarIcon,
